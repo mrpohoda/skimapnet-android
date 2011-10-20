@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item 
+		android:id="@+id/ab_button_list"
+		android:title="@string/ab_button_list"
+		android:icon="@drawable/ic_menu_list"
+		android:showAsAction="ifRoom" />
+		
+	<item 
+		android:id="@+id/ab_button_map"
+		android:title="@string/ab_button_map"
+		android:icon="@drawable/ic_menu_mapmode"
+		android:showAsAction="ifRoom" />
+		
+	<item 
+		android:id="@+id/ab_button_search"
+		android:title="@string/ab_button_search"
+		android:icon="@drawable/ic_menu_search"
+		android:showAsAction="ifRoom" />
+</menu>

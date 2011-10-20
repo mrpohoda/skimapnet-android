@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SkiMap</string>
+    
+    <string name="map_api_key_debug">0ED6_e2Y9kSFAVxC_CN1Jdme6afF_pvPQhIlrHA</string>
+    <string name="map_api_key_release">todo</string>
+    
+    <string name="ab_button_list">List</string>
+    <string name="ab_button_map">Map</string>
+    <string name="ab_button_search">Search</string>
+    <string name="ab_button_share">Share</string>
+    <string name="ab_button_favourite">Favourite</string>
+    <string name="ab_button_camera">Camera</string>
+</resources>

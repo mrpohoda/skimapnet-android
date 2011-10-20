@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="ab_button">#0000</color> <!-- pruhledna -->
+	<color name="ab_button_focus">#e92</color> <!-- oranz -->
+	<color name="ab_button_press">#e92</color> <!-- oranz -->
+	
+	<color name="ab_background_start">#444</color> <!-- seda -->
+	<color name="ab_background_end">#111</color> <!-- cerna -->
+	
+	<color name="ab_divider_button">#555</color> <!-- seda -->
+	<color name="ab_divider_top">#e92</color> <!-- oranz -->
+	<color name="ab_divider_bottom">#000</color> <!-- cerna -->
+</resources>
