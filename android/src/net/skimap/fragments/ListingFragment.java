@@ -9,18 +9,18 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ListFragment extends Fragment
+public class ListingFragment extends Fragment
 {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedStateInstance)
 	{	
 		setHasOptionsMenu(true);
-		return inflater.inflate(R.layout.layout_list, container);
+		return inflater.inflate(R.layout.layout_listing, container);
 	}
 	
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
-		inflater.inflate(R.menu.menu_main, menu);
+		inflater.inflate(R.menu.menu_listing, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 }

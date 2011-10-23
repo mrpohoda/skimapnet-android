@@ -4,26 +4,19 @@ import net.skimap.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
-import android.support.v4.app.FragmentMapActivity;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-public class MapActivity extends FragmentMapActivity 
+public class ListingActivity extends FragmentActivity 
 {
-	@Override
+    @Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.activity_listing);
         setActionBar();
-    }
-    
-	
-    @Override
-    protected boolean isRouteDisplayed() 
-    {
-        return false;
     }
     
     
@@ -55,8 +48,8 @@ public class MapActivity extends FragmentMapActivity
     	
     	switch (item.getItemId()) 
     	{
-	    	case R.id.ab_button_list:				
-		        intent.setClass(this, ListingActivity.class);
+	    	case R.id.ab_button_map:				
+		        intent.setClass(this, MapActivity.class);
 		        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		        startActivity(intent);
 				return true;

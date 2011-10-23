@@ -7,12 +7,6 @@
 		android:showAsAction="ifRoom" />
 		
 	<item 
-		android:id="@+id/ab_button_map"
-		android:title="@string/ab_button_map"
-		android:icon="@drawable/ic_menu_mapmode"
-		android:showAsAction="ifRoom" />
-		
-	<item 
 		android:id="@+id/ab_button_search"
 		android:title="@string/ab_button_search"
 		android:icon="@drawable/ic_menu_search"
