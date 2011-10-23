@@ -4,9 +4,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     
-	<TextView
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:text="list layout..." />
+    <ListView
+		android:id="@+id/layout_listing_listview"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+	    android:dividerHeight="@dimen/layout_listing_listview_divider"
+	    android:divider="@color/layout_listing_listview_divider"
+        android:cacheColorHint="@color/layout_listing_listview_cache"
+        android:background="@color/layout_background" />
 	    
 </LinearLayout>

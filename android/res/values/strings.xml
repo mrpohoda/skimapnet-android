@@ -3,7 +3,7 @@
     <string name="app_name">SkiMap</string>
     
     <string name="map_api_key_debug">0ED6_e2Y9kSFAVxC_CN1Jdme6afF_pvPQhIlrHA</string>
-    <string name="map_api_key_release">todo</string>
+    <string name="map_api_key_release">0ED6_e2Y9kSFAVxC_CN1Jdme6afF_pvPQhIlrHA</string>
     
     <string name="ab_button_list">List</string>
     <string name="ab_button_map">Map</string>
@@ -11,4 +11,8 @@
     <string name="ab_button_share">Share</string>
     <string name="ab_button_favourite">Favourite</string>
     <string name="ab_button_camera">Camera</string>
+    
+    <string name="ab_tab_nearest">Nearest</string>
+    <string name="ab_tab_favourites">Favourites</string>
+    <string name="ab_tab_recommended">Recommended</string>
 </resources>

@@ -5,5 +5,13 @@
             <item name="abBackground">@drawable/ab_background</item>
             <item name="abDivider">@color/ab_divider_button</item>
             <item name="selectableItemBackground">@drawable/ab_selectable_background</item>
+            <item name="actionBarTabStyle">@style/MyActionBarTabStyle</item>
         </style>
+        
+        <!-- tabs -->
+	    <style name="MyActionBarTabStyle" parent="Widget.Sherlock.ActionBar.TabView">
+	        <item name="android:background">@drawable/ab_tab_background</item>
+	        <item name="android:paddingLeft">@dimen/ab_tab_padding</item>
+	        <item name="android:paddingRight">@dimen/ab_tab_padding</item>
+	    </style>
 </resources>

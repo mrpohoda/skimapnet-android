@@ -14,6 +14,13 @@ import com.google.android.maps.MapView;
 public class MapFragment extends Fragment 
 {
 	@Override
+    public void onCreate(Bundle savedInstanceState) 
+    {
+        super.onCreate(savedInstanceState);
+    }
+	
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedStateInstance)
 	{	
 		setHasOptionsMenu(true);
@@ -25,6 +32,7 @@ public class MapFragment extends Fragment
 		
 		return view;
 	}
+	
 	
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{

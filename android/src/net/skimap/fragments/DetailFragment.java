@@ -12,11 +12,19 @@ import android.view.ViewGroup;
 public class DetailFragment extends Fragment
 {
 	@Override
+    public void onCreate(Bundle savedInstanceState) 
+    {
+        super.onCreate(savedInstanceState);
+    }
+	
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedStateInstance)
 	{	
 		setHasOptionsMenu(true);
 		return inflater.inflate(R.layout.layout_detail, container);
 	}
+	
 	
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{

@@ -1,22 +1,34 @@
 package net.skimap.activities;
 
 import net.skimap.R;
+import net.skimap.adapters.TabsAdapter;
+import net.skimap.fragments.ListingFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.MenuItem;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Toast;
 
-public class ListingActivity extends FragmentActivity 
+public class ListingActivity extends FragmentActivity
 {
+	ViewPager  mViewPager;
+    TabsAdapter mTabsAdapter;
+    
+    
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listing);
         setActionBar();
+        
+        if (savedInstanceState != null) 
+        {
+        	getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt("index"));
+        }
     }
     
     
@@ -37,6 +49,27 @@ public class ListingActivity extends FragmentActivity
     	catch(Exception e)
     	{
     	}
+    	
+    	// tabs
+    	bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+    	mViewPager = (ViewPager) findViewById(R.id.layout_listing_pager);
+        mTabsAdapter = new TabsAdapter(this, bar, mViewPager);
+    	
+    	ActionBar.Tab tab1 = bar.newTab().setText(R.string.ab_tab_nearest);
+        ActionBar.Tab tab2 = bar.newTab().setText(R.string.ab_tab_favourites);
+        ActionBar.Tab tab3 = bar.newTab().setText(R.string.ab_tab_recommended);
+               
+        mTabsAdapter.addTab(tab1, ListingFragment.class);
+        mTabsAdapter.addTab(tab2, ListingFragment.class);
+        mTabsAdapter.addTab(tab3, ListingFragment.class);
+    }
+    
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putInt("index", getSupportActionBar().getSelectedNavigationIndex());
     }
     
     
