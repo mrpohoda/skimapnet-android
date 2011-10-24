@@ -17,5 +17,6 @@
 	
 	<color name="layout_listing_item_background">#fff</color> <!-- bila -->
 	<color name="layout_listing_item_background_focused">#fb6</color> <!-- svetla oranz -->
-	<color name="layout_listing_item_background_pressed">#fb6</color> <!-- svetla oranz -->
+	<color name="layout_listing_item_background_pressed">#fb6</color> <!-- svetla oranz -->	
+	<color name="layout_listing_item_textview">#333</color> <!-- seda -->
 </resources>

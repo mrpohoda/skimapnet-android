@@ -11,10 +11,8 @@
 		android:id="@+id/layout_listing_item_textview"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:textColor="#444"
-		android:textSize="18sp"
-		android:paddingTop="10dp"
-		android:paddingBottom="10dp"
-		android:paddingLeft="10dp" />
+		android:textColor="@color/layout_listing_item_textview"
+		android:textSize="@dimen/layout_listing_item_textview_textsize"
+		android:padding="@dimen/layout_listing_item_textview_padding" />
 	
 </LinearLayout>
