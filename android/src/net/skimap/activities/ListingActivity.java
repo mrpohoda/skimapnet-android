@@ -3,19 +3,16 @@ package net.skimap.activities;
 import net.skimap.R;
 import net.skimap.adapters.TabsAdapter;
 import net.skimap.fragments.ListingFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.MenuItem;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.Toast;
 
 public class ListingActivity extends FragmentActivity
 {
-	ViewPager  mViewPager;
-    TabsAdapter mTabsAdapter;
+	private ViewPager  mViewPager;
+	private TabsAdapter mTabsAdapter;
     
     
     @Override
@@ -70,29 +67,5 @@ public class ListingActivity extends FragmentActivity
     {
         super.onSaveInstanceState(outState);
         outState.putInt("index", getSupportActionBar().getSelectedNavigationIndex());
-    }
-    
-    
-    @Override
-	public boolean onOptionsItemSelected(MenuItem item) 
-    {
-    	// nastaveni chovani tlacitek
-    	Intent intent = new Intent();
-    	
-    	switch (item.getItemId()) 
-    	{
-	    	case R.id.ab_button_map:				
-		        intent.setClass(this, MapActivity.class);
-		        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		        startActivity(intent);
-				return true;
-				
-	    	case R.id.ab_button_search:
-	    		Toast.makeText(this, "SEARCH", Toast.LENGTH_LONG).show();
-				return true;
-				
-    		default:
-    			return super.onOptionsItemSelected(item);
-    	}
     }
 }

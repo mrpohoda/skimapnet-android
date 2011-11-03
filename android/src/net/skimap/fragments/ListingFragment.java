@@ -4,17 +4,19 @@ import java.util.ArrayList;
 
 import net.skimap.R;
 import net.skimap.activities.DetailActivity;
+import net.skimap.activities.MapActivity;
 import net.skimap.adapters.ListingAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ListingFragment extends Fragment
 {
@@ -69,11 +71,36 @@ public class ListingFragment extends Fragment
 	}
 	
 	
+	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		inflater.inflate(R.menu.menu_listing, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+    {
+    	// nastaveni chovani tlacitek
+    	Intent intent = new Intent();
+    	
+    	switch (item.getItemId()) 
+    	{
+	    	case R.id.ab_button_map:				
+		        intent.setClass(this.getActivity(), MapActivity.class);
+		        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		        startActivity(intent);
+				return true;
+				
+	    	case R.id.ab_button_search:
+	    		Toast.makeText(this.getActivity(), "SEARCH", Toast.LENGTH_LONG).show();
+				return true;
+
+    		default:
+    			return super.onOptionsItemSelected(item);
+    	}
+    }
 	
 	
 	private void setView()
@@ -123,6 +150,8 @@ public class ListingFragment extends Fragment
 	}
 	
 	
+	// TODO: predani indexu do detail fragmentu
+	// TODO: pri vypnuti (kliknuti na home) detail fragmentu pamatovat pozici zalozky z predchoziho kroku
 	public void showDetail(int index)
 	{
         mPositionChecked = index;
@@ -136,18 +165,37 @@ public class ListingFragment extends Fragment
 
             if (mPositionShown != mPositionChecked)
             {
-                // If we are not currently showing a fragment for the new
-                // position, we need to create and install a new one.
-                DetailFragment fragment = DetailFragment.newInstance(index);
+//            	FragmentManager manager = getFragmentManager();
+//            	Fragment fragment = manager.findFragmentById(R.id.fragment_detail);
+//            	View fragmentView = fragment.getView();
+//            	           	
+//            	TextView textView = (TextView) fragmentView.findViewById(R.id.layout_detail_textview);
+//            	textView.setText(mPositionChecked);
 
-                // Execute a transaction, replacing any existing fragment
-                // with this one inside the frame.
-                getFragmentManager()
-                	.beginTransaction()
-                	.replace(R.id.fragment_detail, fragment)
-                	.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                	.commit();
-                
+            	
+//                // If we are not currently showing a fragment for the new
+//                // position, we need to create and install a new one.
+//                DetailFragment fragment = DetailFragment.newInstance(index);
+//                //DetailFragment fragment = new DetailFragment();
+//
+//                // Execute a transaction, replacing any existing fragment
+//                // with this one inside the frame.
+//                
+//                // fragment manazer
+//                FragmentManager manager = getFragmentManager();
+//                FragmentTransaction transaction = manager.beginTransaction();
+//                
+//                // smazani stareho fragmentu a pridani noveho
+//                Fragment oldFragment = manager.findFragmentById(R.id.fragment_detail);
+//                transaction.remove(oldFragment);
+//                transaction.add(R.id.fragment_detail, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//                
+//                // nahrazeni fragmentu
+//                // transaction.replace(R.id.fragment_detail, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//
+//                // odeslani zmen
+//                transaction.commit();
+
                 mPositionShown = index;
             }
         } 

@@ -4,11 +4,13 @@ import net.skimap.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DetailFragment extends Fragment
 {
@@ -36,28 +38,52 @@ public class DetailFragment extends Fragment
 		
 		setHasOptionsMenu(true);
 		View view = inflater.inflate(R.layout.layout_detail, container, false);
-		//TODO: rusit predchozi view - visi tam v action baru ikony navic
 		
 		try
 		{
-			int index = getArguments().getInt("index", 0);		
+			int index = getArguments().getInt("index", -1);
 			TextView textView = (TextView) view.findViewById(R.id.layout_detail_textview);
 			textView.setText("Detail: " + index);
 		}
 		catch(Exception e)
 		{
-			
+			e.printStackTrace();
 		}
 		
 		return view;
 	}
 	
 	
+	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		inflater.inflate(R.menu.menu_detail, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
+	
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+    {
+    	// nastaveni chovani tlacitek
+    	switch (item.getItemId()) 
+    	{
+	    	case R.id.ab_button_share:				
+	    		Toast.makeText(this.getActivity(), "SHARE", Toast.LENGTH_LONG).show();
+				return true;
+				
+	    	case R.id.ab_button_favourite:
+	    		Toast.makeText(this.getActivity(), "FAV", Toast.LENGTH_LONG).show();
+				return true;
+				
+	    	case R.id.ab_button_camera:
+	    		Toast.makeText(this.getActivity(), "CAMERA", Toast.LENGTH_LONG).show();
+				return true;
+				
+    		default:
+    			return super.onOptionsItemSelected(item);
+    	}
+    }
 	
 	
 	public static DetailFragment newInstance(int index) 
