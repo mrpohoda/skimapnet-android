@@ -10,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class ListingAdapter extends BaseAdapter implements OnClickListener 
@@ -31,16 +30,16 @@ public class ListingAdapter extends BaseAdapter implements OnClickListener
     public View getView(int position, View convertView, ViewGroup parent)
     {		
 		// nastaveni xml layoutu
-		View v = LayoutInflater.from(mFragment.getActivity()).inflate(R.layout.layout_listing_item, null);
-		v.setId(position);
+		View view = LayoutInflater.from(mFragment.getActivity()).inflate(R.layout.layout_listing_item, null);
+		view.setId(position);
 		
 		// textove pole
-		TextView text = (TextView) v.findViewById(R.id.layout_listing_item_textview);
+		TextView text = (TextView) view.findViewById(R.id.layout_listing_item_textview);
 		text.setText(mList.get(position));
-
-        // nastaveni pozadi a onclick
-        v.setOnClickListener(new OnItemClickListener(position));
-        return v;
+		
+        // nastaveni onclick
+		view.setOnClickListener(new OnItemClickListener(position));
+        return view;
     }
     
     
@@ -51,12 +50,11 @@ public class ListingAdapter extends BaseAdapter implements OnClickListener
  	    
  	    OnItemClickListener(int position)
  	    {
-             this.mPosition = position;
+ 	    	this.mPosition = position;
  	    }
  	    
  	    public void onClick(View arg0) 
  	    {
- 	    	Toast.makeText(mFragment.getActivity(), "CLICK " + mPosition, Toast.LENGTH_LONG).show();
  	    	mFragment.showDetail(mPosition);
  	    }
  	}

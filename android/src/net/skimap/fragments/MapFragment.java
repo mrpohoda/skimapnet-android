@@ -17,6 +17,9 @@ import com.google.android.maps.MapView;
 
 public class MapFragment extends Fragment 
 {
+	public static final String ITEM_ID = "item_id";
+	
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
@@ -41,6 +44,7 @@ public class MapFragment extends Fragment
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
+		// vytvoreni menu
 		inflater.inflate(R.menu.menu_map, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}

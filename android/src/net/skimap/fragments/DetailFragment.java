@@ -1,10 +1,13 @@
 package net.skimap.fragments;
 
 import net.skimap.R;
+import net.skimap.activities.MapActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -14,6 +17,14 @@ import android.widget.Toast;
 
 public class DetailFragment extends Fragment
 {
+	public static final String ITEM_ID = "item_id";
+	public static final String DUAL_VIEW = "dual_view";
+	
+	private boolean mDualView;
+	private View mRootView;
+	private int mItemId;
+	
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
@@ -36,27 +47,78 @@ public class DetailFragment extends Fragment
 //            return null;
 //        }
 		
+		// dual view
+		Bundle extras = getActivity().getIntent().getExtras();
+		if(extras != null && extras.containsKey(DUAL_VIEW))
+		{
+			mDualView = extras.getBoolean(DUAL_VIEW);
+		}
+		else
+		{
+			mDualView = true;
+		}
+		
+		// nastaveni id detailu
+		int id; 		
+		// nahrani id z bundle aktivity
+		if(extras != null && extras.containsKey(ITEM_ID))
+		{
+			id = extras.getInt(ITEM_ID);
+			Log.d("SKIMAP", "bundle: " + id);
+		}		
+		// nahrani posledniho pouziteho id
+		else if (savedStateInstance != null && savedStateInstance.containsKey(ITEM_ID))
+        {
+			id = savedStateInstance.getInt(ITEM_ID, 0);
+			Log.d("SKIMAP", "saved state: " + id);
+        }		
+		// vychozi id
+		else
+		{
+			id = 0; // TODO: nastavit geograficky nejblizsi skicentrum
+			Log.d("SKIMAP", "default: " + id);
+		}
+		
+		// nastaveni view
 		setHasOptionsMenu(true);
-		View view = inflater.inflate(R.layout.layout_detail, container, false);
-		
-		try
-		{
-			int index = getArguments().getInt("index", -1);
-			TextView textView = (TextView) view.findViewById(R.id.layout_detail_textview);
-			textView.setText("Detail: " + index);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-		return view;
+		mRootView = inflater.inflate(R.layout.layout_detail, container, false);
+		setView(id);
+		return mRootView;
 	}
 	
 	
 	@Override
+    public void onSaveInstanceState(Bundle outState) 
+	{
+		// ulozeni pozice
+        super.onSaveInstanceState(outState);
+        outState.putInt(ITEM_ID, mItemId);
+        Log.d("SKIMAP", "saving: " + mItemId);
+    }
+	
+
+	@Override
+	public void onDestroy() 
+	{
+	    super.onDestroy();
+	    Log.d("SKIMAP", "ondestroy dualview: " + mDualView);
+
+	    if(!mDualView)
+	    {
+	    	// TODO: prenest hodnotu mItemId do fragmentu na zasobniku
+//		    getFragmentManager().getFragment(bundle, key);
+//		    
+//		    Bundle bundle = new Bundle();
+//		    bundle.putInt(ITEM_ID, mItemId);
+//		    fragment.setArguments(bundle);
+	    }
+	}
+
+
+	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
+		// vytvoreni menu
 		inflater.inflate(R.menu.menu_detail, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -80,21 +142,24 @@ public class DetailFragment extends Fragment
 	    		Toast.makeText(this.getActivity(), "CAMERA", Toast.LENGTH_LONG).show();
 				return true;
 				
+	    	case R.id.ab_button_map:	
+	    		Intent intent = new Intent();
+		        intent.setClass(this.getActivity(), MapActivity.class);
+		        intent.putExtra(MapFragment.ITEM_ID, mItemId);
+		        startActivity(intent);
+				return true;
+				
     		default:
     			return super.onOptionsItemSelected(item);
     	}
     }
 	
 	
-	public static DetailFragment newInstance(int index) 
+	public void setView(int id)
 	{
-        // Supply index input as an argument.
-        Bundle args = new Bundle();
-        args.putInt("index", index);
-        
-        DetailFragment fragment = new DetailFragment();
-        fragment.setArguments(args);
-
-        return fragment;
-    }
+		mItemId = id;
+		
+		TextView textView = (TextView) mRootView.findViewById(R.id.layout_detail_textview);
+		textView.setText("Detail: " + id);
+	}
 }

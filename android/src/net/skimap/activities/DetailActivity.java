@@ -1,8 +1,7 @@
 package net.skimap.activities;
 
 import net.skimap.R;
-import android.content.Intent;
-import android.content.res.Configuration;
+import net.skimap.fragments.DetailFragment;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
@@ -15,13 +14,20 @@ public class DetailActivity extends FragmentActivity
     {
         super.onCreate(savedInstanceState);
         
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-        {
-            // If the screen is now in landscape mode, we can show the
-            // dialog in-line with the list so we don't need this activity.
+        // dual view
+        boolean dualView = true;
+        Bundle extras = getIntent().getExtras();
+		if(extras != null && extras.containsKey(DetailFragment.DUAL_VIEW))
+		{
+			dualView = extras.getBoolean(DetailFragment.DUAL_VIEW);
+		}
+		
+		// v dual view ukonci aktivitu
+ 		if(dualView)
+ 		{
             finish();
             return;
-        }
+ 		}
         
         setContentView(R.layout.activity_detail);
         setActionBar();
@@ -46,9 +52,7 @@ public class DetailActivity extends FragmentActivity
     	switch (item.getItemId()) 
     	{
     		case android.R.id.home:
-				Intent intent = new Intent(this, ListingActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
+    			this.finish();
 				return true;
 				
     		default:

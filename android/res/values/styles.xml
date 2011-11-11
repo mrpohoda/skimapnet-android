@@ -2,6 +2,7 @@
 <resources>
         <style name="Theme.SkiMap" parent="Theme.Sherlock">
             <item name="abLogo">@drawable/ab_logo</item>
+            <item name="abIcon">@drawable/ic_menu_home</item>
             <item name="abBackground">@drawable/ab_background</item>
             <item name="abDivider">@color/ab_divider_button</item>
             <item name="selectableItemBackground">@drawable/ab_selectable_background</item>

@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item 
-		android:id="@+id/ab_button_map"
-		android:title="@string/ab_button_map"
-		android:icon="@drawable/ic_menu_mapmode"
-		android:showAsAction="ifRoom"
-		android:orderInCategory="10" />
-		
+<menu xmlns:android="http://schemas.android.com/apk/res/android">	
 	<item 
 		android:id="@+id/ab_button_search"
 		android:title="@string/ab_button_search"

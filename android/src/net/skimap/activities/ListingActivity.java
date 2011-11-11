@@ -11,10 +11,12 @@ import android.view.View;
 
 public class ListingActivity extends FragmentActivity
 {
+	private final String SAVED_TAB_INDEX = "tab_index";
+	
 	private ViewPager  mViewPager;
 	private TabsAdapter mTabsAdapter;
-    
-    
+
+	
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
@@ -22,9 +24,10 @@ public class ListingActivity extends FragmentActivity
         setContentView(R.layout.activity_listing);
         setActionBar();
         
+        // nacteni pozice zalozky
         if (savedInstanceState != null) 
         {
-        	getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt("index"));
+        	getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt(SAVED_TAB_INDEX));
         }
     }
     
@@ -65,7 +68,8 @@ public class ListingActivity extends FragmentActivity
     @Override
     protected void onSaveInstanceState(Bundle outState)
     {
+    	// ulozeni pozice zalozky
         super.onSaveInstanceState(outState);
-        outState.putInt("index", getSupportActionBar().getSelectedNavigationIndex());
+        outState.putInt(SAVED_TAB_INDEX, getSupportActionBar().getSelectedNavigationIndex());
     }
 }

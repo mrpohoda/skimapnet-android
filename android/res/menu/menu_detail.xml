@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item 
+		android:id="@+id/ab_button_map"
+		android:title="@string/ab_button_map"
+		android:icon="@drawable/ic_menu_mapmode"
+		android:showAsAction="ifRoom"
+		android:orderInCategory="1" />
+    
 	<item 
 		android:id="@+id/ab_button_favourite"
 		android:title="@string/ab_button_favourite"
 		android:icon="@drawable/ic_menu_star"
 		android:showAsAction="ifRoom"
-		android:orderInCategory="1" />
+		android:orderInCategory="2" />
 	
 	<item 
 		android:id="@+id/ab_button_share"
 		android:title="@string/ab_button_share"
 		android:icon="@drawable/ic_menu_share"
 		android:showAsAction="ifRoom"
-		android:orderInCategory="2" />
+		android:orderInCategory="3" />
 		
 	<item 
 		android:id="@+id/ab_button_camera"
 		android:title="@string/ab_button_camera"
 		android:icon="@drawable/ic_menu_camera"
 		android:showAsAction="ifRoom"
-		android:orderInCategory="3" />
+		android:orderInCategory="4" />
 </menu>
