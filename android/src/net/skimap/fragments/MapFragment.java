@@ -2,22 +2,32 @@ package net.skimap.fragments;
 
 import net.skimap.R;
 import net.skimap.activities.ListingActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
+import android.support.v4.view.SubMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 
 public class MapFragment extends Fragment 
 {
 	public static final String ITEM_ID = "item_id";
+	private final int ZOOM_DEFAULT = 13;
+	private enum MapLocationMode { CURRENT_POSITION, NEAREST_SKI_CENTRE };
+	
+	private MapView mMapView;
 	
 	
 	@Override
@@ -34,8 +44,9 @@ public class MapFragment extends Fragment
 		
 		View view = inflater.inflate(R.layout.layout_map, container, false);
 		
-		MapView mapView = (MapView)view.findViewById(R.id.layout_map_mapview);
-		mapView.setBuiltInZoomControls(true);
+		mMapView = (MapView)view.findViewById(R.id.layout_map_mapview);
+		mMapView.setBuiltInZoomControls(true);
+		setMapLocation(MapLocationMode.CURRENT_POSITION);
 		
 		return view;
 	}
@@ -47,6 +58,22 @@ public class MapFragment extends Fragment
 		// vytvoreni menu
 		inflater.inflate(R.menu.menu_map, menu);
 		super.onCreateOptionsMenu(menu, inflater);
+
+    	// pridani submenu location
+		SubMenu locationSubMenu = menu.addSubMenu(Menu.NONE, R.id.ab_button_location, 10, R.string.ab_button_location);
+		locationSubMenu.add(Menu.NONE, R.id.ab_button_location_current, 1, R.string.ab_button_location_current);
+		locationSubMenu.add(Menu.NONE, R.id.ab_button_location_nearest, 2, R.string.ab_button_location_nearest);
+    	MenuItem locationItem = locationSubMenu.getItem();
+    	locationItem.setIcon(R.drawable.ic_menu_mylocation);
+    	locationItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+    	
+    	// pridani submenu layers
+		SubMenu layersSubMenu = menu.addSubMenu(Menu.NONE, R.id.ab_button_layers, 11, R.string.ab_button_layers);
+		layersSubMenu.add(Menu.NONE, R.id.ab_button_layers_normal, 1, R.string.ab_button_layers_normal);
+		layersSubMenu.add(Menu.NONE, R.id.ab_button_layers_satellite, 2, R.string.ab_button_layers_satellite);
+    	MenuItem layersItem = layersSubMenu.getItem();
+    	layersItem.setIcon(R.drawable.ic_menu_layers);
+    	layersItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 	}
 	
 	
@@ -68,8 +95,54 @@ public class MapFragment extends Fragment
 	    		Toast.makeText(this.getActivity(), "SEARCH", Toast.LENGTH_LONG).show();
 				return true;
 				
+	    	case R.id.ab_button_location_current:
+	    		setMapLocation(MapLocationMode.CURRENT_POSITION);
+				return true;
+				
+	    	case R.id.ab_button_location_nearest:
+	    		setMapLocation(MapLocationMode.NEAREST_SKI_CENTRE);
+				return true;
+				
+	    	case R.id.ab_button_layers_normal:
+	    		mMapView.setSatellite(false);
+				return true;
+				
+	    	case R.id.ab_button_layers_satellite:
+	    		mMapView.setSatellite(true);
+				return true;
+				
     		default:
     			return super.onOptionsItemSelected(item);
     	}
     }
+	
+	
+	private void setMapLocation(MapLocationMode mode)
+	{
+		// nastaveni zoomu
+		final MapController controller = mMapView.getController();		
+		controller.setZoom(ZOOM_DEFAULT);
+		
+		// posledni znama poloha z BTS
+		LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+		Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		GeoPoint currentPoint = null;
+		if(location != null)
+		{
+			currentPoint = new GeoPoint( (int)(location.getLatitude()*1E6), (int)(location.getLongitude()*1E6) );
+		}
+		
+		switch (mode) 
+    	{
+			// aktualni poloha
+	    	case CURRENT_POSITION:
+	    		if(currentPoint!=null) controller.animateTo(currentPoint);
+	    		break;
+	    		
+	    	// poloha nejblizsiho skicentra k aktualni poloze
+	    	case NEAREST_SKI_CENTRE:
+		        // TODO
+	    		break;
+    	}
+	}
 }

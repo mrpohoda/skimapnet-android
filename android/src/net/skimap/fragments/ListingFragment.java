@@ -90,7 +90,7 @@ public class ListingFragment extends Fragment
 		{
 			MenuItem mapItem = menu.add(Menu.NONE, R.id.ab_button_map, 10, R.string.ab_button_map);
 			mapItem.setIcon(R.drawable.ic_menu_mapmode);
-			mapItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+			mapItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		}
 	}
 	
@@ -162,6 +162,8 @@ public class ListingFragment extends Fragment
         {
 			listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         }
+		
+		// TODO: odstranit modry obrazek v listview - kdyz pretahnu za okraj
 	}
 	
 	

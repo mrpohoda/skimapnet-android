@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<color name="scrollbar_background_start">#fb6</color> <!-- bila -->
+	<color name="scrollbar_background_end">#e92</color> <!-- oranz -->
+	
 	<color name="ab_button">#0000</color> <!-- pruhledna -->
 	<color name="ab_button_focused">#e92</color> <!-- oranz -->
 	<color name="ab_button_pressed">#e92</color> <!-- oranz -->
@@ -12,8 +15,8 @@
 	<color name="ab_divider_bottom">#000</color> <!-- cerna -->
 	
 	<color name="layout_background">#fff</color> <!-- bila -->
-	<color name="layout_listing_listview_divider">#aaa</color> <!-- seda -->
-	<color name="layout_listing_listview_cache">#666</color> <!-- seda -->
+	<color name="layout_listing_listview_divider">#ccc</color> <!-- seda -->
+	<color name="layout_listing_listview_cache">#999</color> <!-- seda -->
 	
 	<color name="layout_listing_item_background">#fff</color> <!-- bila -->
 	<color name="layout_listing_item_background_focused">#fb6</color> <!-- svetla oranz -->

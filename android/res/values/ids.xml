@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<item type="id" name="ab_button_layers" />
+	<item type="id" name="ab_button_layers_normal" />
+	<item type="id" name="ab_button_layers_satellite" />
+	
+	<item type="id" name="ab_button_location" />
+	<item type="id" name="ab_button_location_current" />
+	<item type="id" name="ab_button_location_nearest" />
+</resources>

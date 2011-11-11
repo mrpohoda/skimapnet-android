@@ -7,6 +7,12 @@
     
     <string name="ab_button_list">List</string>
     <string name="ab_button_map">Map</string>
+    <string name="ab_button_layers">Map layers</string>
+    <string name="ab_button_layers_normal">Normal</string>
+    <string name="ab_button_layers_satellite">Satellite</string>
+    <string name="ab_button_location">Map location</string>
+    <string name="ab_button_location_current">My location</string>
+    <string name="ab_button_location_nearest">Nearest ski centre</string>
     <string name="ab_button_search">Search</string>
     <string name="ab_button_share">Share</string>
     <string name="ab_button_favourite">Favourite</string>

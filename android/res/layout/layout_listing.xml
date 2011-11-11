@@ -19,6 +19,8 @@
 	    android:dividerHeight="@dimen/layout_listing_listview_divider"
 	    android:divider="@color/layout_listing_listview_divider"
         android:cacheColorHint="@color/layout_listing_listview_cache"
-        android:background="@color/layout_background" />
+        android:background="@color/layout_background" 
+        android:scrollbarThumbVertical="@drawable/scrollbar_background"
+        android:scrollbarSize="@dimen/scrollbar_size" />
 
 </RelativeLayout>
