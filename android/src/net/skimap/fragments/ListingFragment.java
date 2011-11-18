@@ -3,7 +3,6 @@ package net.skimap.fragments;
 import java.util.ArrayList;
 
 import net.skimap.R;
-import net.skimap.activities.DetailActivity;
 import net.skimap.activities.MapActivity;
 import net.skimap.adapters.ListingAdapter;
 import net.skimap.data.SkicentreShort;
@@ -11,12 +10,15 @@ import net.skimap.database.Database;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.SupportActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,15 +26,17 @@ public class ListingFragment extends Fragment
 {
 	private final String SAVED_CHOICE_CHECKED = "choice_checked";
 	private final String SAVED_CHOICE_SHOWN = "choice_shown";
-	private final int DEFAULT_CHOICE_CHECKED = 0;
-	private final int DEFAULT_CHOICE_SHOWN = 0;
-      
+	private final int DEFAULT_CHOICE_CHECKED = -1;
+	private final int DEFAULT_CHOICE_SHOWN = -1;
+     
+	// TODO: nastavit init hodnotu mItemIdShown 
     private int mItemIdChecked = DEFAULT_CHOICE_CHECKED;
     private int mItemIdShown = DEFAULT_CHOICE_SHOWN;
     private boolean mDualView;
     private View mRootView;
     private ArrayList<SkicentreShort> mList;
-    
+    private OnItemSelectedListener mClickListener;
+
 
 	@Override
     public void onCreate(Bundle savedInstanceState) 
@@ -45,9 +49,15 @@ public class ListingFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedStateInstance)
 	{	
+		// nastaveni view
 		setHasOptionsMenu(true);
 		mRootView = inflater.inflate(R.layout.layout_listing, container, false);
 		setView();
+		
+		// je k dispozici detail fragment?
+        View detailFrame = getActivity().findViewById(R.id.fragment_detail);
+        mDualView = (detailFrame != null) && (detailFrame.getVisibility() == View.VISIBLE);
+        
 		return mRootView;
 	}
 	
@@ -57,10 +67,6 @@ public class ListingFragment extends Fragment
 	{
         super.onActivityCreated(savedInstanceState);
 
-        // je k dispozici detail fragment?
-        View detailFrame = getActivity().findViewById(R.id.fragment_detail);
-        mDualView = (detailFrame != null) && (detailFrame.getVisibility() == View.VISIBLE);
-
         // nahrani posledni pouzite pozice
         if (savedInstanceState != null) 
         {
@@ -69,6 +75,21 @@ public class ListingFragment extends Fragment
         }
     }
 	
+	
+	@Override
+    public void onAttach(SupportActivity activity)
+	{
+        super.onAttach(activity);
+        try
+        {
+        	mClickListener = (OnItemSelectedListener) activity;
+        } 
+        catch (ClassCastException e)
+        {
+            throw new ClassCastException(activity.toString() + " must implement OnItemSelectedListener");
+        }
+    }
+
 	
 	@Override
     public void onSaveInstanceState(Bundle outState) 
@@ -88,9 +109,7 @@ public class ListingFragment extends Fragment
 		super.onCreateOptionsMenu(menu, inflater);
 		
 		// tlacitko s mapou
-		View detailFrame = getActivity().findViewById(R.id.fragment_detail);
-		boolean dualView = (detailFrame != null) && (detailFrame.getVisibility() == View.VISIBLE);		 
-		if(!dualView)
+		if(!mDualView)
 		{
 			MenuItem mapItem = menu.add(Menu.NONE, R.id.ab_button_map, 11, R.string.ab_button_map);
 			mapItem.setIcon(R.drawable.ic_menu_mapmode);
@@ -106,13 +125,13 @@ public class ListingFragment extends Fragment
     	switch (item.getItemId()) 
     	{
 	    	case R.id.ab_button_search:
-	    		Toast.makeText(this.getActivity(), "SEARCH", Toast.LENGTH_LONG).show();
+	    		Toast.makeText(this.getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
 				return true;
 				
 	    	case R.id.ab_button_map:
 	    		Intent intent = new Intent();
 		        intent.setClass(this.getActivity(), MapActivity.class);
-		        intent.putExtra(MapFragment.ITEM_ID, mItemIdShown);
+		        if(mDualView) intent.putExtra(MapFragment.ITEM_ID, mItemIdShown);
 		        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		        startActivity(intent);
 				return true;
@@ -131,12 +150,19 @@ public class ListingFragment extends Fragment
 		
 		// ulozeni dat
 		db.removeAll();
-		db.insertSkicentre(new SkicentreShort(1, "Bormio", 0, 0));
-		db.insertSkicentre(new SkicentreShort(2, "Monínec", 0, 0));
-		db.insertSkicentre(new SkicentreShort(3, "Pec pod Snìžkou", 0, 0));
-		db.insertSkicentre(new SkicentreShort(4, "Špindlerùv Mlýn", 0, 0));
-		db.insertSkicentre(new SkicentreShort(5, "Adamov", 0, 0));
-		db.insertSkicentre(new SkicentreShort(6, "Brno", 0, 0));
+		db.insertSkicentre(new SkicentreShort(100, "Bormio", 0, 0));
+		db.insertSkicentre(new SkicentreShort(200, "Monínec", 0, 0));
+		db.insertSkicentre(new SkicentreShort(300, "Pec pod Snìžkou", 0, 0));
+		db.insertSkicentre(new SkicentreShort(400, "Špindlerùv Mlýn", 0, 0));
+		db.insertSkicentre(new SkicentreShort(500, "Adamov", 0, 0));
+		db.insertSkicentre(new SkicentreShort(600, "Brno", 0, 0));
+		
+		// promazani pole
+		if(mList != null) 
+		{
+			mList.clear();
+			mList = null;
+		}
 		
 		// nacteni dat do pole
 		mList = db.getAllSkicentres();
@@ -153,7 +179,19 @@ public class ListingFragment extends Fragment
 		listView.setAdapter(null);
 		ListingAdapter adapter = new ListingAdapter(this, mList);
 		listView.setAdapter(adapter);
-
+		
+		// nastaveni onclick
+		listView.setItemsCanFocus(false);
+		listView.setOnItemClickListener(new OnItemClickListener() 
+		{
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long viewId) 
+			{
+				int id = mList.get(position).getId();
+				showDetail(id);
+			}
+		});
+		
 		// nastaveni oznaceni polozky v listu
 		if (mDualView) 
         {
@@ -164,10 +202,10 @@ public class ListingFragment extends Fragment
 	}
 	
 	
-	public void showDetail(int index)
+	private void showDetail(int id)
 	{
-		mItemIdChecked = index;
-
+		mItemIdChecked = id;
+		
         // dual view
         if (mDualView)
         {
@@ -176,25 +214,21 @@ public class ListingFragment extends Fragment
             {
             	// TODO: zvyrazneni vybrane polozky
             	ListView listView = (ListView) mRootView.findViewById(R.id.layout_listing_listview);
-            	listView.setItemChecked(index, true);
-
-            	// nastaveni view v detail fragmentu
-            	DetailFragment detailFragment = (DetailFragment) getFragmentManager().findFragmentById(R.id.fragment_detail);
-            	detailFragment.setView(index);
-            	            	
-            	mItemIdShown = index;
+            	listView.setItemChecked(id, true);
+            	
+            	mClickListener.onItemSelected(id);
+            	mItemIdShown = id;
             }
         }
-        
-        // mono view
-        else 
+        else
         {
-            // nova aktivita
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), DetailActivity.class);
-            intent.putExtra(DetailFragment.ITEM_ID, index);
-            intent.putExtra(DetailFragment.DUAL_VIEW, false);
-            startActivity(intent);
+        	mClickListener.onItemSelected(id);
         }
+    }
+	
+
+	public interface OnItemSelectedListener 
+	{
+        public void onItemSelected(int id);
     }
 }

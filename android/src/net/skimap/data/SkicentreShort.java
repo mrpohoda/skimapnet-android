@@ -7,10 +7,6 @@ public class SkicentreShort
 	private double mLatitude;
 	private double mLongitude;
 	
-	public SkicentreShort()
-	{	
-	}
-	
 	public SkicentreShort(int id, String name, double lat, double lon)
 	{
 		mId = id;

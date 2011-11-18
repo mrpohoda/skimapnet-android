@@ -8,7 +8,6 @@ import net.skimap.fragments.ListingFragment;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
@@ -38,40 +37,17 @@ public class ListingAdapter extends BaseAdapter
 			view = inflater.inflate(R.layout.layout_listing_item, null);			
 		}
 
-		// nacteni dat z kurzoru
+		// nacteni dat z listu
 		SkicentreShort skicentre = mList.get(position);
-		int id = skicentre.getId();
 		String name = skicentre.getName();
 		
 		// textove pole
 		TextView text = (TextView) view.findViewById(R.id.layout_listing_item_textview);
 		text.setText(name);
-
-		// nastaveni onclick
-		view.setOnClickListener(new OnItemClickListener(position));
 		
 		// vraceni view
-		view.setId(id);
 		return view;
     }
-    
-    
-    // klik
- 	public class OnItemClickListener implements OnClickListener
- 	{
- 	    private int mPosition;
- 	    
- 	    OnItemClickListener(int position)
- 	    {
- 	    	this.mPosition = position;
- 	    }
- 	    
- 	    public void onClick(View view) 
- 	    {
- 	    	// TODO: resit pres listener
- 	    	mFragment.showDetail(mPosition);
- 	    }
- 	}
 
 
 	@Override

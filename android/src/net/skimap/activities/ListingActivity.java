@@ -2,14 +2,16 @@ package net.skimap.activities;
 
 import net.skimap.R;
 import net.skimap.adapters.TabsAdapter;
+import net.skimap.fragments.DetailFragment;
 import net.skimap.fragments.ListingFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-public class ListingActivity extends FragmentActivity
+public class ListingActivity extends FragmentActivity implements ListingFragment.OnItemSelectedListener
 {
 	private final String SAVED_TAB_INDEX = "tab_index";
 	
@@ -72,4 +74,29 @@ public class ListingActivity extends FragmentActivity
         super.onSaveInstanceState(outState);
         outState.putInt(SAVED_TAB_INDEX, getSupportActionBar().getSelectedNavigationIndex());
     }
+
+
+	@Override
+	public void onItemSelected(int id)
+	{
+		// je k dispozici detail fragment?
+        View detailFrame = findViewById(R.id.fragment_detail);
+        boolean dualView = (detailFrame != null) && (detailFrame.getVisibility() == View.VISIBLE);
+
+		if(dualView)
+		{
+			// aktualizace view v detail fragmentu
+        	DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_detail);
+        	detailFragment.setView(id);
+        } 
+		else 
+		{
+			// nova aktivita detail
+			Intent intent = new Intent();
+			intent.setClass(this, DetailActivity.class);
+			intent.putExtra(DetailFragment.ITEM_ID, id);
+			intent.putExtra(DetailFragment.DUAL_VIEW, dualView);
+			startActivity(intent);
+        }
+	}
 }
