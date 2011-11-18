@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
-import android.support.v4.view.SubMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -58,22 +57,6 @@ public class MapFragment extends Fragment
 		// vytvoreni menu
 		inflater.inflate(R.menu.menu_map, menu);
 		super.onCreateOptionsMenu(menu, inflater);
-
-    	// pridani submenu location
-		SubMenu locationSubMenu = menu.addSubMenu(Menu.NONE, R.id.ab_button_location, 10, R.string.ab_button_location);
-		locationSubMenu.add(Menu.NONE, R.id.ab_button_location_current, 1, R.string.ab_button_location_current);
-		locationSubMenu.add(Menu.NONE, R.id.ab_button_location_nearest, 2, R.string.ab_button_location_nearest);
-    	MenuItem locationItem = locationSubMenu.getItem();
-    	locationItem.setIcon(R.drawable.ic_menu_mylocation);
-    	locationItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-    	
-    	// pridani submenu layers
-		SubMenu layersSubMenu = menu.addSubMenu(Menu.NONE, R.id.ab_button_layers, 11, R.string.ab_button_layers);
-		layersSubMenu.add(Menu.NONE, R.id.ab_button_layers_normal, 1, R.string.ab_button_layers_normal);
-		layersSubMenu.add(Menu.NONE, R.id.ab_button_layers_satellite, 2, R.string.ab_button_layers_satellite);
-    	MenuItem layersItem = layersSubMenu.getItem();
-    	layersItem.setIcon(R.drawable.ic_menu_layers);
-    	layersItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 	}
 	
 	

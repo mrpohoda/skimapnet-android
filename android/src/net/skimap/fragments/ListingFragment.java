@@ -6,6 +6,8 @@ import net.skimap.R;
 import net.skimap.activities.DetailActivity;
 import net.skimap.activities.MapActivity;
 import net.skimap.adapters.ListingAdapter;
+import net.skimap.data.SkicentreShort;
+import net.skimap.database.Database;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,17 +26,19 @@ public class ListingFragment extends Fragment
 	private final String SAVED_CHOICE_SHOWN = "choice_shown";
 	private final int DEFAULT_CHOICE_CHECKED = 0;
 	private final int DEFAULT_CHOICE_SHOWN = 0;
-    
-    private boolean mDualView;
+      
     private int mItemIdChecked = DEFAULT_CHOICE_CHECKED;
     private int mItemIdShown = DEFAULT_CHOICE_SHOWN;
+    private boolean mDualView;
     private View mRootView;
+    private ArrayList<SkicentreShort> mList;
     
 
 	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        loadSkicentres();
     }
 
 	
@@ -88,7 +92,7 @@ public class ListingFragment extends Fragment
 		boolean dualView = (detailFrame != null) && (detailFrame.getVisibility() == View.VISIBLE);		 
 		if(!dualView)
 		{
-			MenuItem mapItem = menu.add(Menu.NONE, R.id.ab_button_map, 10, R.string.ab_button_map);
+			MenuItem mapItem = menu.add(Menu.NONE, R.id.ab_button_map, 11, R.string.ab_button_map);
 			mapItem.setIcon(R.drawable.ic_menu_mapmode);
 			mapItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		}
@@ -119,44 +123,37 @@ public class ListingFragment extends Fragment
     }
 	
 	
+	private void loadSkicentres()
+	{
+		// otevreni databaze
+		Database db = new Database(getActivity());
+		db.open();
+		
+		// ulozeni dat
+		db.removeAll();
+		db.insertSkicentre(new SkicentreShort(1, "Bormio", 0, 0));
+		db.insertSkicentre(new SkicentreShort(2, "Monínec", 0, 0));
+		db.insertSkicentre(new SkicentreShort(3, "Pec pod Snìžkou", 0, 0));
+		db.insertSkicentre(new SkicentreShort(4, "Špindlerùv Mlýn", 0, 0));
+		db.insertSkicentre(new SkicentreShort(5, "Adamov", 0, 0));
+		db.insertSkicentre(new SkicentreShort(6, "Brno", 0, 0));
+		
+		// nacteni dat do pole
+		mList = db.getAllSkicentres();
+		db.close();
+	}
+	
+	
 	private void setView()
 	{
 		// seznam skicenter
 		ListView listView = (ListView) mRootView.findViewById(R.id.layout_listing_listview);
 		
-		// vyprazdneni seznamu
+		// naplneni skicenter
 		listView.setAdapter(null);
-		
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("Bormio");
-		list.add("Pec pod Snìžkou");
-		list.add("Špindlerùv Mlýn");
-		list.add("Kvilda");
-		list.add("Kouty nad Desnou");
-		list.add("Monínec");
-		list.add("Èerná hora");
-		list.add("Javorina");
-		list.add("Bormio");
-		list.add("Pec pod Snìžkou");
-		list.add("Špindlerùv Mlýn");
-		list.add("Kvilda");
-		list.add("Kouty nad Desnou");
-		list.add("Monínec");
-		list.add("Èerná hora");
-		list.add("Javorina");
-		list.add("Bormio");
-		list.add("Pec pod Snìžkou");
-		list.add("Špindlerùv Mlýn");
-		list.add("Kvilda");
-		list.add("Kouty nad Desnou");
-		list.add("Monínec");
-		list.add("Èerná hora");
-		list.add("Javorina");
-		
-		// nastaveni view seznamu skicenter
-		ListingAdapter adapter =  new ListingAdapter(this, list);
+		ListingAdapter adapter = new ListingAdapter(this, mList);
 		listView.setAdapter(adapter);
-		
+
 		// nastaveni oznaceni polozky v listu
 		if (mDualView) 
         {

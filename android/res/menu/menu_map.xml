@@ -1,16 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">	
+    <item 
+		android:id="@+id/ab_button_layers"
+		android:title="@string/ab_button_layers"
+		android:icon="@drawable/ic_menu_layers"
+		android:showAsAction="ifRoom"
+		android:orderInCategory="10">		
+		<menu>
+		    <item 
+				android:id="@+id/ab_button_layers_normal"
+				android:title="@string/ab_button_layers_normal"
+				android:showAsAction="always"
+				android:orderInCategory="1" />
+		    <item 
+				android:id="@+id/ab_button_layers_satellite"
+				android:title="@string/ab_button_layers_satellite"
+				android:showAsAction="always"
+				android:orderInCategory="2" />
+		</menu>
+	</item>
+	
+    <item 
+		android:id="@+id/ab_button_location"
+		android:title="@string/ab_button_location"
+		android:icon="@drawable/ic_menu_mylocation"
+		android:showAsAction="ifRoom"
+		android:orderInCategory="11">
+		<menu>
+		    <item 
+				android:id="@+id/ab_button_location_current"
+				android:title="@string/ab_button_location_current"
+				android:showAsAction="always"
+				android:orderInCategory="1" />
+		    <item 
+				android:id="@+id/ab_button_location_nearest"
+				android:title="@string/ab_button_location_nearest"
+				android:showAsAction="always"
+				android:orderInCategory="2" />
+		</menu>
+	</item>
+    
+	<item 
+		android:id="@+id/ab_button_search"
+		android:title="@string/ab_button_search"
+		android:icon="@drawable/ic_menu_search"
+		android:showAsAction="always"
+		android:orderInCategory="12" />
+	
 	<item 
 		android:id="@+id/ab_button_list"
 		android:title="@string/ab_button_list"
 		android:icon="@drawable/ic_menu_list"
 		android:showAsAction="always"
-		android:orderInCategory="12" />
-		
-	<item 
-		android:id="@+id/ab_button_search"
-		android:title="@string/ab_button_search"
-		android:icon="@drawable/ic_menu_search"
-		android:showAsAction="ifRoom"
 		android:orderInCategory="13" />
 </menu>
