@@ -31,7 +31,7 @@ public class DetailFragment extends Fragment
         super.onCreate(savedInstanceState);
         
         // nastaveni extras
-        Bundle extras = getActivity().getIntent().getExtras();
+        Bundle extras = getSupportActivity().getIntent().getExtras();
         setExtras(extras, savedInstanceState);
         
         // nastaveni nejblizsiho skicentra
@@ -75,20 +75,20 @@ public class DetailFragment extends Fragment
     	switch (item.getItemId()) 
     	{
 	    	case R.id.ab_button_share:				
-	    		Toast.makeText(this.getActivity(), "SHARE", Toast.LENGTH_SHORT).show();
+	    		Toast.makeText(getActivity(), "SHARE", Toast.LENGTH_SHORT).show();
 				return true;
 				
 	    	case R.id.ab_button_favourite:
-	    		Toast.makeText(this.getActivity(), "FAV", Toast.LENGTH_SHORT).show();
+	    		Toast.makeText(getActivity(), "FAV", Toast.LENGTH_SHORT).show();
 				return true;
 				
 	    	case R.id.ab_button_camera:
-	    		Toast.makeText(this.getActivity(), "CAMERA", Toast.LENGTH_SHORT).show();
+	    		Toast.makeText(getActivity(), "CAMERA", Toast.LENGTH_SHORT).show();
 				return true;
 				
 	    	case R.id.ab_button_map:	
 	    		Intent intent = new Intent();
-		        intent.setClass(this.getActivity(), MapActivity.class);
+		        intent.setClass(getActivity(), MapActivity.class);
 		        intent.putExtra(MapFragment.ITEM_ID, mItemId);
 		        startActivity(intent);
 				return true;
@@ -136,7 +136,7 @@ public class DetailFragment extends Fragment
 	public void searchNearestSkicentre()
 	{
 		// TODO
-		Toast.makeText(this.getActivity(), "NEAREST SKICENTRE", Toast.LENGTH_SHORT).show();
+		Toast.makeText(getActivity(), "NEAREST SKICENTRE", Toast.LENGTH_SHORT).show();
 		// mItemId = id;
 	}
 	

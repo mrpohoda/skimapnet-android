@@ -42,7 +42,7 @@ public class ListingFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-        loadSkicentres();
+        loadAllSkicentres();
     }
 
 	
@@ -55,7 +55,7 @@ public class ListingFragment extends Fragment
 		setView();
 		
 		// je k dispozici detail fragment?
-        View detailFrame = getActivity().findViewById(R.id.fragment_detail);
+        View detailFrame = getSupportActivity().findViewById(R.id.fragment_detail);
         mDualView = (detailFrame != null) && (detailFrame.getVisibility() == View.VISIBLE);
         
 		return mRootView;
@@ -125,12 +125,12 @@ public class ListingFragment extends Fragment
     	switch (item.getItemId()) 
     	{
 	    	case R.id.ab_button_search:
-	    		Toast.makeText(this.getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
+	    		Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
 				return true;
 				
 	    	case R.id.ab_button_map:
 	    		Intent intent = new Intent();
-		        intent.setClass(this.getActivity(), MapActivity.class);
+		        intent.setClass(getActivity(), MapActivity.class);
 		        if(mDualView) intent.putExtra(MapFragment.ITEM_ID, mItemIdShown);
 		        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		        startActivity(intent);
@@ -140,22 +140,13 @@ public class ListingFragment extends Fragment
     			return super.onOptionsItemSelected(item);
     	}
     }
-	
-	
-	private void loadSkicentres()
+
+
+	private void loadAllSkicentres()
 	{
 		// otevreni databaze
 		Database db = new Database(getActivity());
 		db.open();
-		
-		// ulozeni dat
-		db.removeAll();
-		db.insertSkicentre(new SkicentreShort(100, "Bormio", 0, 0));
-		db.insertSkicentre(new SkicentreShort(200, "Monínec", 0, 0));
-		db.insertSkicentre(new SkicentreShort(300, "Pec pod Snìžkou", 0, 0));
-		db.insertSkicentre(new SkicentreShort(400, "Špindlerùv Mlýn", 0, 0));
-		db.insertSkicentre(new SkicentreShort(500, "Adamov", 0, 0));
-		db.insertSkicentre(new SkicentreShort(600, "Brno", 0, 0));
 		
 		// promazani pole
 		if(mList != null) 

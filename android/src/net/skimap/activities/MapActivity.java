@@ -4,6 +4,7 @@ import net.skimap.R;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentMapActivity;
+import android.support.v4.view.Window;
 import android.view.View;
 
 public class MapActivity extends FragmentMapActivity 
@@ -45,5 +46,9 @@ public class MapActivity extends FragmentMapActivity
     	catch(Exception e)
     	{
     	}
+    	
+    	// progress
+    	requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+    	setProgressBarIndeterminateVisibility(Boolean.FALSE);
     }
 }

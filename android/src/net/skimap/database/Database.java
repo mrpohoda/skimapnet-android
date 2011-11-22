@@ -1,6 +1,7 @@
 package net.skimap.database;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import net.skimap.data.SkicentreShort;
 import android.content.ContentValues;
@@ -63,6 +64,24 @@ public class Database
 	{
 		ContentValues values = valuesSkicentreShort(skicentre);
 		return mDatabase.insert(DatabaseHelper.TAB_SKICENTRE, null, values);
+	}
+	
+	
+	public int insertSkicentres(ArrayList<SkicentreShort> skicentres)
+	{
+		int count = 0;
+		if(skicentres==null) return count; 
+			
+		Iterator<SkicentreShort> iterator = skicentres.iterator();
+		while(iterator.hasNext())
+		{
+			SkicentreShort skicentre = iterator.next();
+			ContentValues values = valuesSkicentreShort(skicentre);
+			long result = mDatabase.insert(DatabaseHelper.TAB_SKICENTRE, null, values);
+			if(result>=0) count++;
+		}
+		
+		return count;
 	}
 	
 	

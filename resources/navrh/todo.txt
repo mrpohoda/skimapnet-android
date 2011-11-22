@@ -1,0 +1,6 @@
+-kesovani obrazku
+-zmapovani konkurence
+-overlay okenko pres mapu s informacemi o aktualnim stredisku, zmena informaci pri zmene polohy na mape (pouze tablet)
+-řazení skicenter
+-pridat analytics
+-dokumentovat kod

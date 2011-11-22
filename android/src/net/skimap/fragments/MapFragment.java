@@ -2,6 +2,7 @@ package net.skimap.fragments;
 
 import net.skimap.R;
 import net.skimap.activities.ListingActivity;
+import net.skimap.network.Synchronization;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -37,7 +38,7 @@ public class MapFragment extends Fragment
         super.onCreate(savedInstanceState);
         
         // nastaveni extras
-        Bundle extras = getActivity().getIntent().getExtras();
+        Bundle extras = getSupportActivity().getIntent().getExtras();
         setExtras(extras, savedInstanceState);
     }
 	
@@ -60,6 +61,17 @@ public class MapFragment extends Fragment
 		
 		return view;
 	}
+	
+	
+	@Override
+    public void onActivityCreated(Bundle savedInstanceState)
+	{
+        super.onActivityCreated(savedInstanceState);
+
+        // TODO: synchronizace skicenter
+        Synchronization synchro = new Synchronization(getActivity());
+        synchro.synchronizeSkicentres(getSupportActivity());
+    }
 	
 	
 	@Override
@@ -91,13 +103,13 @@ public class MapFragment extends Fragment
     	switch (item.getItemId()) 
     	{
 	    	case R.id.ab_button_list:				
-		        intent.setClass(this.getActivity(), ListingActivity.class);
+		        intent.setClass(getActivity(), ListingActivity.class);
 		        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		        startActivity(intent);
 				return true;
 				
 	    	case R.id.ab_button_search:
-	    		Toast.makeText(this.getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
+	    		Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
 				return true;
 				
 	    	case R.id.ab_button_location_current:
@@ -143,13 +155,13 @@ public class MapFragment extends Fragment
 	    	case NEAREST_SKICENTRE:
 		        // TODO
 	    		deviceLocation = getDevicePosition();
-	    		Toast.makeText(this.getActivity(), "NEAREST SKICENTRE", Toast.LENGTH_SHORT).show();
+	    		Toast.makeText(getActivity(), "NEAREST SKICENTRE", Toast.LENGTH_SHORT).show();
 	    		break;
 	    		
 	    	// poloha aktualniho skicentra dle mItemId
 	    	case SKICENTRE_POSITION:
 		        // TODO
-	    		Toast.makeText(this.getActivity(), "SKICENTRE: " + mItemId, Toast.LENGTH_SHORT).show();
+	    		Toast.makeText(getActivity(), "SKICENTRE: " + mItemId, Toast.LENGTH_SHORT).show();
 	    		break;
     	}
 	}
@@ -158,7 +170,7 @@ public class MapFragment extends Fragment
 	// TODO: ziskavat pozici lepsim zpusobem, getLastKnownLocation zlobi
 	private GeoPoint getDevicePosition()
 	{
-		LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+		LocationManager locationManager = (LocationManager) getSupportActivity().getSystemService(Context.LOCATION_SERVICE);
 		Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		GeoPoint deviceLocation = null;
 		if(location != null)
