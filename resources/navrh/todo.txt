@@ -1,6 +1,9 @@
 -kesovani obrazku
 -zmapovani konkurence
 -overlay okenko pres mapu s informacemi o aktualnim stredisku, zmena informaci pri zmene polohy na mape (pouze tablet)
--řazení skicenter
+-řazení skicenter, groupovani
 -pridat analytics
 -dokumentovat kod
+-google translate
+-posefovat synchronizaci globalne - nezavisle na fragmentech/aktivitach
+-countries_list - iso kod, pozor na dvojite pole [[]]

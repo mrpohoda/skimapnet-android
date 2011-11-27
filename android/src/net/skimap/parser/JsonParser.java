@@ -1,5 +1,6 @@
 package net.skimap.parser;
 
+import net.skimap.data.Country;
 import net.skimap.data.SkicentreShort;
 import net.skimap.database.Database;
 
@@ -43,7 +44,6 @@ public class JsonParser
 			
 			// otevreni databaze
 			mDatabase.open();
-			mDatabase.removeAll();
 			
 			for(int i=0;i<jsonRoot.length();i++)
 			{
@@ -54,9 +54,68 @@ public class JsonParser
 				double latitude = object.getDouble("lat");
 				double longitude = object.getDouble("lng");
 				//String type = object.getString("type");
+				int country = object.getInt("country");
+				boolean opened = object.getInt("opened")==1;
+				int snow = 0;
+				try
+				{
+					snow = object.getInt("snow");
+				}
+				catch(JSONException e)
+				{
+					// hodnota snow je null
+				}	
 				
-				SkicentreShort skicentre = new SkicentreShort(id, name, latitude, longitude);
-				mDatabase.insertSkicentre(skicentre);
+				SkicentreShort skicentre = new SkicentreShort(id, name, latitude, longitude, country, opened, snow);
+				mDatabase.upsertSkicentre(skicentre);
+				count++;
+			}
+		}
+		catch (SQLiteException e) 
+		{			
+			e.printStackTrace();
+			return count;
+		}
+		catch (JSONException e) 
+		{			
+			e.printStackTrace();
+			return count;
+		}
+		finally
+		{
+			mDatabase.close();
+		}
+				
+		return count;
+	}
+	
+	
+	public int storeCountries(String jsonData)
+	{
+		int count = 0;
+		
+		// TODO: overit funkcnost JSON na serveru
+
+		JSONArray jsonRoot = null;
+
+		// ziskej staty a uloz do databaze
+		try
+		{
+			// nacti JSON pole
+			jsonRoot = new JSONArray(jsonData);
+			
+			// otevreni databaze
+			mDatabase.open();
+			
+			for(int i=0;i<jsonRoot.length();i++)
+			{
+				JSONObject object = jsonRoot.getJSONObject(i);
+				
+				int id = object.getInt("cat");
+				String name = object.getString("cntry_name");
+				
+				Country country = new Country(id, name);
+				mDatabase.upsertCountry(country);
 				count++;
 			}
 		}

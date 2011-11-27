@@ -6,14 +6,16 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.MenuItem;
+import android.support.v4.view.Window;
+import android.widget.Toast;
 
-public class DetailActivity extends FragmentActivity 
+public class DetailActivity extends FragmentActivity implements SkimapApplication.OnSynchroListener
 {
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-        
+
         // dual view
         boolean dualView = true;
         Bundle extras = getIntent().getExtras();
@@ -28,7 +30,11 @@ public class DetailActivity extends FragmentActivity
             finish();
             return;
  		}
-        
+ 		
+ 		// naslouchani synchronizace
+        ((SkimapApplication) getApplicationContext()).setSynchroListener(this);
+
+        // nastaveni layoutu
         setContentView(R.layout.activity_detail);
         setActionBar();
     }
@@ -42,6 +48,11 @@ public class DetailActivity extends FragmentActivity
     	bar.setDisplayShowTitleEnabled(true);
     	bar.setDisplayShowHomeEnabled(true);
     	bar.setDisplayHomeAsUpEnabled(true);
+    	
+    	// inicializace progress baru
+    	requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+    	boolean synchro = ((SkimapApplication) getApplicationContext()).getSynchro();
+    	setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
     }
     
     
@@ -59,4 +70,26 @@ public class DetailActivity extends FragmentActivity
     			return super.onOptionsItemSelected(item);
     	}
     }
+    
+
+	@Override
+	public void onSynchroStart()
+	{
+		// zapnuti progress baru
+		setProgressBarIndeterminateVisibility(Boolean.TRUE);
+		
+		// start
+		Toast.makeText(this, "SYNCHRO START", Toast.LENGTH_SHORT).show();
+	}
+
+
+	@Override
+	public void onSynchroStop()
+	{
+		// vypnuti progress baru
+		setProgressBarIndeterminateVisibility(Boolean.FALSE);
+		
+		// hotovo
+		Toast.makeText(this, "SYNCHRO DONE", Toast.LENGTH_SHORT).show();
+	}
 }

@@ -1,52 +1,68 @@
 package net.skimap.network;
 
+import net.skimap.activities.SkimapApplication;
 import net.skimap.parser.JsonParser;
-import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.SupportActivity;
 
 public class Synchronization 
 {
-	private final int MESSAGE_SYNCHRO_SKICENTRES = 0;
+	private final int MESSAGE_SYNCHRO_SHORT = 0;
 	
-	private Context mContext;
+	private Handler mHandler;
+	private SkimapApplication mApplication;
 	
 	
-	public Synchronization(Context context)
+	public Synchronization(SkimapApplication application)
 	{
-		mContext = context;
-	}
-	
-	
-	public void synchronizeSkicentres(final SupportActivity activity)
-	{
-		// TODO
-		activity.setProgressBarIndeterminateVisibility(Boolean.TRUE);
-		activity.setProgress(0);
+		mApplication = application;
 		
-		// odchyceni zpravy
-		final Handler handler = new Handler() 
+		// odchyceni zpravy z vlakna
+		mHandler = new Handler() 
 	    {
             @Override
             public void handleMessage(Message message) 
             {        
-            	if(message.what == MESSAGE_SYNCHRO_SKICENTRES)
+            	if(message.what == MESSAGE_SYNCHRO_SHORT)
             	{
-            		activity.setProgressBarIndeterminateVisibility(Boolean.FALSE);
+            		// zastaveni synchronizace
+        			mApplication.stopSynchro();
+        			mApplication.setSynchro(false);
             	}
             }
 	    };
-	    
+	}
+	
+	
+	public void trySynchronizeShortData()
+	{
+		boolean synchro = mApplication.getSynchro();
+		if(!synchro)
+		{
+			// TODO: progressbar viditelny ze vsech fragmentu
+			
+			// start synchronizace
+			mApplication.setSynchro(true);
+			mApplication.startSynchro();
+			
+			// spusteni vlakna
+			synchronizeShortData();
+		}
+	}
+	
+	
+	private void synchronizeShortData()
+	{
 	    // vlakno
 	    new Thread()
         {
         	public void run() 
 		    {
+        		synchronizeCountriesThread();
         		synchronizeSkicentresThread();
         		Message message = new Message();
-        		message.what = MESSAGE_SYNCHRO_SKICENTRES;
-    			handler.sendMessage(message);
+        		message.what = MESSAGE_SYNCHRO_SHORT;
+        		mHandler.sendMessage(message);
 		    }
         }.start();
 	}
@@ -57,11 +73,11 @@ public class Synchronization
 		int count = 0;
 		
 		// nacteni JSON dat z url
-		String json = null;
+		String skicentresJson = null;
 		try
 		{
-			json = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/skimap.txt");
-			//json = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list");
+			skicentresJson = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/skicentres_list.txt");
+			//skicentresJson = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&extended=1");
 		}
 		catch (Exception e)
 		{
@@ -70,10 +86,38 @@ public class Synchronization
 		}
 		
 		// parsovani JSON dat a ukladani do databaze
-		if(json!=null)
+		if(skicentresJson!=null)
 		{
-			JsonParser parser = new JsonParser(mContext);
-			count = parser.storeSkicentresShort(json);
+			JsonParser parser = new JsonParser(mApplication.getApplicationContext());
+			count = parser.storeSkicentresShort(skicentresJson);
+		}
+
+		return count;
+	}
+	
+	
+	private int synchronizeCountriesThread()
+	{
+		int count = 0;
+		
+		// nacteni JSON dat z url
+		String countriesJson = null;
+		try
+		{		
+			countriesJson = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/countries_list.txt");
+			//countriesJson = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=countries_list");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return count;
+		}
+		
+		// parsovani JSON dat a ukladani do databaze		
+		if(countriesJson!=null)
+		{
+			JsonParser parser = new JsonParser(mApplication.getApplicationContext());
+			count = parser.storeCountries(countriesJson);
 		}
 		
 		return count;

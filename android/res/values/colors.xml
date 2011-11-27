@@ -15,7 +15,7 @@
 	<color name="ab_divider_bottom">#000</color> <!-- cerna -->
 	
 	<color name="layout_background">#fff</color> <!-- bila -->
-	<color name="layout_listing_listview_divider">#ccc</color> <!-- seda -->
+	<color name="layout_listing_listview_divider">#aaa</color> <!-- seda -->
 	<color name="layout_listing_listview_cache">#999</color> <!-- seda -->
 	
 	<color name="layout_listing_item_background">#fff</color> <!-- bila -->

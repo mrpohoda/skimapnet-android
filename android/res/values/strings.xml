@@ -18,7 +18,7 @@
     <string name="ab_button_favourite">Favourite</string>
     <string name="ab_button_camera">Camera</string>
     
-    <string name="ab_tab_nearest">Nearest</string>
+    <string name="ab_tab_all">All</string>
     <string name="ab_tab_favourites">Favourites</string>
     <string name="ab_tab_recommended">Recommended</string>
 </resources>

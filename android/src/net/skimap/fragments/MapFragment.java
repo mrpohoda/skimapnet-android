@@ -2,7 +2,6 @@ package net.skimap.fragments;
 
 import net.skimap.R;
 import net.skimap.activities.ListingActivity;
-import net.skimap.network.Synchronization;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -67,10 +66,6 @@ public class MapFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState)
 	{
         super.onActivityCreated(savedInstanceState);
-
-        // TODO: synchronizace skicenter
-        Synchronization synchro = new Synchronization(getActivity());
-        synchro.synchronizeSkicentres(getSupportActivity());
     }
 	
 	

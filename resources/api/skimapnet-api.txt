@@ -1,4 +1,4 @@
-﻿Získání všech středisek (jednotlivé body na mapě)
+Získání všech středisek (jednotlivé body na mapě)
 =================================================
 
 Dotaz
@@ -66,6 +66,32 @@ funpark - 1
 8) trasy pro běžky
 http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&xc=1
 xc - 1
+
+9) rozšířené parametry
+http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&country=13&extended=1
+extended - 1
+
+
+Získání všech států
+===================
+
+Dotaz
+-----
+http://ski-map.net/skimapnet/php/common.php?fce=countries_list
+
+Odpověď
+-------
+[
+	{
+	    "cat": "13",
+	    "cntry_name": "Austria"
+	}
+]
+
+Datatypy
+--------
+cat			int
+cntry_name	string
 
 
 Získání všech středisek (jednotlivé regiony)

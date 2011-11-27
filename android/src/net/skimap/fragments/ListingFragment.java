@@ -124,6 +124,7 @@ public class ListingFragment extends Fragment
     	// nastaveni chovani tlacitek
     	switch (item.getItemId()) 
     	{
+    		// TODO: pridat razeni a groupovani
 	    	case R.id.ab_button_search:
 	    		Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
 				return true;
@@ -140,6 +141,13 @@ public class ListingFragment extends Fragment
     			return super.onOptionsItemSelected(item);
     	}
     }
+	
+	
+	public void refreshListView()
+	{
+		loadAllSkicentres();
+		setView();
+	}
 
 
 	private void loadAllSkicentres()
@@ -165,11 +173,17 @@ public class ListingFragment extends Fragment
 	{
 		// seznam skicenter
 		ListView listView = (ListView) mRootView.findViewById(R.id.layout_listing_listview);
-		
+
 		// naplneni skicenter
-		listView.setAdapter(null);
-		ListingAdapter adapter = new ListingAdapter(this, mList);
-		listView.setAdapter(adapter);
+		if (listView.getAdapter()==null) 
+		{
+			ListingAdapter adapter = new ListingAdapter(this, mList);
+			listView.setAdapter(adapter);
+		} 
+		else 
+		{
+		    ((ListingAdapter) listView.getAdapter()).refill(mList);
+		}
 		
 		// nastaveni onclick
 		listView.setItemsCanFocus(false);

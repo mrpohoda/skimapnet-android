@@ -69,4 +69,12 @@ public class ListingAdapter extends BaseAdapter
 	{
 		return position;
 	}
+	
+	
+	public void refill(ArrayList<SkicentreShort> list)
+	{
+		mList.clear();
+		mList.addAll(list);
+	    notifyDataSetChanged();
+	}
 }
