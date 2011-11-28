@@ -1,10 +1,12 @@
 package net.skimap.fragments;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.skimap.R;
 import net.skimap.activities.MapActivity;
 import net.skimap.adapters.ListingAdapter;
+import net.skimap.data.Country;
 import net.skimap.data.SkicentreShort;
 import net.skimap.database.Database;
 import android.content.Intent;
@@ -34,7 +36,8 @@ public class ListingFragment extends Fragment
     private int mItemIdShown = DEFAULT_CHOICE_SHOWN;
     private boolean mDualView;
     private View mRootView;
-    private ArrayList<SkicentreShort> mList;
+    private ArrayList<SkicentreShort> mSkicentreList;
+    private HashMap<Integer, Country> mCountryList;
     private OnItemSelectedListener mClickListener;
 
 
@@ -42,6 +45,7 @@ public class ListingFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        loadAllCountries();
         loadAllSkicentres();
     }
 
@@ -136,6 +140,18 @@ public class ListingFragment extends Fragment
 		        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		        startActivity(intent);
 				return true;
+				
+	    	case R.id.ab_button_sort_alphabet:
+	    		Toast.makeText(getActivity(), "SORT ALPHABET", Toast.LENGTH_SHORT).show();
+				return true;
+				
+	    	case R.id.ab_button_sort_distance:
+	    		Toast.makeText(getActivity(), "SORT DISTANCE", Toast.LENGTH_SHORT).show();
+				return true;
+				
+	    	case R.id.ab_button_sort_snow:
+	    		Toast.makeText(getActivity(), "SORT SNOW", Toast.LENGTH_SHORT).show();
+				return true;
 
     		default:
     			return super.onOptionsItemSelected(item);
@@ -145,6 +161,7 @@ public class ListingFragment extends Fragment
 	
 	public void refreshListView()
 	{
+		loadAllCountries();
 		loadAllSkicentres();
 		setView();
 	}
@@ -157,14 +174,33 @@ public class ListingFragment extends Fragment
 		db.open();
 		
 		// promazani pole
-		if(mList != null) 
+		if(mSkicentreList != null) 
 		{
-			mList.clear();
-			mList = null;
+			mSkicentreList.clear();
+			mSkicentreList = null;
 		}
 		
 		// nacteni dat do pole
-		mList = db.getAllSkicentres();
+		mSkicentreList = db.getAllSkicentres();
+		db.close();
+	}
+	
+	
+	private void loadAllCountries()
+	{
+		// otevreni databaze
+		Database db = new Database(getActivity());
+		db.open();
+		
+		// promazani pole
+		if(mCountryList != null) 
+		{
+			mCountryList.clear();
+			mCountryList = null;
+		}
+		
+		// nacteni dat do pole
+		mCountryList = db.getAllCountries();
 		db.close();
 	}
 	
@@ -177,12 +213,12 @@ public class ListingFragment extends Fragment
 		// naplneni skicenter
 		if (listView.getAdapter()==null) 
 		{
-			ListingAdapter adapter = new ListingAdapter(this, mList);
+			ListingAdapter adapter = new ListingAdapter(this, mSkicentreList, mCountryList);
 			listView.setAdapter(adapter);
 		} 
 		else 
 		{
-		    ((ListingAdapter) listView.getAdapter()).refill(mList);
+		    ((ListingAdapter) listView.getAdapter()).refill(mSkicentreList, mCountryList);
 		}
 		
 		// nastaveni onclick
@@ -192,7 +228,7 @@ public class ListingFragment extends Fragment
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long viewId) 
 			{
-				int id = mList.get(position).getId();
+				int id = mSkicentreList.get(position).getId();
 				showDetail(id);
 			}
 		});

@@ -56,7 +56,7 @@ public class JsonParser
 				//String type = object.getString("type");
 				int country = object.getInt("country");
 				boolean opened = object.getInt("opened")==1;
-				int snow = 0;
+				int snow = -1;
 				try
 				{
 					snow = object.getInt("snow");

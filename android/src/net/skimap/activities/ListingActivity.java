@@ -3,10 +3,7 @@ package net.skimap.activities;
 import net.skimap.R;
 import net.skimap.adapters.TabsAdapter;
 import net.skimap.fragments.DetailFragment;
-import net.skimap.fragments.ListingAllFragment;
-import net.skimap.fragments.ListingFavFragment;
 import net.skimap.fragments.ListingFragment;
-import net.skimap.fragments.ListingRecFragment;
 import net.skimap.network.Synchronization;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,6 +31,7 @@ public class ListingActivity extends FragmentActivity implements ListingFragment
         ((SkimapApplication) getApplicationContext()).setSynchroListener(this);
 
         // nastaveni layoutu
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_listing);
         setActionBar();
         
@@ -76,12 +74,11 @@ public class ListingActivity extends FragmentActivity implements ListingFragment
         ActionBar.Tab tab2 = bar.newTab().setText(R.string.ab_tab_favourites);
         ActionBar.Tab tab3 = bar.newTab().setText(R.string.ab_tab_recommended);
                
-        mTabsAdapter.addTab(tab1, ListingAllFragment.class);
-        mTabsAdapter.addTab(tab2, ListingFavFragment.class);
-        mTabsAdapter.addTab(tab3, ListingRecFragment.class);
+        mTabsAdapter.addTab(tab1, ListingFragment.class);
+        mTabsAdapter.addTab(tab2, ListingFragment.class);
+        mTabsAdapter.addTab(tab3, ListingFragment.class);
 
         // inicializace progress baru
-    	requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
     	boolean synchro = ((SkimapApplication) getApplicationContext()).getSynchro();
     	setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
     }

@@ -35,6 +35,7 @@ public class DetailActivity extends FragmentActivity implements SkimapApplicatio
         ((SkimapApplication) getApplicationContext()).setSynchroListener(this);
 
         // nastaveni layoutu
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_detail);
         setActionBar();
     }
@@ -50,7 +51,6 @@ public class DetailActivity extends FragmentActivity implements SkimapApplicatio
     	bar.setDisplayHomeAsUpEnabled(true);
     	
     	// inicializace progress baru
-    	requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
     	boolean synchro = ((SkimapApplication) getApplicationContext()).getSynchro();
     	setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
     }

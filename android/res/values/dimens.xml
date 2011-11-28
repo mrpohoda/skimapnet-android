@@ -7,6 +7,11 @@
     <dimen name="ab_tab_padding">5dp</dimen>
     
     <dimen name="layout_listing_listview_divider">0.5dp</dimen>
-    <dimen name="layout_listing_item_textview_textsize">18sp</dimen>
-    <dimen name="layout_listing_item_textview_padding">10dp</dimen>       
+    <dimen name="layout_listing_item_name_textsize">17sp</dimen>
+    <dimen name="layout_listing_item_country_textsize">13sp</dimen>
+    <dimen name="layout_listing_item_padding_vertical">5dp</dimen>
+    <dimen name="layout_listing_item_opened_padding_left">7dp</dimen>
+    <dimen name="layout_listing_item_text_padding_left">7dp</dimen>
+    <dimen name="layout_listing_item_favourite_padding_left">5dp</dimen>
+    <dimen name="layout_listing_item_favourite_padding_right">5dp</dimen>
 </resources>

@@ -1,6 +1,7 @@
 package net.skimap.database;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import net.skimap.data.Country;
@@ -252,19 +253,19 @@ public class Database
 	}
 	
 	
-	public ArrayList<Country> getAllCountries()
+	public HashMap<Integer, Country> getAllCountries()
 	{
 		Cursor cursor = mDatabase.query(DatabaseHelper.TAB_COUNTRY, DatabaseHelper.COLS_COUNTRY, null, null, null, null, DatabaseHelper.TAB_COUNTRY_API_ID + " ASC", null);
-		ArrayList<Country> list = new ArrayList<Country>();
+		HashMap<Integer, Country> map = new HashMap<Integer, Country>();
 		
 		while (cursor.moveToNext()) 
 	    {
 			Country country = cursorCountry(cursor);
-			list.add(country);
+			map.put(country.getId(), country);
 	    }
 		
 		cursor.close();
-		return list;
+		return map;
 	}
 	
 

@@ -7,13 +7,17 @@
     
     <string name="ab_button_list">List</string>
     <string name="ab_button_map">Map</string>
+    <string name="ab_button_search">Search</string>
     <string name="ab_button_layers">Map layers</string>
     <string name="ab_button_layers_normal">Normal</string>
     <string name="ab_button_layers_satellite">Satellite</string>
     <string name="ab_button_location">Map location</string>
     <string name="ab_button_location_current">My location</string>
     <string name="ab_button_location_nearest">Nearest ski centre</string>
-    <string name="ab_button_search">Search</string>
+    <string name="ab_button_sort">Sort by</string>
+    <string name="ab_button_sort_alphabet">Alphabet</string>
+    <string name="ab_button_sort_distance">Distance</string>
+    <string name="ab_button_sort_snow">Snow minimum</string>
     <string name="ab_button_share">Share</string>
     <string name="ab_button_favourite">Favourite</string>
     <string name="ab_button_camera">Camera</string>
@@ -21,4 +25,6 @@
     <string name="ab_tab_all">All</string>
     <string name="ab_tab_favourites">Favourites</string>
     <string name="ab_tab_recommended">Recommended</string>
+    
+    <string name="layout_listing_item_snow">cm of snow</string>
 </resources>

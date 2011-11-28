@@ -1,8 +1,10 @@
 package net.skimap.adapters;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.skimap.R;
+import net.skimap.data.Country;
 import net.skimap.data.SkicentreShort;
 import net.skimap.fragments.ListingFragment;
 import android.content.Context;
@@ -10,19 +12,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
 public class ListingAdapter extends BaseAdapter
 {
 	private ListingFragment mFragment;
-	private ArrayList<SkicentreShort> mList;    
+	private ArrayList<SkicentreShort> mSkicentreList;
+	private HashMap<Integer, Country> mCountryList;
 	
 	
-    public ListingAdapter(ListingFragment fragment, ArrayList<SkicentreShort> list)
+    public ListingAdapter(ListingFragment fragment, ArrayList<SkicentreShort> skicentreList, HashMap<Integer, Country> countryList)
     {
         mFragment = fragment;
-        mList = list;
+        mSkicentreList = skicentreList;
+        mCountryList = countryList;
     }
     
     
@@ -38,12 +43,24 @@ public class ListingAdapter extends BaseAdapter
 		}
 
 		// nacteni dat z listu
-		SkicentreShort skicentre = mList.get(position);
+		SkicentreShort skicentre = mSkicentreList.get(position);
 		String name = skicentre.getName();
+		int country = skicentre.getCountry();
+		boolean opened = skicentre.getOpened();
+		int snow = skicentre.getSnow();
 		
-		// textove pole
-		TextView text = (TextView) view.findViewById(R.id.layout_listing_item_textview);
-		text.setText(name);
+		// reference na widgety
+		ImageView imageOpened = (ImageView) view.findViewById(R.id.layout_listing_item_opened);
+		TextView textName = (TextView) view.findViewById(R.id.layout_listing_item_name);
+		TextView textCountry = (TextView) view.findViewById(R.id.layout_listing_item_country);
+		
+		// nastaveni obsahu widgetu
+		imageOpened.setImageResource(opened ? R.drawable.presence_online : R.drawable.presence_busy);
+		textName.setText(name);
+		
+		String secondLine = mCountryList.get(country).getName();
+		if(snow>0) secondLine += ", " + snow + " " + mFragment.getString(R.string.layout_listing_item_snow);
+		textCountry.setText(secondLine);
 		
 		// vraceni view
 		return view;
@@ -53,14 +70,14 @@ public class ListingAdapter extends BaseAdapter
 	@Override
 	public int getCount() 
 	{
-		return mList.size();
+		return mSkicentreList.size();
 	}
 
 
 	@Override
 	public Object getItem(int position) 
 	{
-		return mList.get(position);
+		return mSkicentreList.get(position);
 	}
 
 
@@ -71,10 +88,12 @@ public class ListingAdapter extends BaseAdapter
 	}
 	
 	
-	public void refill(ArrayList<SkicentreShort> list)
+	public void refill(ArrayList<SkicentreShort> skicentreList, HashMap<Integer, Country> countryList)
 	{
-		mList.clear();
-		mList.addAll(list);
+		mSkicentreList.clear();
+		mSkicentreList.addAll(skicentreList);
+		mCountryList.clear();
+		mCountryList.putAll(countryList);
 	    notifyDataSetChanged();
 	}
 }

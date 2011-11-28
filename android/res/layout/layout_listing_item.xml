@@ -5,14 +5,55 @@
 	android:orientation="horizontal"
 	android:focusable="false"
 	android:focusableInTouchMode="false"
+	android:paddingTop="@dimen/layout_listing_item_padding_vertical"
+	android:paddingBottom="@dimen/layout_listing_item_padding_vertical"
 	android:background="@drawable/layout_listing_item_background">
-
-    <TextView
-		android:id="@+id/layout_listing_item_textview"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:textColor="@color/layout_listing_item_textview"
-		android:textSize="@dimen/layout_listing_item_textview_textsize"
-		android:padding="@dimen/layout_listing_item_textview_padding" />
 	
+    <ImageView 
+		android:id="@+id/layout_listing_item_opened"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_vertical"
+		android:paddingLeft="@dimen/layout_listing_item_opened_padding_left"
+		android:src="@drawable/presence_online" />
+    
+    <RelativeLayout
+   		android:layout_width="wrap_content" 
+   		android:layout_height="wrap_content">
+   		
+        <ImageView 
+			android:id="@+id/layout_listing_item_favourite"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:src="@drawable/btn_star_big_on"
+			android:paddingLeft="@dimen/layout_listing_item_favourite_padding_left"
+			android:paddingRight="@dimen/layout_listing_item_favourite_padding_right"
+			android:layout_alignParentRight="true">
+		</ImageView>
+
+	    <LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:paddingLeft="@dimen/layout_listing_item_text_padding_left"
+			android:layout_alignParentLeft="true"
+			android:layout_toLeftOf="@id/layout_listing_item_favourite">
+		
+	   		<TextView
+				android:id="@+id/layout_listing_item_name"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="@color/layout_listing_item_name"
+				android:textSize="@dimen/layout_listing_item_name_textsize" />
+	   		
+	   		<TextView
+				android:id="@+id/layout_listing_item_country"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="@color/layout_listing_item_country"
+				android:textSize="@dimen/layout_listing_item_country_textsize" />
+		
+		</LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
