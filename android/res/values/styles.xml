@@ -5,6 +5,7 @@
             <item name="abIcon">@drawable/ic_menu_home</item>
             <item name="abBackground">@drawable/ab_background</item>
             <item name="abDivider">@color/ab_divider_button</item>
+            <item name="abIndeterminateProgressStyle">@android:style/Widget.ProgressBar.Small</item>
             <item name="selectableItemBackground">@drawable/ab_selectable_background</item>
             <item name="actionBarTabStyle">@style/MyActionBarTabStyle</item>
             <item name="popupMenuStyle">@style/MyPopupMenu</item>

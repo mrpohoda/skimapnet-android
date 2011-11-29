@@ -22,6 +22,7 @@ public class Database
 	//private final String DATE_FORMAT = "yyyy-MM-dd";
 	
 	
+	// TODO: synchronizace vlaken pri praci s databazi, kvuli kolizi
 	public Database(Context context)
 	{
 		mContext = context;
@@ -38,7 +39,7 @@ public class Database
 	
 	public void close()
 	{
-		mHelper.close();
+		if(mHelper!=null) mHelper.close();
 	}
 	
 	

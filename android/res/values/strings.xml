@@ -16,6 +16,7 @@
     <string name="ab_button_location_nearest">Nearest ski centre</string>
     <string name="ab_button_sort">Sort by</string>
     <string name="ab_button_sort_alphabet">Alphabet</string>
+    <string name="ab_button_sort_country">Country</string>
     <string name="ab_button_sort_distance">Distance</string>
     <string name="ab_button_sort_snow">Snow minimum</string>
     <string name="ab_button_share">Share</string>

@@ -13,15 +13,20 @@
 				android:showAsAction="always"
 				android:orderInCategory="1" />
 		    <item 
+				android:id="@+id/ab_button_sort_country"
+				android:title="@string/ab_button_sort_country"
+				android:showAsAction="always"
+				android:orderInCategory="2" />
+		    <item 
 				android:id="@+id/ab_button_sort_distance"
 				android:title="@string/ab_button_sort_distance"
 				android:showAsAction="always"
-				android:orderInCategory="2" />
+				android:orderInCategory="3" />
 		    <item 
 				android:id="@+id/ab_button_sort_snow"
 				android:title="@string/ab_button_sort_snow"
 				android:showAsAction="always"
-				android:orderInCategory="3" />
+				android:orderInCategory="4" />
 		</menu>
 	</item>
     

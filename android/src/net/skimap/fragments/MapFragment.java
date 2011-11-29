@@ -1,9 +1,19 @@
 package net.skimap.fragments;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
 import net.skimap.R;
 import net.skimap.activities.ListingActivity;
+import net.skimap.data.Country;
+import net.skimap.data.SkicentreShort;
+import net.skimap.database.Database;
+import net.skimap.map.MyItemizedOverlay;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -19,6 +29,8 @@ import android.widget.Toast;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 public class MapFragment extends Fragment 
 {
@@ -57,6 +69,9 @@ public class MapFragment extends Fragment
 		// lokace na mape
 		if(mItemId == EMPTY_ID) setMapLocation(MapLocationMode.DEVICE_POSITION);
 		else setMapLocation(MapLocationMode.SKICENTRE_POSITION);
+		
+		// pridani POI
+		addPois();
 		
 		return view;
 	}
@@ -197,5 +212,46 @@ public class MapFragment extends Fragment
  		}
  		
  		mItemId = id;
+	}
+	
+	
+	private void addPois()
+	{
+		List<Overlay> mapOverlays;
+		Drawable drawable;
+		MyItemizedOverlay itemizedOverlay;
+
+		// seznam overlay vrstev
+		mapOverlays = mMapView.getOverlays();
+		
+		// ikona skicentra
+		drawable = getResources().getDrawable(R.drawable.icon_skicentre);
+		
+		// vlastni overlay vrstva
+		itemizedOverlay = new MyItemizedOverlay(drawable, mMapView);
+		
+		// nacteni skicenter a statu z databaze
+		Database database = new Database(getActivity());
+		database.open();
+		ArrayList<SkicentreShort> skicentres = database.getAllSkicentres();
+		HashMap<Integer, Country> countries = database.getAllCountries();
+		database.close();
+		
+		// pridani POI do vrstvy
+		Iterator<SkicentreShort> iterator = skicentres.iterator();
+		while(iterator.hasNext())
+		{
+			SkicentreShort skicentre = iterator.next();
+			
+			// text POI
+			String detail = countries.get(skicentre.getCountry()).getName();
+			if(skicentre.getSnow()>0) detail += ", " + skicentre.getSnow() + " " + getString(R.string.layout_listing_item_snow);
+			
+			// POI
+			GeoPoint point = new GeoPoint((int)(skicentre.getLatitude()*1E6),(int)(skicentre.getLongitude()*1E6));
+			OverlayItem overlayItem = new OverlayItem(point, skicentre.getName(), detail);
+			itemizedOverlay.addOverlay(overlayItem);
+		}
+		mapOverlays.add(itemizedOverlay);
 	}
 }

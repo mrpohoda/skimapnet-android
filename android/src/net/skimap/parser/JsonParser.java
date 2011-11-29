@@ -131,7 +131,7 @@ public class JsonParser
 		}
 		finally
 		{
-			mDatabase.close();
+			if(mDatabase!=null) mDatabase.close();
 		}
 				
 		return count;

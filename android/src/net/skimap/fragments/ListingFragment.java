@@ -21,17 +21,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class ListingFragment extends Fragment
 {
+	// TODO: nastavit init hodnotu mItemIdShown
+	// TODO: pod action barem se zobrazuje rusivy transparentni prechod
 	private final String SAVED_CHOICE_CHECKED = "choice_checked";
 	private final String SAVED_CHOICE_SHOWN = "choice_shown";
 	private final int DEFAULT_CHOICE_CHECKED = -1;
 	private final int DEFAULT_CHOICE_SHOWN = -1;
      
-	// TODO: nastavit init hodnotu mItemIdShown 
     private int mItemIdChecked = DEFAULT_CHOICE_CHECKED;
     private int mItemIdShown = DEFAULT_CHOICE_SHOWN;
     private boolean mDualView;
@@ -145,6 +147,10 @@ public class ListingFragment extends Fragment
 	    		Toast.makeText(getActivity(), "SORT ALPHABET", Toast.LENGTH_SHORT).show();
 				return true;
 				
+	    	case R.id.ab_button_sort_country:
+	    		Toast.makeText(getActivity(), "SORT COUNTRY", Toast.LENGTH_SHORT).show();
+				return true;
+				
 	    	case R.id.ab_button_sort_distance:
 	    		Toast.makeText(getActivity(), "SORT DISTANCE", Toast.LENGTH_SHORT).show();
 				return true;
@@ -230,6 +236,16 @@ public class ListingFragment extends Fragment
 			{
 				int id = mSkicentreList.get(position).getId();
 				showDetail(id);
+			}
+		});
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() 
+		{
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long viewId) 
+			{
+				// TODO
+				Toast.makeText(getActivity(), "LONG CLICK", Toast.LENGTH_SHORT).show();
+				return true;
 			}
 		});
 		

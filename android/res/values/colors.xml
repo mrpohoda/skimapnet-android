@@ -23,4 +23,12 @@
 	<color name="layout_listing_item_background_pressed">#fb6</color> <!-- svetla oranz -->	
 	<color name="layout_listing_item_name">#000</color> <!-- cerna -->
 	<color name="layout_listing_item_country">#777</color> <!-- seda -->
+	
+	<!-- 
+		Uprava barevnosti btn_star_on_normal_holo_light.png:
+			Hue/saturation in PhotoShop:
+				-115
+				+0
+				-10
+	 -->
 </resources>

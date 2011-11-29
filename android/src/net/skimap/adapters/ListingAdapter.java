@@ -51,11 +51,13 @@ public class ListingAdapter extends BaseAdapter
 		
 		// reference na widgety
 		ImageView imageOpened = (ImageView) view.findViewById(R.id.layout_listing_item_opened);
+		ImageView imageFavourite = (ImageView) view.findViewById(R.id.layout_listing_item_favourite);
 		TextView textName = (TextView) view.findViewById(R.id.layout_listing_item_name);
 		TextView textCountry = (TextView) view.findViewById(R.id.layout_listing_item_country);
 		
 		// nastaveni obsahu widgetu
 		imageOpened.setImageResource(opened ? R.drawable.presence_online : R.drawable.presence_busy);
+		imageFavourite.setImageResource(opened ? R.drawable.btn_star_on : R.drawable.btn_star_off);
 		textName.setText(name);
 		
 		String secondLine = mCountryList.get(country).getName();
