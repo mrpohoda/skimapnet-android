@@ -63,7 +63,7 @@ public class MapFragment extends Fragment
 		View view = inflater.inflate(R.layout.layout_map, container, false);
 		
 		// nastaveni mapy
-		mMapView = (MapView)view.findViewById(R.id.layout_map_mapview);
+		mMapView = (MapView) view.findViewById(R.id.layout_map_mapview);
 		mMapView.setBuiltInZoomControls(true);
 		
 		// lokace na mape
@@ -216,6 +216,19 @@ public class MapFragment extends Fragment
 	
 	
 	private void addPois()
+	{
+		// vlakno
+	    new Thread()
+        {
+        	public void run() 
+		    {
+        		addPoisThread();
+		    }
+        }.start();
+	}
+	
+	
+	private void addPoisThread()
 	{
 		List<Overlay> mapOverlays;
 		Drawable drawable;

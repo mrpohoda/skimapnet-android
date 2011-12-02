@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class DetailFragment extends Fragment
@@ -20,7 +19,8 @@ public class DetailFragment extends Fragment
 	public static final String DUAL_VIEW = "dual_view";
 	private final int EMPTY_ID = -1;
 	
-//	private boolean mDualView;
+	@SuppressWarnings("unused")
+	private boolean mDualView;
 	private View mRootView;
 	private int mItemId;
 	
@@ -101,15 +101,15 @@ public class DetailFragment extends Fragment
 	
 	private void setExtras(Bundle extras, Bundle savedInstanceState)
 	{
-//		// dual view
-//		if(extras != null && extras.containsKey(DUAL_VIEW))
-//		{
-//			mDualView = extras.getBoolean(DUAL_VIEW);
-//		}
-//		else
-//		{
-//			mDualView = true;
-//		}
+		// dual view
+		if(extras != null && extras.containsKey(DUAL_VIEW))
+		{
+			mDualView = extras.getBoolean(DUAL_VIEW);
+		}
+		else
+		{
+			mDualView = true;
+		}
         
         // nastaveni id detailu
  		int id; 		
@@ -149,9 +149,12 @@ public class DetailFragment extends Fragment
 	
 	public void setView(int id)
 	{
+		// TODO
+		// TODO: formatovani textu: http://stackoverflow.com/questions/1529068/is-it-possible-to-have-multiple-styles-inside-a-textview
+		// TODO: pridat toasty s napovedou na flagy
 		mItemId = id;
 		
-		TextView textView = (TextView) mRootView.findViewById(R.id.layout_detail_textview);
-		textView.setText("Detail: " + id);
+		//TextView textView = (TextView) mRootView.findViewById(R.id.layout_detail_textview);
+		//textView.setText("Detail: " + id);
 	}
 }

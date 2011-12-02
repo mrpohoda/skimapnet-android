@@ -5,7 +5,7 @@
 	android:layout_height="match_parent"
 	android:background="@color/layout_background">
 	
-	<include layout="@layout/widget_divider" />
+	<include layout="@layout/widget_ab_divider" />
 
 	<fragment
 		android:id="@+id/fragment_map"

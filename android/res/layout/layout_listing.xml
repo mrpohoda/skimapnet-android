@@ -21,6 +21,8 @@
         android:cacheColorHint="@color/layout_listing_listview_cache"
         android:background="@color/layout_background" 
         android:scrollbarThumbVertical="@drawable/scrollbar_background"
-        android:scrollbarSize="@dimen/scrollbar_size" />
+        android:scrollbarSize="@dimen/scrollbar_size"
+        android:scrollbarTrackHorizontal="@drawable/scrollbar_track"
+   		android:scrollbarTrackVertical="@drawable/scrollbar_track" />
 
 </RelativeLayout>

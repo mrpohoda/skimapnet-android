@@ -76,6 +76,7 @@ public class Synchronization
 		String skicentresJson = null;
 		try
 		{
+			// TODO
 			skicentresJson = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/skicentres_list.txt");
 			//skicentresJson = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&extended=1");
 		}
@@ -104,6 +105,7 @@ public class Synchronization
 		String countriesJson = null;
 		try
 		{		
+			// TODO
 			countriesJson = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/countries_list.txt");
 			//countriesJson = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=countries_list");
 		}

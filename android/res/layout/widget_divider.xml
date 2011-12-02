@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"> 
-    
-	<FrameLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="@dimen/ab_divider_top"
-	    android:background="@color/ab_divider_top">   
-	</FrameLayout>
-	
-	<FrameLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="@dimen/ab_divider_bottom"
-	    android:background="@color/ab_divider_bottom">   
-	</FrameLayout>
-	
-</LinearLayout>
+    android:layout_height="@dimen/divider_size"
+    android:background="@color/divider_background">   
+</FrameLayout>

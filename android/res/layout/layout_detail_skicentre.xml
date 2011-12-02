@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:padding="@dimen/layout_detail_padding"
+	android:background="@color/layout_background">
+    
+	<TextView
+	    android:id="@+id/layout_detail_skicentre_title"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/layout_detail_title_textsize"
+	    android:textColor="@color/layout_detail_title"
+	    android:text="Pec pod Sněžkou" />
+
+	<TextView
+	    android:id="@+id/layout_detail_skicentre_country"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/layout_detail_text_textsize"
+	    android:textColor="@color/layout_detail_text"
+	    android:text="Česká Republika, Krkonoše" />
+	
+	<TextView
+	    android:id="@+id/layout_detail_skicentre_season"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/layout_detail_text_textsize"
+	    android:textColor="@color/layout_detail_text"
+	    android:text="Sezóna: 17.12.2011 - 24.4.2012" />
+	
+	<TextView
+	    android:id="@+id/layout_detail_skicentre_location"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/layout_detail_text_textsize"
+	    android:textColor="@color/layout_detail_text"
+	    android:text="Nadmořská výška: 1075 m - 2357 m" />
+	
+	<TextView
+	    android:id="@+id/layout_detail_skicentre_perex"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/layout_detail_text_textsize"
+	    android:textColor="@color/layout_detail_text"
+	    android:text="Tradiční horská vesnička Adelboden leží na úpatí rozsáhlého areálu prostírajícího se na bezmála dvoutisícových oblých hřebenech, jimž kulisu tvoří třítisícové skalnaté vrcholky Bernských Alp. Na opačné straně centrálního lyžařského hřebene leží v údolí středisko Lenk. Sjezdovky potěší „střední třídu“ i milovníka safari, některá zákoutí pak i náročnějšího jezdce či méně dobrodružného freeridera. Skipas pokrývá i několik menších areálů v okolí dostupných skibusem." />
+	
+</LinearLayout>

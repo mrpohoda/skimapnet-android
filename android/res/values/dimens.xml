@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="scrollbar_size">2dp</dimen>
+    <dimen name="divider_size">0.5dp</dimen>
     
 	<dimen name="ab_divider_top">3dp</dimen>
     <dimen name="ab_divider_bottom">1dp</dimen>
@@ -14,4 +15,10 @@
     <dimen name="layout_listing_item_text_padding_left">7dp</dimen>
     <dimen name="layout_listing_item_favourite_padding_left">5dp</dimen>
     <dimen name="layout_listing_item_favourite_padding_right">5dp</dimen>
+    
+    <dimen name="layout_detail_padding">7dp</dimen>
+    <dimen name="layout_detail_title_textsize">21sp</dimen>
+    <dimen name="layout_detail_text_textsize">15sp</dimen>
+    <dimen name="layout_detail_flag_padding">5dp</dimen>
+    <dimen name="layout_detail_weather_padding">15dp</dimen>
 </resources>

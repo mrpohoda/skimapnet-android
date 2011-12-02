@@ -23,6 +23,7 @@ public class Database
 	
 	
 	// TODO: synchronizace vlaken pri praci s databazi, kvuli kolizi
+	// TODO: http://www.touchlab.co/blog/android-sqlite-locking/
 	public Database(Context context)
 	{
 		mContext = context;
@@ -32,6 +33,7 @@ public class Database
 	public Database open() throws SQLException
 	{
 		mHelper = new DatabaseHelper(mContext);
+		// TODO: readable nebo writable dle parametru
 		mDatabase = mHelper.getWritableDatabase();
 		return this;
 	}
@@ -120,7 +122,7 @@ public class Database
 	
 	public SkicentreShort getSkicentre(int id)
 	{
-		Cursor cursor = mDatabase.query(true, DatabaseHelper.TAB_SKICENTRE, DatabaseHelper.COLS_SKICENTRE, DatabaseHelper.TAB_SKICENTRE_API_ID + "='" + id + "'", null, null, null, null, null);
+		Cursor cursor = mDatabase.query(true, DatabaseHelper.TAB_SKICENTRE, DatabaseHelper.COLS_SKICENTRE_SHORT, DatabaseHelper.TAB_SKICENTRE_API_ID + "='" + id + "'", null, null, null, null, null);
 		SkicentreShort skicentre = null;
 		
 		if (cursor != null && cursor.moveToFirst())
@@ -135,7 +137,7 @@ public class Database
 	
 	public ArrayList<SkicentreShort> getAllSkicentres()
 	{
-		Cursor cursor = mDatabase.query(DatabaseHelper.TAB_SKICENTRE, DatabaseHelper.COLS_SKICENTRE, null, null, null, null, DatabaseHelper.TAB_SKICENTRE_API_NAME + " COLLATE LOCALIZED ASC", null);
+		Cursor cursor = mDatabase.query(DatabaseHelper.TAB_SKICENTRE, DatabaseHelper.COLS_SKICENTRE_SHORT, null, null, null, null, DatabaseHelper.TAB_SKICENTRE_API_NAME + " COLLATE LOCALIZED ASC", null);
 		ArrayList<SkicentreShort> list = new ArrayList<SkicentreShort>();
 		
 		while (cursor.moveToNext()) 
@@ -153,11 +155,11 @@ public class Database
 	{
 		int colId = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_ID);
 		int colName = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_NAME);
-		int colLatitude = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_LATITUDE);
-		int colLongitude = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_LONGITUDE);
-		int colCountry = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_COUNTRY_FK);
-		int colOpened = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_OPENED);
-		int colSnow = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_SNOW);
+		int colLatitude = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LATITUDE);
+		int colLongitude = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LONGITUDE);
+		int colCountry = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_COUNTRY_ID);
+		int colOpened = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_FLAG_OPENED);
+		int colSnow = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MIN);
 
 		int id = (int) cursor.getInt(colId);
 		String name = cursor.getString(colName);
@@ -177,11 +179,11 @@ public class Database
 		ContentValues values = new ContentValues();
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_ID, skicentre.getId());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_NAME, skicentre.getName());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_LATITUDE, skicentre.getLatitude());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_LONGITUDE, skicentre.getLongitude());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_COUNTRY_FK, skicentre.getCountry());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_OPENED, skicentre.getOpened());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW, skicentre.getSnow());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LATITUDE, skicentre.getLatitude());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LONGITUDE, skicentre.getLongitude());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_COUNTRY_ID, skicentre.getCountry());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_FLAG_OPENED, skicentre.getOpened());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MIN, skicentre.getSnow());
 		return values;
 	}
 	

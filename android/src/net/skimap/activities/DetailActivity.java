@@ -43,10 +43,10 @@ public class DetailActivity extends FragmentActivity implements SkimapApplicatio
     
     private void setActionBar()
     {
-    	// vypnuti loga, zapnuti titulku a zapnuti home
+    	// vypnuti loga, vypnuti titulku a zapnuti home
     	ActionBar bar = getSupportActionBar();
     	bar.setDisplayUseLogoEnabled(false);
-    	bar.setDisplayShowTitleEnabled(true);
+    	bar.setDisplayShowTitleEnabled(false);
     	bar.setDisplayShowHomeEnabled(true);
     	bar.setDisplayHomeAsUpEnabled(true);
     	

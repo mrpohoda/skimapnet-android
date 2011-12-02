@@ -3,6 +3,8 @@
 	<color name="scrollbar_background_start">#fb6</color> <!-- bila -->
 	<color name="scrollbar_background_end">#e92</color> <!-- oranz -->
 	
+	<color name="divider_background">#aaa</color> <!-- seda -->
+	
 	<color name="ab_button">#0000</color> <!-- pruhledna -->
 	<color name="ab_button_focused">#e92</color> <!-- oranz -->
 	<color name="ab_button_pressed">#e92</color> <!-- oranz -->
@@ -23,6 +25,9 @@
 	<color name="layout_listing_item_background_pressed">#fb6</color> <!-- svetla oranz -->	
 	<color name="layout_listing_item_name">#000</color> <!-- cerna -->
 	<color name="layout_listing_item_country">#777</color> <!-- seda -->
+	
+	<color name="layout_detail_title">#000</color> <!-- cerna -->
+	<color name="layout_detail_text">#777</color> <!-- seda -->
 	
 	<!-- 
 		Uprava barevnosti btn_star_on_normal_holo_light.png:

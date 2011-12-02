@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:padding="@dimen/layout_detail_padding"
+	android:background="@color/layout_background">
+    
+	<TextView
+	    android:id="@+id/layout_detail_links_title"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/layout_detail_title_textsize"
+	    android:textColor="@color/layout_detail_title"
+	    android:text="Links" />
+	
+	<TextView
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+	    android:textSize="@dimen/layout_detail_text_textsize" 
+	    android:textColor="@color/layout_detail_text" />
+	
+</LinearLayout>
