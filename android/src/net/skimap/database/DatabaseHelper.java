@@ -151,5 +151,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) 
 	{
+		// zde bude kod pro osetreni zmeny struktury sqlite databaze pri update
 	}
 }

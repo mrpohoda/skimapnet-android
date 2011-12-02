@@ -12,6 +12,7 @@
 	    android:layout_height="wrap_content"
 	    android:textSize="@dimen/layout_detail_title_textsize"
 	    android:textColor="@color/layout_detail_title"
+	    android:textStyle="bold"
 	    android:text="Skiing info" />
 	
 	<TextView
@@ -21,14 +22,6 @@
 	    android:textSize="@dimen/layout_detail_text_textsize" 
 	    android:textColor="@color/layout_detail_text"
 		android:text="Množství sněhu: 0 cm - 60 cm" />
-	
-	<TextView
-	    android:id="@+id/layout_detail_skiing_snow_covering"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:textSize="@dimen/layout_detail_text_textsize" 
-	    android:textColor="@color/layout_detail_text"
-		android:text="Umělé zasněžování: 40 km" />
 	
 	<TextView
 	    android:id="@+id/layout_detail_skiing_lifts_count"
@@ -66,23 +59,15 @@
 		android:orientation="horizontal"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content">
-	
-		<ImageView 
-			android:id="@+id/layout_detail_skiing_flag_opened"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:paddingRight="@dimen/layout_detail_flag_padding"
-			android:paddingTop="@dimen/layout_detail_flag_padding"
-			android:src="@drawable/flag_opened" />
 		
 		<ImageView 
 			android:id="@+id/layout_detail_skiing_flag_nightski"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
-			android:paddingRight="@dimen/layout_detail_flag_padding"
-			android:paddingTop="@dimen/layout_detail_flag_padding"
+			android:layout_marginRight="@dimen/layout_detail_flag_padding"
+			android:layout_marginTop="@dimen/layout_detail_flag_padding"
+			android:layout_marginBottom="@dimen/layout_detail_flag_padding"
 			android:src="@drawable/flag_nightski" />
 		
 		<ImageView 
@@ -90,8 +75,9 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
-			android:paddingRight="@dimen/layout_detail_flag_padding"
-			android:paddingTop="@dimen/layout_detail_flag_padding"
+			android:layout_marginRight="@dimen/layout_detail_flag_padding"
+			android:layout_marginTop="@dimen/layout_detail_flag_padding"
+			android:layout_marginBottom="@dimen/layout_detail_flag_padding"
 			android:src="@drawable/flag_valley" />
 		
 		<ImageView 
@@ -99,8 +85,9 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
-			android:paddingRight="@dimen/layout_detail_flag_padding"
-			android:paddingTop="@dimen/layout_detail_flag_padding"
+			android:layout_marginRight="@dimen/layout_detail_flag_padding"
+			android:layout_marginTop="@dimen/layout_detail_flag_padding"
+			android:layout_marginBottom="@dimen/layout_detail_flag_padding"
 			android:src="@drawable/flag_snowpark" />
 		
 		<ImageView 
@@ -108,8 +95,9 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
-			android:paddingRight="@dimen/layout_detail_flag_padding"
-			android:paddingTop="@dimen/layout_detail_flag_padding"
+			android:layout_marginRight="@dimen/layout_detail_flag_padding"
+			android:layout_marginTop="@dimen/layout_detail_flag_padding"
+			android:layout_marginBottom="@dimen/layout_detail_flag_padding"
 			android:src="@drawable/flag_halfpipe" />
 		
 	</LinearLayout>

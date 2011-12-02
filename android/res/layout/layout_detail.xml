@@ -20,7 +20,9 @@
 		<include layout="@layout/widget_divider" />
 		<include layout="@layout/layout_detail_prices" />
 		<include layout="@layout/widget_divider" />
+		<include layout="@layout/layout_detail_images" />
+		<include layout="@layout/widget_divider" />
 		<include layout="@layout/layout_detail_links" />
-	
+
 	</LinearLayout>
 </ScrollView>

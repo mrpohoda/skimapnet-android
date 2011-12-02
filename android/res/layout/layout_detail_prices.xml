@@ -12,6 +12,7 @@
 	    android:layout_height="wrap_content"
 	    android:textSize="@dimen/layout_detail_title_textsize"
 	    android:textColor="@color/layout_detail_title"
+	    android:textStyle="bold"
 	    android:text="Prices" />
 	
 	<TextView

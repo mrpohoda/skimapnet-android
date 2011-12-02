@@ -5,14 +5,31 @@
 	android:layout_height="wrap_content"
 	android:padding="@dimen/layout_detail_padding"
 	android:background="@color/layout_background">
-    
-	<TextView
-	    android:id="@+id/layout_detail_skicentre_title"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:textSize="@dimen/layout_detail_title_textsize"
-	    android:textColor="@color/layout_detail_title"
-	    android:text="Pec pod Sněžkou" />
+	
+    <RelativeLayout
+   		android:layout_width="wrap_content" 
+   		android:layout_height="wrap_content">
+   		
+        <ImageView 
+            android:id="@+id/layout_detail_skicentre_opened"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:src="@drawable/presence_online"
+			android:paddingTop="@dimen/layout_detail_opened_padding"
+			android:layout_alignParentRight="true" />
+   		
+        <TextView
+		    android:id="@+id/layout_detail_skicentre_title"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="@dimen/layout_detail_title_textsize"
+		    android:textColor="@color/layout_detail_title"
+		    android:textStyle="bold"
+		    android:text="Saalbach Hinterglemm Leogang Sportwelt"
+		    android:layout_alignParentLeft="true"
+			android:layout_toLeftOf="@id/layout_detail_skicentre_opened" />
+    </RelativeLayout>
 
 	<TextView
 	    android:id="@+id/layout_detail_skicentre_country"
@@ -44,6 +61,5 @@
 	    android:layout_height="wrap_content"
 	    android:textSize="@dimen/layout_detail_text_textsize"
 	    android:textColor="@color/layout_detail_text"
-	    android:text="Tradiční horská vesnička Adelboden leží na úpatí rozsáhlého areálu prostírajícího se na bezmála dvoutisícových oblých hřebenech, jimž kulisu tvoří třítisícové skalnaté vrcholky Bernských Alp. Na opačné straně centrálního lyžařského hřebene leží v údolí středisko Lenk. Sjezdovky potěší „střední třídu“ i milovníka safari, některá zákoutí pak i náročnějšího jezdce či méně dobrodružného freeridera. Skipas pokrývá i několik menších areálů v okolí dostupných skibusem." />
-	
+	    android:text="" />
 </LinearLayout>

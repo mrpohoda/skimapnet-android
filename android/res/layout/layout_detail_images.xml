@@ -7,68 +7,48 @@
 	android:background="@color/layout_background">
     
 	<TextView
-	    android:id="@+id/layout_detail_links_title"
+	    android:id="@+id/layout_detail_images_title"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:textSize="@dimen/layout_detail_title_textsize"
 	    android:textColor="@color/layout_detail_title"
 	    android:textStyle="bold"
-	    android:text="Web links" />
+	    android:text="Image links" />
 	
 	<LinearLayout
 		android:orientation="horizontal"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content">
-	
-		<ImageButton 
-			android:id="@+id/layout_detail_links_url_skimap"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_marginRight="@dimen/layout_detail_flag_padding"
-			android:layout_marginTop="@dimen/layout_detail_flag_padding"
-			android:layout_marginBottom="@dimen/layout_detail_flag_padding"
-			android:background="@drawable/button_skimap" />
 		
 		<ImageButton 
-			android:id="@+id/layout_detail_links_url_home"
+			android:id="@+id/layout_detail_images_url_map"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
 			android:layout_marginRight="@dimen/layout_detail_flag_padding"
 			android:layout_marginTop="@dimen/layout_detail_flag_padding"
 			android:layout_marginBottom="@dimen/layout_detail_flag_padding"
-			android:background="@drawable/button_home" />
+			android:background="@drawable/button_img_map" />
 		
 		<ImageButton 
-			android:id="@+id/layout_detail_links_url_snow_report"
+			android:id="@+id/layout_detail_images_url_chart"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
 			android:layout_marginRight="@dimen/layout_detail_flag_padding"
 			android:layout_marginTop="@dimen/layout_detail_flag_padding"
 			android:layout_marginBottom="@dimen/layout_detail_flag_padding"
-			android:background="@drawable/button_snow" />
+			android:background="@drawable/button_img_chart" />
 		
 		<ImageButton 
-			android:id="@+id/layout_detail_links_url_weather_report"
+			android:id="@+id/layout_detail_images_url_camera"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
 			android:layout_marginRight="@dimen/layout_detail_flag_padding"
 			android:layout_marginTop="@dimen/layout_detail_flag_padding"
 			android:layout_marginBottom="@dimen/layout_detail_flag_padding"
-			android:background="@drawable/button_weather" />
-		
-		<ImageButton 
-			android:id="@+id/layout_detail_links_url_camera"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_marginRight="@dimen/layout_detail_flag_padding"
-			android:layout_marginTop="@dimen/layout_detail_flag_padding"
-			android:layout_marginBottom="@dimen/layout_detail_flag_padding"
-			android:background="@drawable/button_camera" />
+			android:background="@drawable/button_img_camera" />
 		
 	</LinearLayout>
 </LinearLayout>
