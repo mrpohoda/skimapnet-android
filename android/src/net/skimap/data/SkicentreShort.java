@@ -9,7 +9,7 @@ public class SkicentreShort
 	protected double mLocationLatitude;
 	protected double mLocationLongitude;
 	protected boolean mFlagOpened;
-	protected int mSnowMin;
+	protected int mSnowMax;
 	
 	public SkicentreShort(int id, String name) 
 	{
@@ -17,7 +17,7 @@ public class SkicentreShort
 		mName = name;
 	}
 	
-	public SkicentreShort(int id, String name, int area, int country, double locationLatitude, double locationLongitude, boolean flagOpened, int snowMin)
+	public SkicentreShort(int id, String name, int area, int country, double locationLatitude, double locationLongitude, boolean flagOpened, int snowMax)
 	{
 		mId = id;
 		mName = name;
@@ -26,7 +26,7 @@ public class SkicentreShort
 		mLocationLatitude = locationLatitude;
 		mLocationLongitude = locationLongitude;
 		mFlagOpened = flagOpened;
-		mSnowMin = snowMin;
+		mSnowMax = snowMax;
 	}
 
 	public void setId(int id) { mId = id; }
@@ -36,7 +36,7 @@ public class SkicentreShort
 	public void setLocationLatitude(double locationLatitude) { mLocationLatitude = locationLatitude; }
 	public void setLocationLongitude(double locationLongitude) { mLocationLongitude = locationLongitude; }
 	public void setFlagOpened(boolean flagOpened) { mFlagOpened = flagOpened; }
-	public void setSnowMin(int snowMin) { mSnowMin = snowMin; }
+	public void setSnowMax(int snowMax) { mSnowMax = snowMax; }
 	
 	public int getId() { return mId; }
 	public String getName() { return mName; }
@@ -45,5 +45,5 @@ public class SkicentreShort
 	public double getLocationLatitude() { return mLocationLatitude; }
 	public double getLocationLongitude() { return mLocationLongitude; }
 	public boolean isFlagOpened() { return mFlagOpened; }
-	public int getSnowMin() { return mSnowMin; }
+	public int getSnowMax() { return mSnowMax; }
 }

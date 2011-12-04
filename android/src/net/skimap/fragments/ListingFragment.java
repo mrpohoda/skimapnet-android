@@ -5,13 +5,17 @@ import java.util.HashMap;
 
 import net.skimap.R;
 import net.skimap.activities.MapActivity;
+import net.skimap.activities.SkimapApplication;
 import net.skimap.adapters.ListingAdapter;
 import net.skimap.data.Area;
 import net.skimap.data.Country;
 import net.skimap.data.SkicentreShort;
 import net.skimap.database.Database;
+import net.skimap.network.Synchronization;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.SupportActivity;
 import android.support.v4.view.Menu;
@@ -26,10 +30,11 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class ListingFragment extends Fragment
+public class ListingFragment extends Fragment implements SkimapApplication.OnSynchroListener
 {
 	// TODO: nastavit init hodnotu mItemIdShown
 	// TODO: pod action barem se zobrazuje rusivy transparentni prechod
+	// TODO: pri refresh nenabehne progress bar, a neukoncuje se
 	private final String SAVED_CHOICE_CHECKED = "choice_checked";
 	private final String SAVED_CHOICE_SHOWN = "choice_shown";
 	private final int DEFAULT_CHOICE_CHECKED = -1;
@@ -43,16 +48,30 @@ public class ListingFragment extends Fragment
     private HashMap<Integer, Area> mAreaList; // TODO: redundance v ramci fragmentu, slo by presunout do aktivity
     private HashMap<Integer, Country> mCountryList; // TODO: redundance v ramci fragmentu, slo by presunout do aktivity
     private OnItemSelectedListener mClickListener;
+    private boolean mLoadingFromDatabase;
 
+    
+    @Override
+    public void onAttach(SupportActivity activity)
+	{
+        super.onAttach(activity);
+        try
+        {
+        	mClickListener = (OnItemSelectedListener) activity;
+        } 
+        catch (ClassCastException e)
+        {
+            throw new ClassCastException(activity.toString() + " must implement OnItemSelectedListener");
+        }
+    }
+    
 
 	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-        // TODO: beh ve vlakne, protoze prace s databazi je casove narocna
-        loadAllAreas();
-        loadAllCountries();
-        loadAllSkicentres();
+        mLoadingFromDatabase = true;
+        refreshListView();
     }
 
 	
@@ -62,7 +81,7 @@ public class ListingFragment extends Fragment
 		// nastaveni view
 		setHasOptionsMenu(true);
 		mRootView = inflater.inflate(R.layout.layout_listing, container, false);
-		setView();
+		if(!mLoadingFromDatabase) setView();
 		
 		// je k dispozici detail fragment?
         View detailFrame = getSupportActivity().findViewById(R.id.fragment_detail);
@@ -87,20 +106,19 @@ public class ListingFragment extends Fragment
 	
 	
 	@Override
-    public void onAttach(SupportActivity activity)
+    public void onResume()
 	{
-        super.onAttach(activity);
-        try
-        {
-        	mClickListener = (OnItemSelectedListener) activity;
-        } 
-        catch (ClassCastException e)
-        {
-            throw new ClassCastException(activity.toString() + " must implement OnItemSelectedListener");
-        }
-    }
+        super.onResume();
 
+        // naslouchani synchronizace
+        ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
+        
+        // aktualizace stavu progress baru
+    	boolean synchro = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchro();
+    	getSupportActivity().setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
+    }
 	
+
 	@Override
     public void onSaveInstanceState(Bundle outState) 
 	{
@@ -121,7 +139,11 @@ public class ListingFragment extends Fragment
 		// tlacitko s mapou
 		if(!mDualView)
 		{
-			MenuItem mapItem = menu.add(Menu.NONE, R.id.ab_button_map, 11, R.string.ab_button_map);
+			MenuItem preferencesItem = menu.add(Menu.NONE, R.id.ab_button_preferences, 23, R.string.ab_button_preferences);
+			preferencesItem.setIcon(R.drawable.ic_menu_preferences);
+			preferencesItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+			
+			MenuItem mapItem = menu.add(Menu.NONE, R.id.ab_button_map, 23, R.string.ab_button_map);
 			mapItem.setIcon(R.drawable.ic_menu_mapmode);
 			mapItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		}
@@ -147,6 +169,16 @@ public class ListingFragment extends Fragment
 		        startActivity(intent);
 				return true;
 				
+	    	case R.id.ab_button_refresh:
+	    		Toast.makeText(getActivity(), "REFRESH", Toast.LENGTH_SHORT).show();
+	    		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
+	            synchro.trySynchronizeShortData();
+				return true;
+				
+	    	case R.id.ab_button_preferences:
+	    		Toast.makeText(getActivity(), "PREFERENCES", Toast.LENGTH_SHORT).show();
+				return true;
+				
 	    	case R.id.ab_button_sort_alphabet:
 	    		Toast.makeText(getActivity(), "SORT ALPHABET", Toast.LENGTH_SHORT).show();
 				return true;
@@ -169,13 +201,68 @@ public class ListingFragment extends Fragment
     }
 	
 	
-	public void refreshListView()
+	@Override
+	public void onSynchroStart()
 	{
-		// TODO: beh ve vlakne, protoze prace s databazi je casove narocna
+		// zapnuti progress baru
+		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
+		
+		// start
+		Toast.makeText(getActivity(), "SYNCHRO START", Toast.LENGTH_SHORT).show();
+	}
+
+
+	@Override
+	public void onSynchroStop()
+	{
+		// vypnuti progress baru
+		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
+		
+		// hotovo
+		Toast.makeText(getActivity(), "SYNCHRO DONE", Toast.LENGTH_SHORT).show();
+		
+		// aktualizace listview
+		refreshViewsAfterSynchro();
+	}
+	
+	
+	private void refreshViewsAfterSynchro()
+	{
+		// TODO: ziskat referenci ke vsem list fragmentum a zavolat pro ne metodu refreshListView(), obnovit map view
+	}
+	
+	
+	private void refreshListView()
+	{
+		// odchyceni zpravy z vlakna
+		final Handler handler = new Handler()
+	    {
+            @Override
+            public void handleMessage(Message message) 
+            {
+            	mLoadingFromDatabase = false;
+            	setView();
+            }
+	    };
+			    
+		// vlakno
+	    new Thread()
+        {
+        	public void run() 
+		    {
+        		refreshListViewThread();
+        		Message message = new Message();
+        		handler.sendMessage(message);
+		    }
+        }.start();
+	}
+	
+	
+	private void refreshListViewThread()
+	{
 		loadAllAreas();
 		loadAllCountries();
 		loadAllSkicentres();
-		setView();
 	}
 
 
@@ -239,6 +326,7 @@ public class ListingFragment extends Fragment
 	private void setView()
 	{
 		// seznam skicenter
+		if(mRootView==null) return;
 		ListView listView = (ListView) mRootView.findViewById(R.id.layout_listing_listview);
 
 		// naplneni skicenter
@@ -249,7 +337,7 @@ public class ListingFragment extends Fragment
 		} 
 		else 
 		{
-		    ((ListingAdapter) listView.getAdapter()).refill(mSkicentreList, mCountryList);
+		    ((ListingAdapter) listView.getAdapter()).refill(mSkicentreList, mAreaList, mCountryList);
 		}
 		
 		// nastaveni onclick

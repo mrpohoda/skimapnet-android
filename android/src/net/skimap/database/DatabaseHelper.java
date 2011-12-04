@@ -154,7 +154,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LATITUDE,
 		DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LONGITUDE,
 		DatabaseHelper.TAB_SKICENTRE_API_FLAG_OPENED,
-		DatabaseHelper.TAB_SKICENTRE_API_SNOW_MIN
+		DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX
 	};
 	
 	

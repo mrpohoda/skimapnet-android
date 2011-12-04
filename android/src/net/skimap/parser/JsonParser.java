@@ -75,11 +75,11 @@ public class JsonParser
 				try { flagOpened = object.getInt(DatabaseHelper.TAB_SKICENTRE_API_FLAG_OPENED)==1; }
 				catch(JSONException e) { /* hodnota je null */ }
 				
-				int snowMin = DatabaseHelper.NULL_INT;
-				try { snowMin = object.getInt(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MIN); }
+				int snowMax = DatabaseHelper.NULL_INT;
+				try { snowMax = object.getInt(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX); }
 				catch(JSONException e) { /* hodnota je null */ }
 				
-				SkicentreShort skicentre = new SkicentreShort(id, name, area, country, locationLatitude, locationLongitude, flagOpened, snowMin);
+				SkicentreShort skicentre = new SkicentreShort(id, name, area, country, locationLatitude, locationLongitude, flagOpened, snowMax);
 				mDatabase.upsertSkicentre(skicentre);
 				count++;
 			}

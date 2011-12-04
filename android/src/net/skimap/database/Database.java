@@ -186,7 +186,7 @@ public class Database
 		int colLocationLatitude = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LATITUDE);
 		int colLocationLongitude = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LONGITUDE);
 		int colFlagOpened = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_FLAG_OPENED);
-		int colSnowMin = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MIN);
+		int colSnowMax = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX);
 
 		int id = cursor.getInt(colId);
 		String name = cursor.getString(colName);
@@ -195,9 +195,9 @@ public class Database
 		double locationLatitude = cursor.getDouble(colLocationLatitude);
 		double locationLongitude = cursor.getDouble(colLocationLongitude);
 		boolean flagOpened = cursor.getInt(colFlagOpened)==1;
-		int snowMin = cursor.getInt(colSnowMin);
+		int snowMax = cursor.getInt(colSnowMax);
 		
-		SkicentreShort skicentre = new SkicentreShort(id, name, area, country, locationLatitude, locationLongitude, flagOpened, snowMin);
+		SkicentreShort skicentre = new SkicentreShort(id, name, area, country, locationLatitude, locationLongitude, flagOpened, snowMax);
 		return skicentre;
 	}
 	
@@ -236,7 +236,7 @@ public class Database
 		int colUrlImgMap = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_URL_IMG_MAP);
 		int colUrlImgMeteogram = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_URL_IMG_METEOGRAM);
 		int colUrlImgWebcam = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_URL_IMG_WEBCAM);
-		int colSnowMax = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX);
+		int colSnowMin = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MIN);
 		int colSnowDateLastSnow = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_SNOW_DATE_LAST_SNOW);
 		int colSnowDateLastUpdate = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_SNOW_DATE_LAST_UPDATE);
 		int colWeather1Date = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_1_DATE);
@@ -296,7 +296,7 @@ public class Database
 		skicentre.setUrlImgMap( cursor.getString(colUrlImgMap) );
 		skicentre.setUrlImgMeteogram( cursor.getString(colUrlImgMeteogram) );
 		skicentre.setUrlImgWebcam( cursor.getString(colUrlImgWebcam) );
-		skicentre.setSnowMax( cursor.getInt(colSnowMax) );
+		skicentre.setSnowMin( cursor.getInt(colSnowMin) );
 		skicentre.setSnowDateLastSnow( cursor.getString(colSnowDateLastSnow) );
 		skicentre.setSnowDateLastUpdate( cursor.getString(colSnowDateLastUpdate) );
 		skicentre.setWeather1Date( cursor.getString(colWeather1Date) );
@@ -340,7 +340,7 @@ public class Database
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LATITUDE, skicentre.getLocationLatitude());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LONGITUDE, skicentre.getLocationLongitude());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_FLAG_OPENED, skicentre.isFlagOpened());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MIN, skicentre.getSnowMin());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX, skicentre.getSnowMax());
 		return values;
 	}
 	
@@ -378,7 +378,7 @@ public class Database
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_URL_IMG_MAP, skicentre.getUrlImgMap());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_URL_IMG_METEOGRAM, skicentre.getUrlImgMeteogram());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_URL_IMG_WEBCAM, skicentre.getUrlImgWebcam());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX, skicentre.getSnowMax());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MIN, skicentre.getSnowMin());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW_DATE_LAST_SNOW, skicentre.getSnowDateLastSnowString());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW_DATE_LAST_UPDATE, skicentre.getSnowDateLastUpdateString());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_1_DATE, skicentre.getWeather1DateString());

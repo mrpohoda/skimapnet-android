@@ -2,7 +2,7 @@ package net.skimap.fragments;
 
 import net.skimap.R;
 import net.skimap.activities.MapActivity;
-import net.skimap.database.DatabaseHelper;
+import net.skimap.activities.SkimapApplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,13 +14,11 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
-public class DetailFragment extends Fragment
+public class DetailFragment extends Fragment implements SkimapApplication.OnSynchroListener
 {
 	public static final String ITEM_ID = "item_id";
 	public static final String DUAL_VIEW = "dual_view";
@@ -60,6 +58,20 @@ public class DetailFragment extends Fragment
 	
 	
 	@Override
+    public void onResume()
+	{
+        super.onResume();
+
+        // naslouchani synchronizace
+        ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
+        
+        // aktualizace stavu progress baru
+    	boolean synchro = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchro();
+    	getSupportActivity().setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
+    }
+	
+	
+	@Override
     public void onSaveInstanceState(Bundle outState) 
 	{
 		// ulozeni id
@@ -96,6 +108,10 @@ public class DetailFragment extends Fragment
 	    		Toast.makeText(getActivity(), "FAV", Toast.LENGTH_SHORT).show();
 				return true;
 				
+	    	case R.id.ab_button_preferences:
+	    		Toast.makeText(getActivity(), "PREFERENCES", Toast.LENGTH_SHORT).show();
+				return true;
+				
 	    	case R.id.ab_button_map:	
 	    		Intent mapIntent = new Intent();
 	    		mapIntent.setClass(getActivity(), MapActivity.class);
@@ -107,6 +123,37 @@ public class DetailFragment extends Fragment
     			return super.onOptionsItemSelected(item);
     	}
     }
+	
+	
+	@Override
+	public void onSynchroStart()
+	{
+		// zapnuti progress baru
+		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
+		
+		// start
+		Toast.makeText(getActivity(), "SYNCHRO START", Toast.LENGTH_SHORT).show();
+	}
+
+
+	@Override
+	public void onSynchroStop()
+	{
+		// vypnuti progress baru
+		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
+		
+		// hotovo
+		Toast.makeText(getActivity(), "SYNCHRO DONE", Toast.LENGTH_SHORT).show();
+		
+		// aktualizace listview
+		refreshViewsAfterSynchro();
+	}
+	
+	
+	private void refreshViewsAfterSynchro()
+	{
+		// TODO: ziskat referenci ke vsem list fragmentum a zavolat pro ne metodu refreshListView(), obnovit map view
+	}
 	
 	
 	private void setExtras(Bundle extras, Bundle savedInstanceState)

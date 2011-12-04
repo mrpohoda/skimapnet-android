@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.skimap.R;
 import net.skimap.activities.ListingActivity;
+import net.skimap.activities.SkimapApplication;
 import net.skimap.adapters.ListingAdapter;
 import net.skimap.data.Area;
 import net.skimap.data.Country;
@@ -14,6 +15,7 @@ import net.skimap.data.SkicentreShort;
 import net.skimap.database.Database;
 import net.skimap.database.DatabaseHelper;
 import net.skimap.map.MyItemizedOverlay;
+import net.skimap.network.Synchronization;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -35,7 +37,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-public class MapFragment extends Fragment 
+public class MapFragment extends Fragment implements SkimapApplication.OnSynchroListener
 {
 	public static final String ITEM_ID = "item_id";
 	private final int EMPTY_ID = -1;
@@ -81,9 +83,16 @@ public class MapFragment extends Fragment
 	
 	
 	@Override
-    public void onActivityCreated(Bundle savedInstanceState)
+    public void onResume()
 	{
-        super.onActivityCreated(savedInstanceState);
+        super.onResume();
+
+        // naslouchani synchronizace
+        ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
+        
+        // aktualizace stavu progress baru
+    	boolean synchro = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchro();
+    	getSupportActivity().setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
     }
 	
 	
@@ -125,6 +134,16 @@ public class MapFragment extends Fragment
 	    		Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
 				return true;
 				
+	    	case R.id.ab_button_refresh:
+	    		Toast.makeText(getActivity(), "REFRESH", Toast.LENGTH_SHORT).show();
+	    		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
+	            synchro.trySynchronizeShortData();
+				return true;
+				
+	    	case R.id.ab_button_preferences:
+	    		Toast.makeText(getActivity(), "PREFERENCES", Toast.LENGTH_SHORT).show();
+				return true;
+				
 	    	case R.id.ab_button_location_current:
 	    		setMapLocation(MapLocationMode.DEVICE_POSITION);
 				return true;
@@ -147,6 +166,37 @@ public class MapFragment extends Fragment
     }
 	
 	
+	@Override
+	public void onSynchroStart()
+	{
+		// zapnuti progress baru
+		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
+		
+		// start
+		Toast.makeText(getActivity(), "SYNCHRO START", Toast.LENGTH_SHORT).show();
+	}
+
+
+	@Override
+	public void onSynchroStop()
+	{
+		// vypnuti progress baru
+		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
+		
+		// hotovo
+		Toast.makeText(getActivity(), "SYNCHRO DONE", Toast.LENGTH_SHORT).show();
+		
+		// aktualizace listview
+		refreshViewsAfterSynchro();
+	}
+	
+	
+	private void refreshViewsAfterSynchro()
+	{
+		// TODO: ziskat referenci ke vsem list fragmentum a zavolat pro ne metodu refreshListView(), obnovit map view
+	}
+	
+	
 	private void setMapLocation(MapLocationMode mode)
 	{
 		// nastaveni zoomu
@@ -160,14 +210,14 @@ public class MapFragment extends Fragment
     	{
 			// aktualni poloha
 	    	case DEVICE_POSITION:
-	    		deviceLocation = getDevicePosition();
+	    		deviceLocation = getDeviceLocation();
 	    		if(deviceLocation!=null) controller.animateTo(deviceLocation);
 	    		break;
 	    		
 	    	// poloha nejblizsiho skicentra k aktualni poloze
 	    	case NEAREST_SKICENTRE:
 		        // TODO
-	    		deviceLocation = getDevicePosition();
+	    		deviceLocation = getDeviceLocation();
 	    		Toast.makeText(getActivity(), "NEAREST SKICENTRE", Toast.LENGTH_SHORT).show();
 	    		break;
 	    		
@@ -181,7 +231,7 @@ public class MapFragment extends Fragment
 	
 	
 	// TODO: ziskavat pozici lepsim zpusobem, getLastKnownLocation zlobi
-	private GeoPoint getDevicePosition()
+	private GeoPoint getDeviceLocation()
 	{
 		LocationManager locationManager = (LocationManager) getSupportActivity().getSystemService(Context.LOCATION_SERVICE);
 		Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -258,6 +308,7 @@ public class MapFragment extends Fragment
 		Iterator<SkicentreShort> iterator = skicentres.iterator();
 		while(iterator.hasNext())
 		{
+			if(!this.isAdded()) break;
 			SkicentreShort skicentre = iterator.next();
 			
 			// text druheho radku
@@ -269,12 +320,16 @@ public class MapFragment extends Fragment
 			try { countryString = countries.get(skicentre.getCountry()).getName(); }
 			catch(Exception e) {}
 			
+			String snowSuffixText=DatabaseHelper.NULL_STRING;
+			try { snowSuffixText = getString(R.string.layout_listing_item_snow); }
+			catch(Exception e) {}
+			
 			String secondLine = ListingAdapter.createSecondLine(
 				skicentre.getName(),
 				areaString,
 				countryString,
-				skicentre.getSnowMin(), 
-				getString(R.string.layout_listing_item_snow)
+				skicentre.getSnowMax(), 
+				snowSuffixText
 			);
 			
 			// POI

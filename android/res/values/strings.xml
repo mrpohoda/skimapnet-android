@@ -8,6 +8,8 @@
     <string name="ab_button_list">List</string>
     <string name="ab_button_map">Map</string>
     <string name="ab_button_search">Search</string>
+    <string name="ab_button_refresh">Refresh</string>
+    <string name="ab_button_preferences">Preferences</string>
     <string name="ab_button_layers">Map layers</string>
     <string name="ab_button_layers_normal">Normal</string>
     <string name="ab_button_layers_satellite">Satellite</string>
@@ -21,7 +23,6 @@
     <string name="ab_button_sort_snow">Snow minimum</string>
     <string name="ab_button_share">Share</string>
     <string name="ab_button_favourite">Favourite</string>
-    <string name="ab_button_camera">Camera</string>
     
     <string name="ab_tab_all">All</string>
     <string name="ab_tab_favourites">Favourites</string>

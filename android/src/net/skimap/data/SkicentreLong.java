@@ -39,7 +39,7 @@ public class SkicentreLong extends SkicentreShort
 	protected String mUrlImgMap;
 	protected String mUrlImgMeteogram;
 	protected String mUrlImgWebcam;
-	protected int mSnowMax;
+	protected int mSnowMin;
 	protected Date mSnowDateLastSnow;
 	protected Date mSnowDateLastUpdate;
 	protected Date mWeather1Date;
@@ -159,8 +159,8 @@ public class SkicentreLong extends SkicentreShort
 	public void setUrlImgMeteogram(String mUrlImgMeteogram) { this.mUrlImgMeteogram = mUrlImgMeteogram; }
 	public String getUrlImgWebcam() { return mUrlImgWebcam; }
 	public void setUrlImgWebcam(String mUrlImgWebcam) { this.mUrlImgWebcam = mUrlImgWebcam; }
-	public int getSnowMax() { return mSnowMax; }
-	public void setSnowMax(int mSnowMax) { this.mSnowMax = mSnowMax; }
+	public int getSnowMin() { return mSnowMin; }
+	public void setSnowMin(int mSnowMin) { this.mSnowMin = mSnowMin; }
 	public Date getSnowDateLastSnow() { return mSnowDateLastSnow; }
 	public String getSnowDateLastSnowString() { return dateToString(mSnowDateLastSnow); }
 	public void setSnowDateLastSnow(Date mSnowDateLastSnow) { this.mSnowDateLastSnow = mSnowDateLastSnow; }

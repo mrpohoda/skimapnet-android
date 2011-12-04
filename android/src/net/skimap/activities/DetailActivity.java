@@ -7,9 +7,8 @@ import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.MenuItem;
 import android.support.v4.view.Window;
-import android.widget.Toast;
 
-public class DetailActivity extends FragmentActivity implements SkimapApplication.OnSynchroListener
+public class DetailActivity extends FragmentActivity
 {
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -30,9 +29,6 @@ public class DetailActivity extends FragmentActivity implements SkimapApplicatio
             finish();
             return;
  		}
- 		
- 		// naslouchani synchronizace
-        ((SkimapApplication) getApplicationContext()).setSynchroListener(this);
 
         // nastaveni layoutu
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -51,7 +47,7 @@ public class DetailActivity extends FragmentActivity implements SkimapApplicatio
     	bar.setDisplayHomeAsUpEnabled(true);
     	
     	// inicializace progress baru
-    	boolean synchro = ((SkimapApplication) getApplicationContext()).getSynchro();
+    	boolean synchro = ((SkimapApplication) getApplicationContext()).isSynchro();
     	setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
     }
     
@@ -70,26 +66,4 @@ public class DetailActivity extends FragmentActivity implements SkimapApplicatio
     			return super.onOptionsItemSelected(item);
     	}
     }
-    
-
-	@Override
-	public void onSynchroStart()
-	{
-		// zapnuti progress baru
-		setProgressBarIndeterminateVisibility(Boolean.TRUE);
-		
-		// start
-		Toast.makeText(this, "SYNCHRO START", Toast.LENGTH_SHORT).show();
-	}
-
-
-	@Override
-	public void onSynchroStop()
-	{
-		// vypnuti progress baru
-		setProgressBarIndeterminateVisibility(Boolean.FALSE);
-		
-		// hotovo
-		Toast.makeText(this, "SYNCHRO DONE", Toast.LENGTH_SHORT).show();
-	}
 }

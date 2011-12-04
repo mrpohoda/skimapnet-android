@@ -52,7 +52,7 @@ public class ListingAdapter extends BaseAdapter
 		int area = skicentre.getArea();
 		int country = skicentre.getCountry();
 		boolean flagOpened = skicentre.isFlagOpened();
-		int snowMin = skicentre.getSnowMin();
+		int snowMax = skicentre.getSnowMax();
 		
 		// reference na widgety
 		ImageView imageOpened = (ImageView) view.findViewById(R.id.layout_listing_item_opened);
@@ -79,7 +79,7 @@ public class ListingAdapter extends BaseAdapter
 			name,
 			areaString, 
 			countryString, 
-			snowMin, 
+			snowMax, 
 			mFragment.getString(R.string.layout_listing_item_snow)
 		);
 		textSub.setText(secondLine);
@@ -110,17 +110,19 @@ public class ListingAdapter extends BaseAdapter
 	}
 	
 	
-	public void refill(ArrayList<SkicentreShort> skicentreList, HashMap<Integer, Country> countryList)
+	public void refill(ArrayList<SkicentreShort> skicentreList, HashMap<Integer, Area> areaList, HashMap<Integer, Country> countryList)
 	{
-		mSkicentreList.clear();
-		mSkicentreList.addAll(skicentreList);
+		mAreaList.clear();
+		mAreaList.putAll(areaList);
 		mCountryList.clear();
 		mCountryList.putAll(countryList);
+		mSkicentreList.clear();
+		mSkicentreList.addAll(skicentreList);
 	    notifyDataSetChanged();
 	}
 	
 	
-	public static String createSecondLine(String skicentreName, String areaName, String countryName, int snowMin, String snowSuffixText)
+	public static String createSecondLine(String skicentreName, String areaName, String countryName, int snowMax, String snowSuffixText)
 	{
 		// stat
 		String countryString = "";
@@ -138,10 +140,10 @@ public class ListingAdapter extends BaseAdapter
 		}
 		
 		// mnozstvi snehu
-		if(snowMin>DatabaseHelper.NULL_INT)
+		if(snowMax>DatabaseHelper.NULL_INT)
 		{
 			if(countryString!=DatabaseHelper.NULL_STRING || areaString!=DatabaseHelper.NULL_STRING) countryString += ", ";
-			countryString += snowMin + " " + snowSuffixText;
+			countryString += snowMax + " " + snowSuffixText;
 		}
 		
 		return countryString;

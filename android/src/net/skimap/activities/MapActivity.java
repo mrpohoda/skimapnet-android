@@ -6,9 +6,8 @@ import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentMapActivity;
 import android.support.v4.view.Window;
 import android.view.View;
-import android.widget.Toast;
 
-public class MapActivity extends FragmentMapActivity implements SkimapApplication.OnSynchroListener
+public class MapActivity extends FragmentMapActivity
 {
 	// TODO - opravit error
 	// http://stackoverflow.com/questions/6006835/android-mapactivity-couldnt-get-connection-factory-client
@@ -18,9 +17,6 @@ public class MapActivity extends FragmentMapActivity implements SkimapApplicatio
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-        
-        // naslouchani synchronizace
-        ((SkimapApplication) getApplicationContext()).setSynchroListener(this);
 
         // nastaveni layoutu
     	requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -55,29 +51,8 @@ public class MapActivity extends FragmentMapActivity implements SkimapApplicatio
     	}
     	
     	// inicializace progress baru
-    	boolean synchro = ((SkimapApplication) getApplicationContext()).getSynchro();
+    	boolean synchro = ((SkimapApplication) getApplicationContext()).isSynchro();
     	setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
     }
     
-
-	@Override
-	public void onSynchroStart()
-	{
-		// zapnuti progress baru
-		setProgressBarIndeterminateVisibility(Boolean.TRUE);
-		
-		// start
-		Toast.makeText(this, "SYNCHRO START", Toast.LENGTH_SHORT).show();
-	}
-
-
-	@Override
-	public void onSynchroStop()
-	{
-		// vypnuti progress baru
-		setProgressBarIndeterminateVisibility(Boolean.FALSE);
-		
-		// hotovo
-		Toast.makeText(this, "SYNCHRO DONE", Toast.LENGTH_SHORT).show();
-	}
 }

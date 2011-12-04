@@ -44,7 +44,7 @@ public class Synchronization
 	
 	public void trySynchronizeShortData()
 	{
-		boolean synchro = mApplication.getSynchro();
+		boolean synchro = mApplication.isSynchro();
 		if(!synchro)
 		{
 			// start synchronizace
@@ -59,7 +59,7 @@ public class Synchronization
 	
 	public void trySynchronizeLongData()
 	{
-		boolean synchro = mApplication.getSynchro();
+		boolean synchro = mApplication.isSynchro();
 		if(!synchro)
 		{
 			// start synchronizace
@@ -144,7 +144,7 @@ public class Synchronization
 		try
 		{
 			// TODO
-			skicentresJson = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/skicentres_list.txt");
+			skicentresJson = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/skicentres_list2.txt");
 			//skicentresJson = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&extended=1");
 		}
 		catch (Exception e)
