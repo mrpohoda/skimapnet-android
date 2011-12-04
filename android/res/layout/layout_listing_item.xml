@@ -48,7 +48,7 @@
 				android:textSize="@dimen/layout_listing_item_name_textsize" />
 	   		
 	   		<TextView
-				android:id="@+id/layout_listing_item_country"
+				android:id="@+id/layout_listing_item_sub"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textColor="@color/layout_listing_item_country"

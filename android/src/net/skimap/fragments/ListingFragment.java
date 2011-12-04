@@ -6,6 +6,7 @@ import java.util.HashMap;
 import net.skimap.R;
 import net.skimap.activities.MapActivity;
 import net.skimap.adapters.ListingAdapter;
+import net.skimap.data.Area;
 import net.skimap.data.Country;
 import net.skimap.data.SkicentreShort;
 import net.skimap.database.Database;
@@ -39,7 +40,8 @@ public class ListingFragment extends Fragment
     private boolean mDualView;
     private View mRootView;
     private ArrayList<SkicentreShort> mSkicentreList;
-    private HashMap<Integer, Country> mCountryList;
+    private HashMap<Integer, Area> mAreaList; // TODO: redundance v ramci fragmentu, slo by presunout do aktivity
+    private HashMap<Integer, Country> mCountryList; // TODO: redundance v ramci fragmentu, slo by presunout do aktivity
     private OnItemSelectedListener mClickListener;
 
 
@@ -47,6 +49,8 @@ public class ListingFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        // TODO: beh ve vlakne, protoze prace s databazi je casove narocna
+        loadAllAreas();
         loadAllCountries();
         loadAllSkicentres();
     }
@@ -167,6 +171,8 @@ public class ListingFragment extends Fragment
 	
 	public void refreshListView()
 	{
+		// TODO: beh ve vlakne, protoze prace s databazi je casove narocna
+		loadAllAreas();
 		loadAllCountries();
 		loadAllSkicentres();
 		setView();
@@ -177,7 +183,7 @@ public class ListingFragment extends Fragment
 	{
 		// otevreni databaze
 		Database db = new Database(getActivity());
-		db.open();
+		db.open(false);
 		
 		// promazani pole
 		if(mSkicentreList != null) 
@@ -192,11 +198,30 @@ public class ListingFragment extends Fragment
 	}
 	
 	
+	private void loadAllAreas()
+	{
+		// otevreni databaze
+		Database db = new Database(getActivity());
+		db.open(false);
+		
+		// promazani pole
+		if(mAreaList != null) 
+		{
+			mAreaList.clear();
+			mAreaList = null;
+		}
+		
+		// nacteni dat do pole
+		mAreaList = db.getAllAreas();
+		db.close();
+	}
+	
+	
 	private void loadAllCountries()
 	{
 		// otevreni databaze
 		Database db = new Database(getActivity());
-		db.open();
+		db.open(false);
 		
 		// promazani pole
 		if(mCountryList != null) 
@@ -219,7 +244,7 @@ public class ListingFragment extends Fragment
 		// naplneni skicenter
 		if (listView.getAdapter()==null) 
 		{
-			ListingAdapter adapter = new ListingAdapter(this, mSkicentreList, mCountryList);
+			ListingAdapter adapter = new ListingAdapter(this, mSkicentreList, mAreaList, mCountryList);
 			listView.setAdapter(adapter);
 		} 
 		else 

@@ -2,6 +2,7 @@ package net.skimap.fragments;
 
 import net.skimap.R;
 import net.skimap.activities.MapActivity;
+import net.skimap.database.DatabaseHelper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -161,6 +162,7 @@ public class DetailFragment extends Fragment
 		// TODO
 		// TODO: formatovani textu: http://stackoverflow.com/questions/1529068/is-it-possible-to-have-multiple-styles-inside-a-textview
 		// TODO: pridat toasty s napovedou na flagy
+		// TODO: osetrovat null hodnoty - DatabaseHelper.NULL_STRING apod., pripadne schovat dany widget
 		mItemId = id;
 		mPerexMore = false;
 		

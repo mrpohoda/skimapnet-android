@@ -7,9 +7,12 @@ import java.util.List;
 
 import net.skimap.R;
 import net.skimap.activities.ListingActivity;
+import net.skimap.adapters.ListingAdapter;
+import net.skimap.data.Area;
 import net.skimap.data.Country;
 import net.skimap.data.SkicentreShort;
 import net.skimap.database.Database;
+import net.skimap.database.DatabaseHelper;
 import net.skimap.map.MyItemizedOverlay;
 import android.content.Context;
 import android.content.Intent;
@@ -245,8 +248,9 @@ public class MapFragment extends Fragment
 		
 		// nacteni skicenter a statu z databaze
 		Database database = new Database(getActivity());
-		database.open();
+		database.open(false);
 		ArrayList<SkicentreShort> skicentres = database.getAllSkicentres();
+		HashMap<Integer, Area> areas = database.getAllAreas();
 		HashMap<Integer, Country> countries = database.getAllCountries();
 		database.close();
 		
@@ -256,13 +260,26 @@ public class MapFragment extends Fragment
 		{
 			SkicentreShort skicentre = iterator.next();
 			
-			// text POI
-			String detail = countries.get(skicentre.getCountry()).getName();
-			if(skicentre.getSnow()>0) detail += ", " + skicentre.getSnow() + " " + getString(R.string.layout_listing_item_snow);
+			// text druheho radku
+			String areaString=DatabaseHelper.NULL_STRING;
+			try { areaString = areas.get(skicentre.getArea()).getName(); }
+			catch(Exception e) {}
+			
+			String countryString=DatabaseHelper.NULL_STRING;
+			try { countryString = countries.get(skicentre.getCountry()).getName(); }
+			catch(Exception e) {}
+			
+			String secondLine = ListingAdapter.createSecondLine(
+				skicentre.getName(),
+				areaString,
+				countryString,
+				skicentre.getSnowMin(), 
+				getString(R.string.layout_listing_item_snow)
+			);
 			
 			// POI
-			GeoPoint point = new GeoPoint((int)(skicentre.getLatitude()*1E6),(int)(skicentre.getLongitude()*1E6));
-			OverlayItem overlayItem = new OverlayItem(point, skicentre.getName(), detail);
+			GeoPoint point = new GeoPoint((int)(skicentre.getLocationLatitude()*1E6),(int)(skicentre.getLocationLongitude()*1E6));
+			OverlayItem overlayItem = new OverlayItem(point, skicentre.getName(), secondLine);
 			itemizedOverlay.addOverlay(overlayItem);
 		}
 		mapOverlays.add(itemizedOverlay);

@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.skimap.R;
+import net.skimap.data.Area;
 import net.skimap.data.Country;
 import net.skimap.data.SkicentreShort;
+import net.skimap.database.DatabaseHelper;
 import net.skimap.fragments.ListingFragment;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -20,13 +22,15 @@ public class ListingAdapter extends BaseAdapter
 {
 	private ListingFragment mFragment;
 	private ArrayList<SkicentreShort> mSkicentreList;
+	private HashMap<Integer, Area> mAreaList;
 	private HashMap<Integer, Country> mCountryList;
 	
-	
-    public ListingAdapter(ListingFragment fragment, ArrayList<SkicentreShort> skicentreList, HashMap<Integer, Country> countryList)
+
+    public ListingAdapter(ListingFragment fragment, ArrayList<SkicentreShort> skicentreList, HashMap<Integer, Area> areaList, HashMap<Integer, Country> countryList)
     {
         mFragment = fragment;
         mSkicentreList = skicentreList;
+        mAreaList = areaList;
         mCountryList = countryList;
     }
     
@@ -45,24 +49,40 @@ public class ListingAdapter extends BaseAdapter
 		// nacteni dat z listu
 		SkicentreShort skicentre = mSkicentreList.get(position);
 		String name = skicentre.getName();
+		int area = skicentre.getArea();
 		int country = skicentre.getCountry();
-		boolean opened = skicentre.getOpened();
-		int snow = skicentre.getSnow();
+		boolean flagOpened = skicentre.isFlagOpened();
+		int snowMin = skicentre.getSnowMin();
 		
 		// reference na widgety
 		ImageView imageOpened = (ImageView) view.findViewById(R.id.layout_listing_item_opened);
 		ImageView imageFavourite = (ImageView) view.findViewById(R.id.layout_listing_item_favourite);
 		TextView textName = (TextView) view.findViewById(R.id.layout_listing_item_name);
-		TextView textCountry = (TextView) view.findViewById(R.id.layout_listing_item_country);
+		TextView textSub = (TextView) view.findViewById(R.id.layout_listing_item_sub);
 		
 		// nastaveni obsahu widgetu
-		imageOpened.setImageResource(opened ? R.drawable.presence_online : R.drawable.presence_busy);
-		imageFavourite.setImageResource(opened ? R.drawable.btn_star_on : R.drawable.btn_star_off);
+		imageOpened.setImageResource(flagOpened ? R.drawable.presence_online : R.drawable.presence_busy);
+		// TODO: osetrit favourite
+		imageFavourite.setImageResource(flagOpened ? R.drawable.btn_star_on : R.drawable.btn_star_off);
 		textName.setText(name);
 		
-		String secondLine = mCountryList.get(country).getName();
-		if(snow>0) secondLine += ", " + snow + " " + mFragment.getString(R.string.layout_listing_item_snow);
-		textCountry.setText(secondLine);
+		// text druheho radku
+		String areaString=DatabaseHelper.NULL_STRING;
+		try { areaString = mAreaList.get(area).getName(); }
+		catch(Exception e) {}
+		
+		String countryString=DatabaseHelper.NULL_STRING;
+		try { countryString = mCountryList.get(country).getName(); }
+		catch(Exception e) {}
+		
+		String secondLine = createSecondLine(
+			name,
+			areaString, 
+			countryString, 
+			snowMin, 
+			mFragment.getString(R.string.layout_listing_item_snow)
+		);
+		textSub.setText(secondLine);
 		
 		// vraceni view
 		return view;
@@ -97,5 +117,33 @@ public class ListingAdapter extends BaseAdapter
 		mCountryList.clear();
 		mCountryList.putAll(countryList);
 	    notifyDataSetChanged();
+	}
+	
+	
+	public static String createSecondLine(String skicentreName, String areaName, String countryName, int snowMin, String snowSuffixText)
+	{
+		// stat
+		String countryString = "";
+		if(countryString!=DatabaseHelper.NULL_STRING)
+		{
+			countryString = countryName;
+		}
+		
+		// oblast
+		String areaString = areaName;
+		if(areaString!=DatabaseHelper.NULL_STRING && !skicentreName.contains(areaName) && !areaString.contentEquals(countryString) && !areaString.contentEquals(""))
+		{
+			if(countryString!=DatabaseHelper.NULL_STRING) countryString += ", ";
+			countryString += areaString;
+		}
+		
+		// mnozstvi snehu
+		if(snowMin>DatabaseHelper.NULL_INT)
+		{
+			if(countryString!=DatabaseHelper.NULL_STRING || areaString!=DatabaseHelper.NULL_STRING) countryString += ", ";
+			countryString += snowMin + " " + snowSuffixText;
+		}
+		
+		return countryString;
 	}
 }
