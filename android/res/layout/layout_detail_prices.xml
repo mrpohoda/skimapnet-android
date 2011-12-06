@@ -13,7 +13,7 @@
 	    android:textSize="@dimen/layout_detail_title_textsize"
 	    android:textColor="@color/layout_detail_title"
 	    android:textStyle="bold"
-	    android:text="Prices" />
+	    android:text="@string/layout_detail_prices_title" />
 	
 	<TextView
 	    android:id="@+id/layout_detail_prices_adults"
@@ -21,7 +21,7 @@
 	    android:layout_height="wrap_content"
 	    android:textSize="@dimen/layout_detail_text_textsize" 
 	    android:textColor="@color/layout_detail_text" 
-	    android:text="Dospělí 1 den: 34 EUR\nDospělí 6 dní: 151 EUR" />
+	    android:text="" />
 	
 	<TextView
 	    android:id="@+id/layout_detail_prices_children"
@@ -29,7 +29,7 @@
 	    android:layout_height="wrap_content"
 	    android:textSize="@dimen/layout_detail_text_textsize" 
 	    android:textColor="@color/layout_detail_text" 
-	    android:text="Děti 1 den: 14 EUR\nDěti 6 dní: 131 EUR" />
+	    android:text="" />
 	
 	<TextView
 	    android:id="@+id/layout_detail_prices_young"
@@ -37,7 +37,7 @@
 	    android:layout_height="wrap_content"
 	    android:textSize="@dimen/layout_detail_text_textsize" 
 	    android:textColor="@color/layout_detail_text" 
-	    android:text="Mládež 1 den: 24 EUR\nMládež 6 dní: 141 EUR" />
+	    android:text="" />
 	
 	<TextView
 	    android:id="@+id/layout_detail_prices_seniors"
@@ -45,6 +45,6 @@
 	    android:layout_height="wrap_content"
 	    android:textSize="@dimen/layout_detail_text_textsize" 
 	    android:textColor="@color/layout_detail_text" 
-	    android:text="Senioři 1 den: 24 EUR\nSenioři 6 dní: 131 EUR" />
+	    android:text="" />
 	
 </LinearLayout>

@@ -1,12 +1,13 @@
 package net.skimap.data;
 
-import java.sql.Date;
+import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class SkicentreLong extends SkicentreShort
 {
-	private final String DATE_FORMAT = "yyyy-MM-dd";
+	private final String DATE_FORMAT_DATABASE = "yyyy-MM-dd";
+	private final String DATE_FORMAT_VIEW = "dd.MM.yyyy";
 	
 	
 	protected String mInfoPerex;
@@ -78,19 +79,27 @@ public class SkicentreLong extends SkicentreShort
 	}
 	
 	
-	private String dateToString(Date date)
+	private String dateToString(Date date, String format)
 	{
-		SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
-		return format.format(date);
+		String str = null;
+		if(date!=null)
+		{
+			SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+			str = dateFormat.format(date);
+		}
+		return str;
 	}
 	
 	
-	private Date stringToDate(String str)
+	private Date stringToDate(String str, String format)
 	{
-		SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
 		Date date = null;
-		try { date = (Date) format.parse(str); }
-		catch (ParseException e) { e.printStackTrace(); }
+		if(str!=null)
+		{
+			SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+			try { date = dateFormat.parse(str); }
+			catch(ParseException e) { e.printStackTrace(); }
+		}
 		return date;
 	}
 	
@@ -98,13 +107,15 @@ public class SkicentreLong extends SkicentreShort
 	public String getInfoPerex() { return mInfoPerex; }
 	public void setInfoPerex(String mInfoPerex) { this.mInfoPerex = mInfoPerex; }
 	public Date getDateSeasonStart() { return mDateSeasonStart; }
-	public String getDateSeasonStartString() { return dateToString(mDateSeasonStart); }
+	public String getDateSeasonStartDatabase() { return dateToString(mDateSeasonStart, DATE_FORMAT_DATABASE); }
+	public String getDateSeasonStartView() { return dateToString(mDateSeasonStart, DATE_FORMAT_VIEW); }
 	public void setDateSeasonStart(Date mDateSeasonStart) { this.mDateSeasonStart = mDateSeasonStart; }
-	public void setDateSeasonStart(String mDateSeasonStart) { this.mDateSeasonStart = stringToDate(mDateSeasonStart); }
+	public void setDateSeasonStart(String mDateSeasonStart) { this.mDateSeasonStart = stringToDate(mDateSeasonStart, DATE_FORMAT_DATABASE); }
 	public Date getDateSeasonEnd() { return mDateSeasonEnd; }
-	public String getDateSeasonEndString() { return dateToString(mDateSeasonEnd); }
+	public String getDateSeasonEndDatabase() { return dateToString(mDateSeasonEnd, DATE_FORMAT_DATABASE); }
+	public String getDateSeasonEndView() { return dateToString(mDateSeasonEnd, DATE_FORMAT_VIEW); }
 	public void setDateSeasonEnd(Date mDateSeasonEnd) { this.mDateSeasonEnd = mDateSeasonEnd; }
-	public void setDateSeasonEnd(String mDateSeasonEnd) { this.mDateSeasonEnd = stringToDate(mDateSeasonEnd); }
+	public void setDateSeasonEnd(String mDateSeasonEnd) { this.mDateSeasonEnd = stringToDate(mDateSeasonEnd, DATE_FORMAT_DATABASE); }
 	public int getLocationAltitudeUndermost() { return mLocationAltitudeUndermost; }
 	public void setLocationAltitudeUndermost(int mLocationAltitudeUndermost) { this.mLocationAltitudeUndermost = mLocationAltitudeUndermost; }
 	public int getLocationAltitudeTopmost() { return mLocationAltitudeTopmost; }
@@ -162,17 +173,20 @@ public class SkicentreLong extends SkicentreShort
 	public int getSnowMin() { return mSnowMin; }
 	public void setSnowMin(int mSnowMin) { this.mSnowMin = mSnowMin; }
 	public Date getSnowDateLastSnow() { return mSnowDateLastSnow; }
-	public String getSnowDateLastSnowString() { return dateToString(mSnowDateLastSnow); }
+	public String getSnowDateLastSnowDatabase() { return dateToString(mSnowDateLastSnow, DATE_FORMAT_DATABASE); }
+	public String getSnowDateLastSnowView() { return dateToString(mSnowDateLastSnow, DATE_FORMAT_VIEW); }
 	public void setSnowDateLastSnow(Date mSnowDateLastSnow) { this.mSnowDateLastSnow = mSnowDateLastSnow; }
-	public void setSnowDateLastSnow(String mSnowDateLastSnow) { this.mSnowDateLastSnow = stringToDate(mSnowDateLastSnow); }
+	public void setSnowDateLastSnow(String mSnowDateLastSnow) { this.mSnowDateLastSnow = stringToDate(mSnowDateLastSnow, DATE_FORMAT_DATABASE); }
 	public Date getSnowDateLastUpdate() { return mSnowDateLastUpdate; }
-	public String getSnowDateLastUpdateString() { return dateToString(mSnowDateLastUpdate); }
+	public String getSnowDateLastUpdateDatabase() { return dateToString(mSnowDateLastUpdate, DATE_FORMAT_DATABASE); }
+	public String getSnowDateLastUpdateView() { return dateToString(mSnowDateLastUpdate, DATE_FORMAT_VIEW); }
 	public void setSnowDateLastUpdate(Date mSnowDateLastUpdate) { this.mSnowDateLastUpdate = mSnowDateLastUpdate; }
-	public void setSnowDateLastUpdate(String mSnowDateLastUpdate) { this.mSnowDateLastUpdate = stringToDate(mSnowDateLastUpdate); }
+	public void setSnowDateLastUpdate(String mSnowDateLastUpdate) { this.mSnowDateLastUpdate = stringToDate(mSnowDateLastUpdate, DATE_FORMAT_DATABASE); }
 	public Date getWeather1Date() { return mWeather1Date; }
-	public String getWeather1DateString() { return dateToString(mWeather1Date); }
+	public String getWeather1DateDatabase() { return dateToString(mWeather1Date, DATE_FORMAT_DATABASE); }
+	public String getWeather1DateView() { return dateToString(mWeather1Date, DATE_FORMAT_VIEW); }
 	public void setWeather1Date(Date mWeather1Date) { this.mWeather1Date = mWeather1Date; }
-	public void setWeather1Date(String mWeather1Date) { this.mWeather1Date = stringToDate(mWeather1Date); }
+	public void setWeather1Date(String mWeather1Date) { this.mWeather1Date = stringToDate(mWeather1Date, DATE_FORMAT_DATABASE); }
 	public Weather.Type getWeather1Symbol() { return mWeather1Symbol; }
 	public void setWeather1Symbol(Weather.Type mWeather1Symbol) { this.mWeather1Symbol = mWeather1Symbol; }
 	public int getWeather1TemperatureMin() { return mWeather1TemperatureMin; }
@@ -180,9 +194,10 @@ public class SkicentreLong extends SkicentreShort
 	public int getWeather1TemperatureMax() { return mWeather1TemperatureMax; }
 	public void setWeather1TemperatureMax(int mWeather1TemperatureMax) { this.mWeather1TemperatureMax = mWeather1TemperatureMax; }
 	public Date getWeather2Date() { return mWeather2Date; }
-	public String getWeather2DateString() { return dateToString(mWeather2Date); }
+	public String getWeather2DateDatabase() { return dateToString(mWeather2Date, DATE_FORMAT_DATABASE); }
+	public String getWeather2DateView() { return dateToString(mWeather2Date, DATE_FORMAT_VIEW); }
 	public void setWeather2Date(Date mWeather2Date) { this.mWeather2Date = mWeather2Date; }
-	public void setWeather2Date(String mWeather2Date) { this.mWeather2Date = stringToDate(mWeather2Date); }
+	public void setWeather2Date(String mWeather2Date) { this.mWeather2Date = stringToDate(mWeather2Date, DATE_FORMAT_DATABASE); }
 	public Weather.Type getWeather2Symbol() { return mWeather2Symbol; }
 	public void setWeather2Symbol(Weather.Type mWeather2Symbol) { this.mWeather2Symbol = mWeather2Symbol; }
 	public int getWeather2TemperatureMin() { return mWeather2TemperatureMin; }
@@ -190,9 +205,10 @@ public class SkicentreLong extends SkicentreShort
 	public int getWeather2TemperatureMax() { return mWeather2TemperatureMax; }
 	public void setWeather2TemperatureMax(int mWeather2TemperatureMax) { this.mWeather2TemperatureMax = mWeather2TemperatureMax; }
 	public Date getWeather3Date() { return mWeather3Date; }
-	public String getWeather3DateString() { return dateToString(mWeather3Date); }
+	public String getWeather3DateDatabase() { return dateToString(mWeather3Date, DATE_FORMAT_DATABASE); }
+	public String getWeather3DateView() { return dateToString(mWeather3Date, DATE_FORMAT_VIEW); }
 	public void setWeather3Date(Date mWeather3Date) { this.mWeather3Date = mWeather3Date; }
-	public void setWeather3Date(String mWeather3Date) { this.mWeather3Date = stringToDate(mWeather3Date); }
+	public void setWeather3Date(String mWeather3Date) { this.mWeather3Date = stringToDate(mWeather3Date, DATE_FORMAT_DATABASE); }
 	public Weather.Type getWeather3Symbol() { return mWeather3Symbol; }
 	public void setWeather3Symbol(Weather.Type mWeather3Symbol) { this.mWeather3Symbol = mWeather3Symbol; }
 	public int getWeather3TemperatureMin() { return mWeather3TemperatureMin; }
@@ -200,9 +216,10 @@ public class SkicentreLong extends SkicentreShort
 	public int getWeather3TemperatureMax() { return mWeather3TemperatureMax; }
 	public void setWeather3TemperatureMax(int mWeather3TemperatureMax) { this.mWeather3TemperatureMax = mWeather3TemperatureMax; }
 	public Date getWeather4Date() { return mWeather4Date; }
-	public String getWeather4DateString() { return dateToString(mWeather4Date); }
+	public String getWeather4DateDatabase() { return dateToString(mWeather4Date, DATE_FORMAT_DATABASE); }
+	public String getWeather4DateView() { return dateToString(mWeather4Date, DATE_FORMAT_VIEW); }
 	public void setWeather4Date(Date mWeather4Date) { this.mWeather4Date = mWeather4Date; }
-	public void setWeather4Date(String mWeather4Date) { this.mWeather4Date = stringToDate(mWeather4Date); }
+	public void setWeather4Date(String mWeather4Date) { this.mWeather4Date = stringToDate(mWeather4Date, DATE_FORMAT_DATABASE); }
 	public Weather.Type getWeather4Symbol() { return mWeather4Symbol; }
 	public void setWeather4Symbol(Weather.Type mWeather4Symbol) { this.mWeather4Symbol = mWeather4Symbol; }
 	public int getWeather4TemperatureMin() { return mWeather4TemperatureMin; }
@@ -210,9 +227,10 @@ public class SkicentreLong extends SkicentreShort
 	public int getWeather4TemperatureMax() { return mWeather4TemperatureMax; }
 	public void setWeather4TemperatureMax(int mWeather4TemperatureMax) { this.mWeather4TemperatureMax = mWeather4TemperatureMax; }
 	public Date getWeather5Date() { return mWeather5Date; }
-	public String getWeather5DateString() { return dateToString(mWeather5Date); }
+	public String getWeather5DateDatabase() { return dateToString(mWeather5Date, DATE_FORMAT_DATABASE); }
+	public String getWeather5DateView() { return dateToString(mWeather5Date, DATE_FORMAT_VIEW); }
 	public void setWeather5Date(Date mWeather5Date) { this.mWeather5Date = mWeather5Date; }
-	public void setWeather5Date(String mWeather5Date) { this.mWeather5Date = stringToDate(mWeather5Date); }
+	public void setWeather5Date(String mWeather5Date) { this.mWeather5Date = stringToDate(mWeather5Date, DATE_FORMAT_DATABASE); }
 	public Weather.Type getWeather5Symbol() { return mWeather5Symbol; }
 	public void setWeather5Symbol(Weather.Type mWeather5Symbol) { this.mWeather5Symbol = mWeather5Symbol; }
 	public int getWeather5TemperatureMin() { return mWeather5TemperatureMin; }
@@ -220,9 +238,10 @@ public class SkicentreLong extends SkicentreShort
 	public int getWeather5TemperatureMax() { return mWeather5TemperatureMax; }
 	public void setWeather5TemperatureMax(int mWeather5TemperatureMax) { this.mWeather5TemperatureMax = mWeather5TemperatureMax; }
 	public Date getWeather6Date() { return mWeather6Date; }
-	public String getWeather6DateString() { return dateToString(mWeather6Date); }
+	public String getWeather6DateDatabase() { return dateToString(mWeather6Date, DATE_FORMAT_DATABASE); }
+	public String getWeather6DateView() { return dateToString(mWeather6Date, DATE_FORMAT_VIEW); }
 	public void setWeather6Date(Date mWeather6Date) { this.mWeather6Date = mWeather6Date; }
-	public void setWeather6Date(String mWeather6Date) { this.mWeather6Date = stringToDate(mWeather6Date); }
+	public void setWeather6Date(String mWeather6Date) { this.mWeather6Date = stringToDate(mWeather6Date, DATE_FORMAT_DATABASE); }
 	public Weather.Type getWeather6Symbol() { return mWeather6Symbol; }
 	public void setWeather6Symbol(Weather.Type mWeather6Symbol) { this.mWeather6Symbol = mWeather6Symbol; }
 	public int getWeather6TemperatureMin() { return mWeather6TemperatureMin; }
@@ -232,7 +251,8 @@ public class SkicentreLong extends SkicentreShort
 	public boolean isFlagFavourite() { return mFlagFavourite; }
 	public void setFlagFavourite(boolean mFlagFavourite) { this.mFlagFavourite = mFlagFavourite; }
 	public Date getDateLastUpdate() { return mDateLastUpdate; }
-	public String getDateLastUpdateString() { return dateToString(mDateLastUpdate); }
+	public String getDateLastUpdateDatabase() { return dateToString(mDateLastUpdate, DATE_FORMAT_DATABASE); }
+	public String getDateLastUpdateView() { return dateToString(mDateLastUpdate, DATE_FORMAT_VIEW); }
 	public void setDateLastUpdate(Date mDateLastUpdate) { this.mDateLastUpdate = mDateLastUpdate; }
-	public void setDateLastUpdate(String mDateLastUpdate) { this.mDateLastUpdate = stringToDate(mDateLastUpdate); }
+	public void setDateLastUpdate(String mDateLastUpdate) { this.mDateLastUpdate = stringToDate(mDateLastUpdate, DATE_FORMAT_DATABASE); }
 }

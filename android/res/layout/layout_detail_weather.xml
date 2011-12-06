@@ -13,7 +13,7 @@
 	    android:textSize="@dimen/layout_detail_title_textsize"
 	    android:textColor="@color/layout_detail_title"
 	    android:textStyle="bold"
-	    android:text="Weather info" />
+	    android:text="@string/layout_detail_weather_title" />
 
 	<TableLayout
 		android:layout_height="fill_parent"
@@ -27,30 +27,31 @@
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_text"
-			    android:text="Pá 2.12.2011" />
+			    android:text="" />
 			<ImageView 
 				android:id="@+id/layout_detail_weather_1_symbol"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical"
-				android:paddingRight="@dimen/layout_detail_weather_padding"
-				android:src="@drawable/weather_snow" />
+				android:paddingRight="@dimen/layout_detail_weather_padding" />
 			<TextView
 			    android:id="@+id/layout_detail_weather_1_min"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_weather_min"
-			    android:text="-6°C" />
+			    android:text="" />
 			<TextView
 			    android:id="@+id/layout_detail_weather_1_max"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_weather_max"
-			    android:text="+2°C" />
+			    android:text="" />
 		</TableRow>
 		
 		<TableRow>
@@ -61,30 +62,31 @@
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_text"
-			    android:text="So 3.12.2011" />
+			    android:text="" />
 			<ImageView 
 				android:id="@+id/layout_detail_weather_2_symbol"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical"
-				android:paddingRight="@dimen/layout_detail_weather_padding"
-				android:src="@drawable/weather_fog" />
+				android:paddingRight="@dimen/layout_detail_weather_padding" />
 			<TextView
 			    android:id="@+id/layout_detail_weather_2_min"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_weather_min"
-			    android:text="-4°C" />
+			    android:text="" />
 			<TextView
 			    android:id="@+id/layout_detail_weather_2_max"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_weather_max"
-			    android:text="+1°C" />
+			    android:text="" />
 		</TableRow>
 		
 		<TableRow>
@@ -95,30 +97,31 @@
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_text"
-			    android:text="Ne 4.12.2011" />
+			    android:text="" />
 			<ImageView 
 				android:id="@+id/layout_detail_weather_3_symbol"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical"
-				android:paddingRight="@dimen/layout_detail_weather_padding"
-				android:src="@drawable/weather_sun_clear_sky" />
+				android:paddingRight="@dimen/layout_detail_weather_padding" />
 			<TextView
 			    android:id="@+id/layout_detail_weather_3_min"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_weather_min"
-			    android:text="-2°C" />
+			    android:text="" />
 			<TextView
 			    android:id="@+id/layout_detail_weather_3_max"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_weather_max"
-			    android:text="+5°C" />
+			    android:text="" />
 		</TableRow>
 		
 		<TableRow>
@@ -129,30 +132,31 @@
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_text"
-			    android:text="Po 5.12.2011" />
+			    android:text="" />
 			<ImageView 
 				android:id="@+id/layout_detail_weather_4_symbol"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical"
-				android:paddingRight="@dimen/layout_detail_weather_padding"
-				android:src="@drawable/weather_fog" />
+				android:paddingRight="@dimen/layout_detail_weather_padding" />
 			<TextView
 			    android:id="@+id/layout_detail_weather_4_min"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_weather_min"
-			    android:text="-3°C" />
+			    android:text="" />
 			<TextView
 			    android:id="@+id/layout_detail_weather_4_max"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_weather_max"
-			    android:text="+2°C" />
+			    android:text="" />
 		</TableRow>
 		
 		<TableRow>
@@ -163,30 +167,31 @@
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_text"
-			    android:text="Út 6.12.2011" />
+			    android:text="" />
 			<ImageView 
 				android:id="@+id/layout_detail_weather_5_symbol"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical"
-				android:paddingRight="@dimen/layout_detail_weather_padding"
-				android:src="@drawable/weather_snow_showers" />
+				android:paddingRight="@dimen/layout_detail_weather_padding" />
 			<TextView
 			    android:id="@+id/layout_detail_weather_5_min"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_weather_min"
-			    android:text="-2°C" />
+			    android:text="" />
 			<TextView
 			    android:id="@+id/layout_detail_weather_5_max"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_weather_max"
-			    android:text="+4°C" />
+			    android:text="" />
 		</TableRow>
 		
 		<TableRow>
@@ -197,30 +202,31 @@
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_text"
-			    android:text="St 7.12.2011" />
+			    android:text="" />
 			<ImageView 
 				android:id="@+id/layout_detail_weather_6_symbol"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical"
-				android:paddingRight="@dimen/layout_detail_weather_padding"
-				android:src="@drawable/weather_cloudy" />
+				android:paddingRight="@dimen/layout_detail_weather_padding" />
 			<TextView
 			    android:id="@+id/layout_detail_weather_6_min"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_weather_min"
-			    android:text="-3°C" />
+			    android:text="" />
 			<TextView
 			    android:id="@+id/layout_detail_weather_6_max"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
 			    android:paddingRight="@dimen/layout_detail_weather_padding"
 			    android:textSize="@dimen/layout_detail_text_textsize" 
 			    android:textColor="@color/layout_detail_weather_max"
-			    android:text="+4°C" />
+			    android:text="" />
 		</TableRow>
 	</TableLayout>
 </LinearLayout>

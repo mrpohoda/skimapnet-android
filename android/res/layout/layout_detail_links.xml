@@ -13,7 +13,7 @@
 	    android:textSize="@dimen/layout_detail_title_textsize"
 	    android:textColor="@color/layout_detail_title"
 	    android:textStyle="bold"
-	    android:text="Web links" />
+	    android:text="@string/layout_detail_links_title" />
 	
 	<LinearLayout
 		android:orientation="horizontal"

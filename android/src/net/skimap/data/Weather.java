@@ -27,27 +27,34 @@ public class Weather
 	public static final String SNOW_AND_THUNDER = "Snow and thunder";
 	
 	
-	public static Weather.Type stringToType(String str)
+	public static Weather.Type intToType(int i)
 	{
-		if(str.equalsIgnoreCase(SUN_CLEAR_SKY)) return Weather.Type.SUN_CLEAR_SKY;
-		else if(str.equalsIgnoreCase(FAIR)) return Weather.Type.FAIR;
-		else if(str.equalsIgnoreCase(PARTLY_CLOUDY)) return Weather.Type.PARTLY_CLOUDY;
-		else if(str.equalsIgnoreCase(CLOUDY)) return Weather.Type.CLOUDY;
-		else if(str.equalsIgnoreCase(FOG)) return Weather.Type.FOG;
-		else if(str.equalsIgnoreCase(RAIN)) return Weather.Type.RAIN;
-		else if(str.equalsIgnoreCase(RAIN_SHOWERS)) return Weather.Type.RAIN_SHOWERS;
-		else if(str.equalsIgnoreCase(HEAVY_RAIN)) return Weather.Type.HEAVY_RAIN;
-		else if(str.equalsIgnoreCase(RAIN_AND_THUNDER)) return Weather.Type.RAIN_AND_THUNDER;
-		else if(str.equalsIgnoreCase(RAIN_SHOWERS_WITH_THUNDER)) return Weather.Type.RAIN_SHOWERS_WITH_THUNDER;
-		else if(str.equalsIgnoreCase(SLEET)) return Weather.Type.SLEET;
-		else if(str.equalsIgnoreCase(SLEET_SHOWERS)) return Weather.Type.SLEET_SHOWERS;
-		else if(str.equalsIgnoreCase(SNOW)) return Weather.Type.SNOW;
-		else if(str.equalsIgnoreCase(SNOW_SHOWERS)) return Weather.Type.SNOW_SHOWERS;
-		else if(str.equalsIgnoreCase(SNOW_AND_THUNDER)) return Weather.Type.SNOW_AND_THUNDER;
-		else return Weather.Type.UNKNOWN;
+		Weather.Type[] types = Weather.Type.values();
+		return types[i];
 	}
 	
 	
+	public static Weather.Type stringToType(String str)
+	{
+		if(str.equalsIgnoreCase(SUN_CLEAR_SKY)) return Weather.Type.SUN_CLEAR_SKY;
+		else if(str.contentEquals(FAIR)) return Weather.Type.FAIR;
+		else if(str.contentEquals(PARTLY_CLOUDY)) return Weather.Type.PARTLY_CLOUDY;
+		else if(str.contentEquals(CLOUDY)) return Weather.Type.CLOUDY;
+		else if(str.contentEquals(FOG)) return Weather.Type.FOG;
+		else if(str.contentEquals(RAIN)) return Weather.Type.RAIN;
+		else if(str.contentEquals(RAIN_SHOWERS)) return Weather.Type.RAIN_SHOWERS;
+		else if(str.contentEquals(HEAVY_RAIN)) return Weather.Type.HEAVY_RAIN;
+		else if(str.contentEquals(RAIN_AND_THUNDER)) return Weather.Type.RAIN_AND_THUNDER;
+		else if(str.contentEquals(RAIN_SHOWERS_WITH_THUNDER)) return Weather.Type.RAIN_SHOWERS_WITH_THUNDER;
+		else if(str.contentEquals(SLEET)) return Weather.Type.SLEET;
+		else if(str.contentEquals(SLEET_SHOWERS)) return Weather.Type.SLEET_SHOWERS;
+		else if(str.contentEquals(SNOW)) return Weather.Type.SNOW;
+		else if(str.contentEquals(SNOW_SHOWERS)) return Weather.Type.SNOW_SHOWERS;
+		else if(str.contentEquals(SNOW_AND_THUNDER)) return Weather.Type.SNOW_AND_THUNDER;
+		else return Weather.Type.UNKNOWN;
+	}
+	
+
 	public static int typeToDrawable(Weather.Type type)
 	{
 		if(type == Weather.Type.SUN_CLEAR_SKY) return R.drawable.weather_sun_clear_sky;

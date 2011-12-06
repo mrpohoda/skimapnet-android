@@ -204,17 +204,22 @@ public class Database
 	
 	private SkicentreLong cursorSkicentreLong(Cursor cursor)
 	{
-		SkicentreLong skicentre = (SkicentreLong) cursorSkicentreShort(cursor);
-		
+		int colId = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_ID);
+		int colName = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_NAME);
+		int colArea = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_AREA_ID);
+		int colCountry = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_COUNTRY_ID);
 		int colInfoPerex = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_INFO_PEREX);
 		int colDateSeasonStart = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_DATE_SEASON_START);
 		int colDateSeasonEnd = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_DATE_SEASON_END);
+		int colLocationLatitude = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LATITUDE);
+		int colLocationLongitude = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LONGITUDE);
 		int colLocationAltitudeUndermost = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_ALTITUDE_UNDERMOST);
 		int colLocationAltitudeTopmost = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_ALTITUDE_TOPMOST);
 		int colCountLiftsOpened = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_COUNT_LIFTS_OPENED);
 		int colCountDownhillsOpened = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_COUNT_DOWNHILLS_OPENED);
 		int colLengthCrosscountry = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_LENGTH_CROSSCOUNTRY);
 		int colLengthDownhillsTotal = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_LENGTH_DOWNHILLS_TOTAL);
+		int colFlagOpened = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_FLAG_OPENED);
 		int colFlagNightski = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_FLAG_NIGHTSKI);
 		int colFlagValley = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_FLAG_VALLEY);
 		int colFlagSnowpark = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_FLAG_SNOWPARK);
@@ -237,6 +242,7 @@ public class Database
 		int colUrlImgMeteogram = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_URL_IMG_METEOGRAM);
 		int colUrlImgWebcam = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_URL_IMG_WEBCAM);
 		int colSnowMin = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MIN);
+		int colSnowMax = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX);
 		int colSnowDateLastSnow = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_SNOW_DATE_LAST_SNOW);
 		int colSnowDateLastUpdate = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_SNOW_DATE_LAST_UPDATE);
 		int colWeather1Date = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_1_DATE);
@@ -266,15 +272,24 @@ public class Database
 		int colFlagFavourite = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_APP_FLAG_FAVOURITE);
 		int colDateLastUpdate = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_APP_DATE_LAST_UPDATE);
 		
+		int id = cursor.getInt(colId);
+		String name = cursor.getString(colName);
+		SkicentreLong skicentre = new SkicentreLong(id, name);
+		
+		skicentre.setArea( cursor.getInt(colArea) );
+		skicentre.setCountry( cursor.getInt(colCountry) );
 		skicentre.setInfoPerex( cursor.getString(colInfoPerex) );
 		skicentre.setDateSeasonStart( cursor.getString(colDateSeasonStart) );
 		skicentre.setDateSeasonEnd( cursor.getString(colDateSeasonEnd) );
+		skicentre.setLocationLatitude( cursor.getDouble(colLocationLatitude) );
+		skicentre.setLocationLongitude( cursor.getDouble(colLocationLongitude) );
 		skicentre.setLocationAltitudeUndermost( cursor.getInt(colLocationAltitudeUndermost) );
 		skicentre.setLocationAltitudeTopmost( cursor.getInt(colLocationAltitudeTopmost) );
 		skicentre.setCountLiftsOpened( cursor.getInt(colCountLiftsOpened) );
 		skicentre.setCountDownhillsOpened( cursor.getInt(colCountDownhillsOpened) );
 		skicentre.setLengthCrosscountry( cursor.getInt(colLengthCrosscountry) );
 		skicentre.setLengthDownhillsTotal( cursor.getInt(colLengthDownhillsTotal) );
+		skicentre.setFlagOpened( cursor.getInt(colFlagOpened)==1 );
 		skicentre.setFlagNightski( cursor.getInt(colFlagNightski)==1 );
 		skicentre.setFlagValley( cursor.getInt(colFlagValley)==1 );
 		skicentre.setFlagSnowpark( cursor.getInt(colFlagSnowpark)==1 );
@@ -297,30 +312,31 @@ public class Database
 		skicentre.setUrlImgMeteogram( cursor.getString(colUrlImgMeteogram) );
 		skicentre.setUrlImgWebcam( cursor.getString(colUrlImgWebcam) );
 		skicentre.setSnowMin( cursor.getInt(colSnowMin) );
+		skicentre.setSnowMax( cursor.getInt(colSnowMax) );
 		skicentre.setSnowDateLastSnow( cursor.getString(colSnowDateLastSnow) );
 		skicentre.setSnowDateLastUpdate( cursor.getString(colSnowDateLastUpdate) );
 		skicentre.setWeather1Date( cursor.getString(colWeather1Date) );
-		skicentre.setWeather1Symbol( Weather.stringToType(cursor.getString(colWeather1Symbol)) );
+		skicentre.setWeather1Symbol( Weather.intToType(cursor.getInt(colWeather1Symbol)) );
 		skicentre.setWeather1TemperatureMin( cursor.getInt(colWeather1TemperatureMin) );
 		skicentre.setWeather1TemperatureMax( cursor.getInt(colWeather1TemperatureMax) );
 		skicentre.setWeather2Date( cursor.getString(colWeather2Date) );
-		skicentre.setWeather2Symbol( Weather.stringToType(cursor.getString(colWeather2Symbol)) );
+		skicentre.setWeather2Symbol( Weather.intToType(cursor.getInt(colWeather2Symbol)) );
 		skicentre.setWeather2TemperatureMin( cursor.getInt(colWeather2TemperatureMin) );
 		skicentre.setWeather2TemperatureMax( cursor.getInt(colWeather2TemperatureMax) );
 		skicentre.setWeather3Date( cursor.getString(colWeather3Date) );
-		skicentre.setWeather3Symbol( Weather.stringToType(cursor.getString(colWeather3Symbol)) );
+		skicentre.setWeather3Symbol( Weather.intToType(cursor.getInt(colWeather3Symbol)) );
 		skicentre.setWeather3TemperatureMin( cursor.getInt(colWeather3TemperatureMin) );
 		skicentre.setWeather3TemperatureMax( cursor.getInt(colWeather3TemperatureMax) );
 		skicentre.setWeather4Date( cursor.getString(colWeather4Date) );
-		skicentre.setWeather4Symbol( Weather.stringToType(cursor.getString(colWeather4Symbol)) );
+		skicentre.setWeather4Symbol( Weather.intToType(cursor.getInt(colWeather4Symbol)) );
 		skicentre.setWeather4TemperatureMin( cursor.getInt(colWeather4TemperatureMin) );
 		skicentre.setWeather4TemperatureMax( cursor.getInt(colWeather4TemperatureMax) );
 		skicentre.setWeather5Date( cursor.getString(colWeather5Date) );
-		skicentre.setWeather5Symbol( Weather.stringToType(cursor.getString(colWeather5Symbol)) );
+		skicentre.setWeather5Symbol( Weather.intToType(cursor.getInt(colWeather5Symbol)) );
 		skicentre.setWeather5TemperatureMin( cursor.getInt(colWeather5TemperatureMin) );
 		skicentre.setWeather5TemperatureMax( cursor.getInt(colWeather5TemperatureMax) );
 		skicentre.setWeather6Date( cursor.getString(colWeather6Date) );
-		skicentre.setWeather6Symbol( Weather.stringToType(cursor.getString(colWeather6Symbol)) );
+		skicentre.setWeather6Symbol( Weather.intToType(cursor.getInt(colWeather6Symbol)) );
 		skicentre.setWeather6TemperatureMin( cursor.getInt(colWeather6TemperatureMin) );
 		skicentre.setWeather6TemperatureMax( cursor.getInt(colWeather6TemperatureMax) );
 		skicentre.setFlagFavourite( cursor.getInt(colFlagFavourite)==1 );
@@ -349,8 +365,8 @@ public class Database
 	{
 		ContentValues values = valuesSkicentreShort(skicentre);
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_INFO_PEREX, skicentre.getInfoPerex());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_DATE_SEASON_START, skicentre.getDateSeasonStartString());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_DATE_SEASON_END, skicentre.getDateSeasonEndString());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_DATE_SEASON_START, skicentre.getDateSeasonStartDatabase());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_DATE_SEASON_END, skicentre.getDateSeasonEndDatabase());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_ALTITUDE_UNDERMOST, skicentre.getLocationAltitudeUndermost());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_ALTITUDE_TOPMOST, skicentre.getLocationAltitudeTopmost());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_COUNT_LIFTS_OPENED, skicentre.getCountLiftsOpened());
@@ -379,34 +395,34 @@ public class Database
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_URL_IMG_METEOGRAM, skicentre.getUrlImgMeteogram());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_URL_IMG_WEBCAM, skicentre.getUrlImgWebcam());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MIN, skicentre.getSnowMin());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW_DATE_LAST_SNOW, skicentre.getSnowDateLastSnowString());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW_DATE_LAST_UPDATE, skicentre.getSnowDateLastUpdateString());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_1_DATE, skicentre.getWeather1DateString());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW_DATE_LAST_SNOW, skicentre.getSnowDateLastSnowDatabase());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW_DATE_LAST_UPDATE, skicentre.getSnowDateLastUpdateDatabase());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_1_DATE, skicentre.getWeather1DateDatabase());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_1_SYMBOL_NAME, skicentre.getWeather1Symbol().ordinal());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_1_TEMPERATURE_MIN, skicentre.getWeather1TemperatureMin());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_1_TEMPERATURE_MAX, skicentre.getWeather1TemperatureMax());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_2_DATE, skicentre.getWeather2DateString());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_2_DATE, skicentre.getWeather2DateDatabase());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_2_SYMBOL_NAME, skicentre.getWeather2Symbol().ordinal());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_2_TEMPERATURE_MIN, skicentre.getWeather2TemperatureMin());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_2_TEMPERATURE_MAX, skicentre.getWeather2TemperatureMax());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_3_DATE, skicentre.getWeather3DateString());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_3_DATE, skicentre.getWeather3DateDatabase());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_3_SYMBOL_NAME, skicentre.getWeather3Symbol().ordinal());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_3_TEMPERATURE_MIN, skicentre.getWeather3TemperatureMin());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_3_TEMPERATURE_MAX, skicentre.getWeather3TemperatureMax());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_4_DATE, skicentre.getWeather4DateString());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_4_DATE, skicentre.getWeather4DateDatabase());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_4_SYMBOL_NAME, skicentre.getWeather4Symbol().ordinal());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_4_TEMPERATURE_MIN, skicentre.getWeather4TemperatureMin());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_4_TEMPERATURE_MAX, skicentre.getWeather4TemperatureMax());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_5_DATE, skicentre.getWeather5DateString());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_5_DATE, skicentre.getWeather5DateDatabase());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_5_SYMBOL_NAME, skicentre.getWeather5Symbol().ordinal());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_5_TEMPERATURE_MIN, skicentre.getWeather5TemperatureMin());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_5_TEMPERATURE_MAX, skicentre.getWeather5TemperatureMax());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_6_DATE, skicentre.getWeather6DateString());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_6_DATE, skicentre.getWeather6DateDatabase());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_6_SYMBOL_NAME, skicentre.getWeather6Symbol().ordinal());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_6_TEMPERATURE_MIN, skicentre.getWeather6TemperatureMin());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_6_TEMPERATURE_MAX, skicentre.getWeather6TemperatureMax());
 		values.put(DatabaseHelper.TAB_SKICENTRE_APP_FLAG_FAVOURITE, skicentre.isFlagFavourite());
-		values.put(DatabaseHelper.TAB_SKICENTRE_APP_DATE_LAST_UPDATE, skicentre.getDateLastUpdateString());
+		values.put(DatabaseHelper.TAB_SKICENTRE_APP_DATE_LAST_UPDATE, skicentre.getDateLastUpdateDatabase());
 		return values;
 	}
 	

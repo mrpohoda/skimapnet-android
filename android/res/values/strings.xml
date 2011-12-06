@@ -29,4 +29,61 @@
     <string name="ab_tab_recommended">Recommended</string>
     
     <string name="layout_listing_item_snow">cm of snow</string>
+    
+    <string name="layout_detail_share">Share skicentre</string>
+    <string name="layout_detail_share_skicentre">Skicentre</string>
+    <string name="layout_detail_share_url">Ski-map.net</string>
+    <string name="layout_detail_share_url_full">http://ski-map.net</string>
+    
+    <string name="layout_detail_skiing_title">Skiing info</string>
+    <string name="layout_detail_weather_title">Weather info</string>
+    <string name="layout_detail_prices_title">Prices</string>
+    <string name="layout_detail_images_title">Image links</string>
+    <string name="layout_detail_links_title">Web links</string>
+    
+    <string name="layout_detail_skicentre_season"><![CDATA[<b>Season:</b>]]></string>
+    <string name="layout_detail_skicentre_altitude"><![CDATA[<b>Altitude:</b>]]></string>
+    <string name="layout_detail_skicentre_perex_more"><![CDATA[<u>more</u>]]></string>
+    <string name="layout_detail_skicentre_perex_less"><![CDATA[<u>less</u>]]></string>
+    <string name="layout_detail_skiing_snow_quantity"><![CDATA[<b>Snow quantity:</b>]]></string>
+    <string name="layout_detail_skiing_lifts_count"><![CDATA[<b>Lifts opened:</b>]]></string>
+    <string name="layout_detail_skiing_downhills_count"><![CDATA[<b>Downhills opened:</b>]]></string>
+    <string name="layout_detail_skiing_downhills_length"><![CDATA[<b>Downhills length:</b>]]></string>
+    <string name="layout_detail_skiing_crosscountry_length"><![CDATA[<b>Crosscountry length:</b>]]></string>
+    <string name="layout_detail_price_adults_1"><![CDATA[<b>Adults 1 day:</b>]]></string>
+    <string name="layout_detail_price_adults_6"><![CDATA[<b>Adults 6 days:</b>]]></string>
+    <string name="layout_detail_price_children_1"><![CDATA[<b>Children 1 day:</b>]]></string>
+    <string name="layout_detail_price_children_6"><![CDATA[<b>Children 6 days:</b>]]></string>
+    <string name="layout_detail_price_young_1"><![CDATA[<b>Young 1 day:</b>]]></string>
+    <string name="layout_detail_price_young_6"><![CDATA[<b>Young 6 days:</b>]]></string>
+    <string name="layout_detail_price_seniors_1"><![CDATA[<b>Seniors 1 day:</b>]]></string>
+    <string name="layout_detail_price_seniors_6"><![CDATA[<b>Seniors 6 days:</b>]]></string>
+    
+    <string name="toast_help_opened">Skicentre opened</string>
+    <string name="toast_help_nightski">Night skiing</string>
+    <string name="toast_help_valley">Desc to valley</string>
+    <string name="toast_help_snowpark">Snowpark</string>
+    <string name="toast_help_halfpipe">Halfpipe</string>
+    
+    <string name="toast_help_url_img_map">Skicentre map image</string>
+    <string name="toast_help_url_img_meteogram">Meteogram</string>
+    <string name="toast_help_url_img_webcam">Webcamera image</string>
+    <string name="toast_help_url_skimap">Ski-map web page</string>
+    <string name="toast_help_url_homepage">Skicentre homepage</string>
+    <string name="toast_help_url_snow_report">Snow report page</string>
+    <string name="toast_help_url_weather_report">Weather report page</string>
+    <string name="toast_help_url_webcams">Webcams page</string>
+    
+    <string name="day_sun">Sun</string>
+    <string name="day_mon">Mon</string>
+    <string name="day_tue">Tue</string>
+    <string name="day_wed">Wed</string>
+    <string name="day_thu">Thu</string>
+    <string name="day_fri">Fri</string>
+    <string name="day_sat">Sat</string>
+    
+    <string name="unit_m">m</string>
+    <string name="unit_cm">cm</string>
+    <string name="unit_km">km</string>
+    <string name="unit_celsius">°C</string>
 </resources>

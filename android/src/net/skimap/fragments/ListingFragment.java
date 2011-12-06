@@ -71,7 +71,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
     {
         super.onCreate(savedInstanceState);
         mLoadingFromDatabase = true;
-        refreshListView();
+        refreshData();
     }
 
 	
@@ -222,17 +222,17 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		Toast.makeText(getActivity(), "SYNCHRO DONE", Toast.LENGTH_SHORT).show();
 		
 		// aktualizace listview
-		refreshViewsAfterSynchro();
+		refreshDataAfterSynchro();
 	}
 	
 	
-	private void refreshViewsAfterSynchro()
+	private void refreshDataAfterSynchro()
 	{
 		// TODO: ziskat referenci ke vsem list fragmentum a zavolat pro ne metodu refreshListView(), obnovit map view
 	}
 	
 	
-	private void refreshListView()
+	private void refreshData()
 	{
 		// odchyceni zpravy z vlakna
 		final Handler handler = new Handler()
@@ -250,7 +250,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
         {
         	public void run() 
 		    {
-        		refreshListViewThread();
+        		refreshDataThread();
         		Message message = new Message();
         		handler.sendMessage(message);
 		    }
@@ -258,7 +258,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	}
 	
 	
-	private void refreshListViewThread()
+	private void refreshDataThread()
 	{
 		loadAllAreas();
 		loadAllCountries();

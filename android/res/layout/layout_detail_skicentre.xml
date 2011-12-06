@@ -15,7 +15,6 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
-			android:src="@drawable/presence_online"
 			android:paddingTop="@dimen/layout_detail_opened_padding"
 			android:layout_alignParentRight="true" />
    		
@@ -26,7 +25,7 @@
 		    android:textSize="@dimen/layout_detail_title_textsize"
 		    android:textColor="@color/layout_detail_title"
 		    android:textStyle="bold"
-		    android:text="Saalbach Hinterglemm Leogang Sportwelt"
+		    android:text=""
 		    android:layout_alignParentLeft="true"
 			android:layout_toLeftOf="@id/layout_detail_skicentre_opened" />
     </RelativeLayout>
@@ -37,7 +36,7 @@
 	    android:layout_height="wrap_content"
 	    android:textSize="@dimen/layout_detail_text_textsize"
 	    android:textColor="@color/layout_detail_text"
-	    android:text="Česká Republika, Krkonoše" />
+	    android:text="" />
 	
 	<TextView
 	    android:id="@+id/layout_detail_skicentre_season"
@@ -45,7 +44,7 @@
 	    android:layout_height="wrap_content"
 	    android:textSize="@dimen/layout_detail_text_textsize"
 	    android:textColor="@color/layout_detail_text"
-	    android:text="Sezóna: 17.12.2011 - 24.4.2012" />
+	    android:text="" />
 	
 	<TextView
 	    android:id="@+id/layout_detail_skicentre_location"
@@ -53,7 +52,7 @@
 	    android:layout_height="wrap_content"
 	    android:textSize="@dimen/layout_detail_text_textsize"
 	    android:textColor="@color/layout_detail_text"
-	    android:text="Nadmořská výška: 1075 m - 2357 m" />
+	    android:text="" />
 	
 	<TextView
 	    android:id="@+id/layout_detail_skicentre_perex"
