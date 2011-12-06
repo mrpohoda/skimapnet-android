@@ -6,6 +6,7 @@ import net.skimap.activities.SkimapApplication;
 import net.skimap.data.SkicentreLong;
 import net.skimap.data.Weather;
 import net.skimap.database.Database;
+import net.skimap.database.DatabaseHelper;
 import net.skimap.network.Synchronization;
 import android.content.Intent;
 import android.net.Uri;
@@ -231,6 +232,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		// TODO: formatovani textu: http://stackoverflow.com/questions/1529068/is-it-possible-to-have-multiple-styles-inside-a-textview
 		// TODO: pridat toasty s napovedou na flagy
 		// TODO: osetrovat null hodnoty - DatabaseHelper.NULL_STRING apod., pripadne schovat dany widget
+		// TODO. roztridit kousky kodu do dilcich funkci, pro kazde jednotlive view
 		mPerexMore = false;
 		
 		// reference na textove pole
@@ -294,47 +296,113 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		
 		// zpracovani nadpisu
 		String skicentreTitle = mSkicentre.getName();
+		textSkicentreTitle.setText(Html.fromHtml(skicentreTitle));
 		
-		// zpracovani nadpisu
+		// zpracovani mista
 		String skicentreArea = getAreaName(mSkicentre.getArea());
 		String skicentreCountry = getCountryName(mSkicentre.getCountry());
-		String skicentrePlace = skicentreCountry + ", " + skicentreArea;
+		if(skicentreArea==DatabaseHelper.NULL_STRING && skicentreCountry==DatabaseHelper.NULL_STRING) textSkicentrePlace.setVisibility(View.GONE);
+		else
+		{
+			String skicentrePlace = getString(R.string.layout_detail_skicentre_country) + " ";
+			if(skicentreCountry!=DatabaseHelper.NULL_STRING) skicentrePlace += skicentreCountry;
+			if(skicentreCountry!=DatabaseHelper.NULL_STRING && skicentreArea!=DatabaseHelper.NULL_STRING) skicentrePlace += ", ";
+			if(skicentreArea!=DatabaseHelper.NULL_STRING) skicentrePlace += skicentreArea;
+			textSkicentrePlace.setText(Html.fromHtml(skicentrePlace));
+		}
 				
 		// zpracovani sezony
 		String skicentreSeasonStart = mSkicentre.getDateSeasonStartView();
 		String skicentreSeasonEnd = mSkicentre.getDateSeasonEndView();
-		String skicentreSeason = getString(R.string.layout_detail_skicentre_season) + " " + skicentreSeasonStart + " - " + skicentreSeasonEnd;
+		if(skicentreSeasonStart==DatabaseHelper.NULL_STRING || skicentreSeasonEnd==DatabaseHelper.NULL_STRING) textSkicentreSeason.setVisibility(View.GONE);
+		else
+		{
+			String skicentreSeason = getString(R.string.layout_detail_skicentre_season) + " " + skicentreSeasonStart + " - " + skicentreSeasonEnd;
+			textSkicentreSeason.setText(Html.fromHtml(skicentreSeason));
+		}
 				
 		// zpracovani nadmorske vysky
 		int skicentreLocationUndermost = mSkicentre.getLocationAltitudeUndermost();
 		int skicentreLocationTopmost = mSkicentre.getLocationAltitudeTopmost();
-		String skicentreLocation = getString(R.string.layout_detail_skicentre_altitude) + " " + skicentreLocationUndermost + " " + getString(R.string.unit_m) + " - " + skicentreLocationTopmost + " " + getString(R.string.unit_m);
+		if(skicentreLocationUndermost<=0 || skicentreLocationTopmost<=0) textSkicentreLocation.setVisibility(View.GONE);
+		else
+		{
+			String skicentreLocation = getString(R.string.layout_detail_skicentre_altitude) + " " + skicentreLocationUndermost + " " + getString(R.string.unit_m) + " - " + skicentreLocationTopmost + " " + getString(R.string.unit_m);
+			textSkicentreLocation.setText(Html.fromHtml(skicentreLocation));
+		}
 		
 		// zpracovani perex
 		final String skicentrePerexLong = mSkicentre.getInfoPerex();
-		int lastSpace = skicentrePerexLong.lastIndexOf(" ", PEREX_SHORT_LENGTH);
-		final String skicentrePerexShort = skicentrePerexLong.subSequence(0, lastSpace).toString().concat("…") + " " + getString(R.string.layout_detail_skicentre_perex_more);
+		if(skicentrePerexLong==DatabaseHelper.NULL_STRING || skicentrePerexLong.trim().contentEquals("")) textSkicentrePerex.setVisibility(View.GONE);
+		else
+		{
+			int lastSpace = skicentrePerexLong.lastIndexOf(" ", PEREX_SHORT_LENGTH);
+			final String skicentrePerexShort = skicentrePerexLong.subSequence(0, lastSpace).toString().concat("…") + " " + getString(R.string.layout_detail_skicentre_perex_more);
+			textSkicentrePerex.setText(Html.fromHtml(skicentrePerexShort));
+			textSkicentrePerex.setOnClickListener(new OnClickListener() 
+			{
+				@Override
+				public void onClick(View view)
+				{				
+					if(mPerexMore)
+					{
+						((TextView) view).setText(Html.fromHtml(skicentrePerexLong + " " + getString(R.string.layout_detail_skicentre_perex_less)));
+					}
+					else
+					{
+						((TextView) view).setText(Html.fromHtml(skicentrePerexShort));
+					}
+					
+					mPerexMore = !mPerexMore;
+				}
+			});
+		}
 		
 		// zpracovani mnozstvi snehu
 		int skiingSnowQuantityMin = mSkicentre.getSnowMin();
 		int skiingSnowQuantityMax = mSkicentre.getSnowMax();
-		String skiingSnowQuantity = getString(R.string.layout_detail_skiing_snow_quantity) + " " + skiingSnowQuantityMin + " " + getString(R.string.unit_cm) + " - " + skiingSnowQuantityMax + " " + getString(R.string.unit_cm);
-				
+		if(skiingSnowQuantityMin<=DatabaseHelper.NULL_INT || skiingSnowQuantityMax<=DatabaseHelper.NULL_INT) textSkiingSnowQuantity.setVisibility(View.GONE);
+		else
+		{
+			String skiingSnowQuantity = getString(R.string.layout_detail_skiing_snow_quantity) + " " + skiingSnowQuantityMin + " " + getString(R.string.unit_cm) + " - " + skiingSnowQuantityMax + " " + getString(R.string.unit_cm);
+			textSkiingSnowQuantity.setText(Html.fromHtml(skiingSnowQuantity));
+		}
+
 		// zpracovani otevrenych lanovek
 		int skiingLiftsOpened = mSkicentre.getCountLiftsOpened();
-		String skiingLiftsCount = getString(R.string.layout_detail_skiing_lifts_count) + " " + skiingLiftsOpened;
-				
+		if(skiingLiftsOpened<=DatabaseHelper.NULL_INT) textSkiingLiftsCount.setVisibility(View.GONE);
+		else
+		{
+			String skiingLiftsCount = getString(R.string.layout_detail_skiing_lifts_count) + " " + skiingLiftsOpened;
+			textSkiingLiftsCount.setText(Html.fromHtml(skiingLiftsCount));
+		}
+
 		// zpracovani otevrenych sjezdovek
 		int skiingDownhillsOpened = mSkicentre.getCountDownhillsOpened();
-		String skiingDownhillsCount = getString(R.string.layout_detail_skiing_downhills_count) + " " + skiingDownhillsOpened;
-		
+		if(skiingDownhillsOpened<=DatabaseHelper.NULL_INT) textSkiingDownhillsCount.setVisibility(View.GONE);
+		else
+		{
+			String skiingDownhillsCount = getString(R.string.layout_detail_skiing_downhills_count) + " " + skiingDownhillsOpened;
+			textSkiingDownhillsCount.setText(Html.fromHtml(skiingDownhillsCount));
+		}
+
 		// zpracovani delky sjezdovek
 		int skiingDownhillsLengthTotal = mSkicentre.getLengthDownhillsTotal();
-		String skiingDownhillsLength = getString(R.string.layout_detail_skiing_downhills_length) + " " + skiingDownhillsLengthTotal + " " + getString(R.string.unit_km);
-				
+		if(skiingDownhillsLengthTotal<=DatabaseHelper.NULL_INT) textSkiingDownhillsLength.setVisibility(View.GONE);
+		else
+		{
+			String skiingDownhillsLength = getString(R.string.layout_detail_skiing_downhills_length) + " " + skiingDownhillsLengthTotal + " " + getString(R.string.unit_km);
+			textSkiingDownhillsLength.setText(Html.fromHtml(skiingDownhillsLength));
+		}
+
 		// zpracovani delky bezeckych trati
 		int skiingCrosscountryLengthTotal = mSkicentre.getLengthCrosscountry();
-		String skiingCrosscountryLength = getString(R.string.layout_detail_skiing_crosscountry_length) + " " + skiingCrosscountryLengthTotal + " " + getString(R.string.unit_km);
+		if(skiingCrosscountryLengthTotal<=DatabaseHelper.NULL_INT) textSkiingCrosscountryLength.setVisibility(View.GONE);
+		else
+		{
+			String skiingCrosscountryLength = getString(R.string.layout_detail_skiing_crosscountry_length) + " " + skiingCrosscountryLengthTotal + " " + getString(R.string.unit_km);
+			textSkiingCrosscountryLength.setText(Html.fromHtml(skiingCrosscountryLength));
+		}
 		
 		// zpracovani data pocasi
 		String weather1Date = mSkicentre.getWeather1DateView() + " " + getDayName(mSkicentre.getWeather1Date().getDay());
@@ -343,6 +411,12 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		String weather4Date = mSkicentre.getWeather4DateView() + " " + getDayName(mSkicentre.getWeather4Date().getDay());
 		String weather5Date = mSkicentre.getWeather5DateView() + " " + getDayName(mSkicentre.getWeather5Date().getDay());
 		String weather6Date = mSkicentre.getWeather6DateView() + " " + getDayName(mSkicentre.getWeather6Date().getDay());
+		textWeather1Date.setText(Html.fromHtml(weather1Date));
+		textWeather2Date.setText(Html.fromHtml(weather2Date));
+		textWeather3Date.setText(Html.fromHtml(weather3Date));
+		textWeather4Date.setText(Html.fromHtml(weather4Date));
+		textWeather5Date.setText(Html.fromHtml(weather5Date));
+		textWeather6Date.setText(Html.fromHtml(weather6Date));
 		
 		// zpracovani minimalni teploty pocasi
 		int weather1Min = mSkicentre.getWeather1TemperatureMin();
@@ -357,6 +431,12 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		String weather5TemperatureMin = (weather5Min>0 ? "+" + weather5Min : weather5Min) + getString(R.string.unit_celsius);
 		int weather6Min = mSkicentre.getWeather6TemperatureMin();
 		String weather6TemperatureMin = (weather6Min>0 ? "+" + weather6Min : weather6Min) + getString(R.string.unit_celsius);
+		textWeather1Min.setText(Html.fromHtml(weather1TemperatureMin));
+		textWeather2Min.setText(Html.fromHtml(weather2TemperatureMin));
+		textWeather3Min.setText(Html.fromHtml(weather3TemperatureMin));
+		textWeather4Min.setText(Html.fromHtml(weather4TemperatureMin));
+		textWeather5Min.setText(Html.fromHtml(weather5TemperatureMin));
+		textWeather6Min.setText(Html.fromHtml(weather6TemperatureMin));
 		
 		// zpracovani maximalni teploty pocasi
 		int weather1Max = mSkicentre.getWeather1TemperatureMax();
@@ -371,57 +451,64 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		String weather5TemperatureMax = (weather5Max>0 ? "+" + weather5Max : weather5Max) + getString(R.string.unit_celsius);
 		int weather6Max = mSkicentre.getWeather6TemperatureMax();
 		String weather6TemperatureMax = (weather6Max>0 ? "+" + weather6Max : weather6Max) + getString(R.string.unit_celsius);
-		
-		// zpracovani cen
-		int priceAdults1 = mSkicentre.getPriceAdults1();
-		int priceAdults6 = mSkicentre.getPriceAdults6();
-		int priceChildren1 = mSkicentre.getPriceChildren1();
-		int priceChildren6 = mSkicentre.getPriceChildren6();
-		int priceYoung1 = mSkicentre.getPriceYoung1();
-		int priceYoung6 = mSkicentre.getPriceYoung6();
-		int priceSeniors1 = mSkicentre.getPriceSeniors1();
-		int priceSeniors6 = mSkicentre.getPriceSeniors6();
-		String priceCurrency = mSkicentre.getPriceCurrency();
-		String pricesAdults = getString(R.string.layout_detail_price_adults_1) + " " + priceAdults1 + " " + priceCurrency + "<br>" + getString(R.string.layout_detail_price_adults_6) + " " + priceAdults6 + " " + priceCurrency;
-		String pricesChildren = getString(R.string.layout_detail_price_children_1) + " " + priceChildren1 + " " + priceCurrency + "<br>" + getString(R.string.layout_detail_price_children_6) + " " + priceChildren6 + " " + priceCurrency;
-		String pricesYoung = getString(R.string.layout_detail_price_young_1) + " " + priceYoung1 + " " + priceCurrency + "<br>" + getString(R.string.layout_detail_price_young_6) + " " + priceYoung6 + " " + priceCurrency;
-		String pricesSeniors = getString(R.string.layout_detail_price_seniors_1) + " " + priceSeniors1 + " " + priceCurrency + "<br>" + getString(R.string.layout_detail_price_seniors_6) + " " + priceSeniors6 + " " + priceCurrency;
-		
-		
-		// nastaveni textu
-		textSkicentreTitle.setText(Html.fromHtml(skicentreTitle));
-		textSkicentrePlace.setText(Html.fromHtml(skicentrePlace));
-		textSkicentreSeason.setText(Html.fromHtml(skicentreSeason));
-		textSkicentreLocation.setText(Html.fromHtml(skicentreLocation));
-		textSkicentrePerex.setText(Html.fromHtml(skicentrePerexShort));
-		textSkiingSnowQuantity.setText(Html.fromHtml(skiingSnowQuantity));
-		textSkiingLiftsCount.setText(Html.fromHtml(skiingLiftsCount));
-		textSkiingDownhillsCount.setText(Html.fromHtml(skiingDownhillsCount));
-		textSkiingDownhillsLength.setText(Html.fromHtml(skiingDownhillsLength));
-		textSkiingCrosscountryLength.setText(Html.fromHtml(skiingCrosscountryLength));
-		textWeather1Date.setText(Html.fromHtml(weather1Date));
-		textWeather2Date.setText(Html.fromHtml(weather2Date));
-		textWeather3Date.setText(Html.fromHtml(weather3Date));
-		textWeather4Date.setText(Html.fromHtml(weather4Date));
-		textWeather5Date.setText(Html.fromHtml(weather5Date));
-		textWeather6Date.setText(Html.fromHtml(weather6Date));
-		textWeather1Min.setText(Html.fromHtml(weather1TemperatureMin));
-		textWeather2Min.setText(Html.fromHtml(weather2TemperatureMin));
-		textWeather3Min.setText(Html.fromHtml(weather3TemperatureMin));
-		textWeather4Min.setText(Html.fromHtml(weather4TemperatureMin));
-		textWeather5Min.setText(Html.fromHtml(weather5TemperatureMin));
-		textWeather6Min.setText(Html.fromHtml(weather6TemperatureMin));
 		textWeather1Max.setText(Html.fromHtml(weather1TemperatureMax));
 		textWeather2Max.setText(Html.fromHtml(weather2TemperatureMax));
 		textWeather3Max.setText(Html.fromHtml(weather3TemperatureMax));
 		textWeather4Max.setText(Html.fromHtml(weather4TemperatureMax));
 		textWeather5Max.setText(Html.fromHtml(weather5TemperatureMax));
 		textWeather6Max.setText(Html.fromHtml(weather6TemperatureMax));
-		textPricesAdults.setText(Html.fromHtml(pricesAdults));
-		textPricesChildren.setText(Html.fromHtml(pricesChildren));
-		textPricesYoung.setText(Html.fromHtml(pricesYoung));
-		textPricesSeniors.setText(Html.fromHtml(pricesSeniors));
 		
+		// zpracovani cen
+		String priceCurrency = mSkicentre.getPriceCurrency();
+		
+		int priceAdults1 = mSkicentre.getPriceAdults1();
+		int priceAdults6 = mSkicentre.getPriceAdults6();
+		if(priceAdults1<=0 && priceAdults6<=0) textPricesAdults.setVisibility(View.GONE);
+		else
+		{
+			String pricesAdults = "";
+			if(priceAdults1>0) pricesAdults += getString(R.string.layout_detail_price_adults_1) + " " + priceAdults1 + " " + priceCurrency;
+			if(priceAdults1>0 && priceAdults6>0) pricesAdults += "<br>";
+			if(priceAdults6>0) pricesAdults += getString(R.string.layout_detail_price_adults_6) + " " + priceAdults6 + " " + priceCurrency;
+			textPricesAdults.setText(Html.fromHtml(pricesAdults));
+		}
+		
+		int priceChildren1 = mSkicentre.getPriceChildren1();
+		int priceChildren6 = mSkicentre.getPriceChildren6();
+		if(priceChildren1<=0 && priceChildren6<=0) textPricesChildren.setVisibility(View.GONE);
+		else
+		{
+			String pricesChildren = "";
+			if(priceChildren1>0) pricesChildren += getString(R.string.layout_detail_price_children_1) + " " + priceChildren1 + " " + priceCurrency;
+			if(priceChildren1>0 && priceChildren6>0) pricesChildren += "<br>";
+			if(priceChildren6>0) pricesChildren += getString(R.string.layout_detail_price_children_6) + " " + priceChildren6 + " " + priceCurrency;
+			textPricesChildren.setText(Html.fromHtml(pricesChildren));
+		}
+
+		int priceYoung1 = mSkicentre.getPriceYoung1();
+		int priceYoung6 = mSkicentre.getPriceYoung6();
+		if(priceYoung1<=0 && priceYoung6<=0) textPricesYoung.setVisibility(View.GONE);
+		else
+		{
+			String pricesYoung = "";
+			if(priceYoung1>0) pricesYoung += getString(R.string.layout_detail_price_young_1) + " " + priceYoung1 + " " + priceCurrency;
+			if(priceYoung1>0 && priceYoung6>0) pricesYoung += "<br>";
+			if(priceYoung6>0) pricesYoung += getString(R.string.layout_detail_price_young_6) + " " + priceYoung6 + " " + priceCurrency;
+			textPricesYoung.setText(Html.fromHtml(pricesYoung));
+		}
+
+		int priceSeniors1 = mSkicentre.getPriceSeniors1();
+		int priceSeniors6 = mSkicentre.getPriceSeniors6();
+		if(priceSeniors1<=0 && priceSeniors6<=0) textPricesSeniors.setVisibility(View.GONE);
+		else
+		{
+			String pricesSeniors = "";
+			if(priceSeniors1>0) pricesSeniors += getString(R.string.layout_detail_price_seniors_1) + " " + priceSeniors1 + " " + priceCurrency;
+			if(priceSeniors1>0 && priceSeniors6>0) pricesSeniors += "<br>";
+			if(priceSeniors6>0) pricesSeniors += getString(R.string.layout_detail_price_seniors_6) + " " + priceSeniors6 + " " + priceCurrency;
+			textPricesSeniors.setText(Html.fromHtml(pricesSeniors));
+		}
+
 		
 		// nastaveni obrazku
 		imageSkicentreOpened.setImageResource(mSkicentre.isFlagOpened() ? R.drawable.presence_online : R.drawable.presence_busy);
@@ -438,34 +525,17 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		setDrawable(imageWeather5, mSkicentre.getWeather5Symbol());
 		setDrawable(imageWeather6, mSkicentre.getWeather6Symbol());
 		
-		imageImagesMap.setVisibility(true ? View.VISIBLE : View.GONE); // TODO
-		imageImagesChart.setVisibility(true ? View.VISIBLE : View.GONE);
-		imageImagesCamera.setVisibility(true ? View.VISIBLE : View.GONE);
-		imageLinksSkimap.setVisibility(true ? View.VISIBLE : View.GONE);
-		imageLinksHome.setVisibility(true ? View.VISIBLE : View.GONE);
-		imageLinksSnowReport.setVisibility(true ? View.VISIBLE : View.GONE);
-		imageLinksWeatherReport.setVisibility(true ? View.VISIBLE : View.GONE);
-		imageLinksCamera.setVisibility(true ? View.VISIBLE : View.GONE);
+		imageImagesMap.setVisibility((mSkicentre.getUrlImgMap()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlImgMap().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
+		imageImagesChart.setVisibility((mSkicentre.getUrlImgMeteogram()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlImgMeteogram().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
+		imageImagesCamera.setVisibility((mSkicentre.getUrlImgWebcam()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlImgWebcam().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
+		imageLinksSkimap.setVisibility((mSkicentre.getUrlSkimap()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlSkimap().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
+		imageLinksHome.setVisibility((mSkicentre.getUrlHomepage()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlHomepage().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
+		imageLinksSnowReport.setVisibility((mSkicentre.getUrlSnowReport()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlSnowReport().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
+		imageLinksWeatherReport.setVisibility((mSkicentre.getUrlWeatherReport()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlWeatherReport().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
+		imageLinksCamera.setVisibility((mSkicentre.getUrlWebcams()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlWebcams().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
 		
 		
 		// onclick napovedy
-		textSkicentrePerex.setOnClickListener(new OnClickListener() 
-		{
-			@Override
-			public void onClick(View view)
-			{				
-				if(mPerexMore)
-				{
-					((TextView) view).setText(Html.fromHtml(skicentrePerexLong + " " + getString(R.string.layout_detail_skicentre_perex_less)));
-				}
-				else
-				{
-					((TextView) view).setText(Html.fromHtml(skicentrePerexShort));
-				}
-				
-				mPerexMore = !mPerexMore;
-			}
-		});
 		imageSkicentreOpened.setOnClickListener(new OnClickListener() 
 		{
 			@Override
@@ -658,22 +728,34 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	
 	private String getAreaName(int id)
 	{
-		// otevreni databaze
+		String area = DatabaseHelper.NULL_STRING;
 		Database db = new Database(getActivity());
-		db.open(false);
-		String area = db.getArea(id).getName();
-		db.close();
+		try
+		{
+			db.open(false);
+			area = db.getArea(id).getName();
+		}
+		finally
+		{
+			db.close();
+		}
 		return area;
 	}
 	
 	
 	private String getCountryName(int id)
 	{
-		// otevreni databaze
+		String country = DatabaseHelper.NULL_STRING;
 		Database db = new Database(getActivity());
-		db.open(false);
-		String country = db.getCountry(id).getName();
-		db.close();
+		try
+		{
+			db.open(false);
+			country = db.getCountry(id).getName();
+		}
+		finally
+		{
+			db.close();
+		}
 		return country;
 	}
 	

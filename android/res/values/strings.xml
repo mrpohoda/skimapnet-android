@@ -41,6 +41,7 @@
     <string name="layout_detail_images_title">Image links</string>
     <string name="layout_detail_links_title">Web links</string>
     
+    <string name="layout_detail_skicentre_country"><![CDATA[<b>Country:</b>]]></string>
     <string name="layout_detail_skicentre_season"><![CDATA[<b>Season:</b>]]></string>
     <string name="layout_detail_skicentre_altitude"><![CDATA[<b>Altitude:</b>]]></string>
     <string name="layout_detail_skicentre_perex_more"><![CDATA[<u>more</u>]]></string>
