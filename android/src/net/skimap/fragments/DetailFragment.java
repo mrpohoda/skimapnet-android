@@ -170,20 +170,6 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public void refreshData(final int id)
 	{
 		mItemId = id;
@@ -228,11 +214,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	
 	private void setView()
 	{
-		// TODO
 		// TODO: formatovani textu: http://stackoverflow.com/questions/1529068/is-it-possible-to-have-multiple-styles-inside-a-textview
 		// TODO: pridat toasty s napovedou na flagy
 		// TODO: osetrovat null hodnoty - DatabaseHelper.NULL_STRING apod., pripadne schovat dany widget
-		// TODO. roztridit kousky kodu do dilcich funkci, pro kazde jednotlive view
+		// TODO: roztridit kousky kodu do dilcich funkci, pro kazde jednotlive view
 		mPerexMore = false;
 		
 		// reference na textove pole
@@ -802,18 +787,6 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		else if(type == Weather.Type.SNOW_SHOWERS) view.setImageResource(R.drawable.weather_snow_showers);
 		else if(type == Weather.Type.SNOW_AND_THUNDER) view.setImageResource(R.drawable.weather_snow_and_thunder);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	private void setExtras(Bundle extras, Bundle savedInstanceState)

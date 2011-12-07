@@ -17,6 +17,62 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 public class HttpCommunication
 {
+//	public static InputStream getInputStreamFromUrl(String url)
+//	{
+//		InputStream content = null;
+//		try
+//		{
+//			HttpClient httpclient = new DefaultHttpClient();
+//			HttpResponse response = httpclient.execute(new HttpGet(url));
+//			content = response.getEntity().getContent();
+//		}
+//		catch (Exception e)
+//		{
+//			e.printStackTrace();
+//		}
+//		return content;
+//	}
+//	
+//	
+//	public static String convertStreamToString(InputStream is)
+//	{
+//		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+//		StringBuilder sb = new StringBuilder();
+//		String line = null;
+//		try
+//		{
+//			while ((line = reader.readLine()) != null)
+//			{
+//					sb.append(line + "\n");
+//			}
+//		}
+//		catch (IOException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		finally
+//		{
+//			try
+//			{
+//				is.close();
+//			}
+//			catch (IOException e)
+//			{
+//				e.printStackTrace();
+//			}
+//		}
+//		return sb.toString();
+//	}
+//	
+//	
+//	public static String executeHttpGet(String url) throws Exception
+//	{
+//		InputStream is = getInputStreamFromUrl(url);
+//		String str = convertStreamToString(is);
+//		return str;
+//	}
+	
+
 	public static String executeHttpGet(String url) throws Exception
 	{
 		// ziska JSON data ze serveru dle URL adresy
@@ -26,7 +82,8 @@ public class HttpCommunication
 			// zaslani pozadavku
 			HttpClient client = new DefaultHttpClient();
 			HttpGet request = new HttpGet();
-			request.setHeader("Content-Type", "text/plain; charset=utf-8");
+			//request.setHeader("Content-Type", "text/plain; charset=utf-8");
+			request.setHeader("Content-Type", "application/json; charset=utf-8");
 			request.setURI(new URI(url));
 			HttpResponse response = client.execute(request);
 			

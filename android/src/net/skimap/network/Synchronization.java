@@ -116,7 +116,7 @@ public class Synchronization
 		{
 			// TODO
 			skicentreJson = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/skicentre_detail.txt");
-			//skicentresJson = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=skicentre_detail&id=10&lang=cs");
+			//skicentreJson = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=skicentre_detail&id=10&lang=cs");
 		}
 		catch (Exception e)
 		{
@@ -144,8 +144,8 @@ public class Synchronization
 		try
 		{
 			// TODO
-			skicentresJson = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/skicentres_list2.txt");
-			//skicentresJson = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&extended=1");
+			skicentresJson = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/skicentres_list.txt");
+			//skicentresJson = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&extended=1&limit=1");
 		}
 		catch (Exception e)
 		{
@@ -157,7 +157,7 @@ public class Synchronization
 		if(skicentresJson!=null)
 		{
 			JsonParser parser = new JsonParser(mApplication.getApplicationContext());
-			count = parser.storeSkicentresShort(skicentresJson);
+			count = parser.storeSkicentresShort(skicentresJson.trim());
 		}
 
 		return count;

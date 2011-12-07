@@ -1,9 +1,15 @@
 package net.skimap.fragments;
 
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import net.skimap.R;
 import net.skimap.activities.ListingActivity;
@@ -11,20 +17,32 @@ import net.skimap.activities.SkimapApplication;
 import net.skimap.adapters.ListingAdapter;
 import net.skimap.data.Area;
 import net.skimap.data.Country;
+import net.skimap.data.Placemark;
 import net.skimap.data.SkicentreShort;
 import net.skimap.database.Database;
 import net.skimap.database.DatabaseHelper;
-import net.skimap.map.MyItemizedOverlay;
+import net.skimap.map.PathUtility;
+import net.skimap.map.PopupItemizedOverlay;
+import net.skimap.map.PathOverlay;
 import net.skimap.network.Synchronization;
+import net.skimap.parser.KmlParser;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -76,7 +94,10 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		else setMapLocation(MapLocationMode.SKICENTRE_POSITION);
 		
 		// pridani POI
-		addPois();
+		//addPois(); // TODO
+		
+		// pridani sjezdovek a vleku
+		addDownhills();
 		
 		return view;
 	}
@@ -285,7 +306,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	{
 		List<Overlay> mapOverlays;
 		Drawable drawable;
-		MyItemizedOverlay itemizedOverlay;
+		PopupItemizedOverlay itemizedOverlay;
 
 		// seznam overlay vrstev
 		mapOverlays = mMapView.getOverlays();
@@ -294,7 +315,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		drawable = getResources().getDrawable(R.drawable.icon_skicentre);
 		
 		// vlastni overlay vrstva
-		itemizedOverlay = new MyItemizedOverlay(drawable, mMapView);
+		itemizedOverlay = new PopupItemizedOverlay(drawable, mMapView);
 		
 		// nacteni skicenter a statu z databaze
 		Database database = new Database(getActivity());
@@ -339,4 +360,109 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		}
 		mapOverlays.add(itemizedOverlay);
 	}
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	// TODO: vykreslovat cary pri zoom >= 11
+	// TODO: vykreslit kdyz neposouvam mapu a zmenil jsem pozici o vetsi kus
+	// TODO: prekreslit pri zoomu, pri prekreslovani smazat predchozi overlays: mMapView.getOverlays().clear();
+	//http://ski-map.net/skimapnet/php/common.php?fce=lines_list&nelat=50.76669766709482&nelng=15.796450982910073&swlat=50.68193459347409&swlng=15.422229181152261
+	//http://maps.google.com/maps?f=d&hl=en&saddr=49.1857979,16.593846775&daddr=49.2857979,16.693846775&ie=UTF8&0&om=0&output=kml
+	private void addDownhills()
+	{
+		// odchyceni zpravy z vlakna
+		final Handler handler = new Handler() 
+	    {
+            @Override
+            public void handleMessage(Message message) 
+            {
+            	@SuppressWarnings("unchecked")
+				ArrayList<Placemark> placemarks = (ArrayList<Placemark>) message.obj;
+            	
+            	// vykresleni placemarks
+            	Iterator<Placemark> iterator = placemarks.iterator();
+        		while(iterator.hasNext())
+        		{
+        			Placemark placemark = iterator.next();
+        	        PathUtility.drawPath(placemark, mMapView);
+        		}
+            }
+	    };
+			    
+		// vlakno
+	    new Thread()
+        {
+        	public void run() 
+		    {
+        		// ziskani url adresy
+                String url = "http://ski-map.net/skimapnet/php/common.php?fce=lines_list&nelat=50.76669766709482&nelng=15.796450982910073&swlat=50.68193459347409&swlng=15.422229181152261";
+
+                // ziskani placemarks
+                ArrayList<Placemark> placemarks = PathUtility.getPlacemarks(url);
+                
+                // zaslani zpravy handleru
+        		Message message = new Message();
+        		message.obj = placemarks;
+        		handler.sendMessage(message);
+		    }
+        }.start();
+	}
+	
+
+	
+	
+	
+	
+	
+	
+		
+// bounding box		
+//		LocationManager locationManager = (LocationManager) getSupportActivity().getSystemService(Context.LOCATION_SERVICE);
+//		String locationProvider = LocationManager.NETWORK_PROVIDER;
+//		Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+//        double dest[] = { lastKnownLocation.getLatitude()+0.1, lastKnownLocation.getLongitude()+0.1 };
+		
+//        // find boundary by using itemized overlay
+//        GeoPoint destPoint = new GeoPoint( new Double(dest[0]*1E6).intValue(), new Double(dest[1]*1E6).intValue() );
+//        GeoPoint currentPoint = new GeoPoint( new Double(lastKnownLocation.getLatitude()*1E6).intValue() ,new Double(lastKnownLocation.getLongitude()*1E6).intValue() );
+//
+//        Drawable dot = this.getResources().getDrawable(R.drawable.pixel);
+//        MapItemizedOverlay bgItemizedOverlay = new MapItemizedOverlay(dot);
+//        OverlayItem currentPixel = new OverlayItem(destPoint, null, null );
+//        OverlayItem destPixel = new OverlayItem(currentPoint, null, null );
+//        bgItemizedOverlay.addOverlay(currentPixel);
+//        bgItemizedOverlay.addOverlay(destPixel);
+//
+//        // center and zoom in the map
+//        MapController mc = mMapView.getController();
+//        mc.zoomToSpan(bgItemizedOverlay.getLatSpanE6()*2,bgItemizedOverlay.getLonSpanE6()*2);
+//        mc.animateTo(new GeoPoint(
+//            (currentPoint.getLatitudeE6() + destPoint.getLatitudeE6()) / 2,
+//            (currentPoint.getLongitudeE6() + destPoint.getLongitudeE6()) / 2
+//        ));
+		
+		
+		
+		
+// overlay vrstvy
+//	    Collection<Overlay> overlaysToAddAgain = new ArrayList<Overlay>();
+//	    for (Iterator<Overlay> iter = mapView.getOverlays().iterator(); iter.hasNext();)
+//	    {
+//	        Object o = iter.next();
+//	        //Log.d(myapp.APP, "overlay type: " + o.getClass().getName());
+//	        if (!RouteOverlay.class.getName().equals(o.getClass().getName()))
+//	        {
+//	            // mMapView01.getOverlays().remove(o);
+//	            overlaysToAddAgain.add((Overlay) o);
+//	        }
+//	    }
+//	    mapView.getOverlays().addAll(overlaysToAddAgain);
+    
 }

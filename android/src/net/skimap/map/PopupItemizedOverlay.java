@@ -10,13 +10,13 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 import com.readystatesoftware.mapviewballons.BalloonItemizedOverlay;
 
-public class MyItemizedOverlay extends BalloonItemizedOverlay<OverlayItem>
+public class PopupItemizedOverlay extends BalloonItemizedOverlay<OverlayItem>
 {
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	private Context mContext;
 	
 	
-	public MyItemizedOverlay(Drawable defaultMarker, MapView mapView)
+	public PopupItemizedOverlay(Drawable defaultMarker, MapView mapView)
 	{
 		super(boundCenter(defaultMarker), mapView);
 		mContext = mapView.getContext();
