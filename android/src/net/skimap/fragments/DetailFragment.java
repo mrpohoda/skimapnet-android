@@ -390,12 +390,24 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		}
 		
 		// zpracovani data pocasi
-		String weather1Date = mSkicentre.getWeather1DateView() + " " + getDayName(mSkicentre.getWeather1Date().getDay());
-		String weather2Date = mSkicentre.getWeather2DateView() + " " + getDayName(mSkicentre.getWeather2Date().getDay());
-		String weather3Date = mSkicentre.getWeather3DateView() + " " + getDayName(mSkicentre.getWeather3Date().getDay());
-		String weather4Date = mSkicentre.getWeather4DateView() + " " + getDayName(mSkicentre.getWeather4Date().getDay());
-		String weather5Date = mSkicentre.getWeather5DateView() + " " + getDayName(mSkicentre.getWeather5Date().getDay());
-		String weather6Date = mSkicentre.getWeather6DateView() + " " + getDayName(mSkicentre.getWeather6Date().getDay());
+		String weather1Date = "";
+		if(mSkicentre.getWeather1DateView()!=DatabaseHelper.NULL_STRING)
+			weather1Date = mSkicentre.getWeather1DateView() + " " + getDayName(mSkicentre.getWeather1Date().getDay());
+		String weather2Date = "";
+		if(mSkicentre.getWeather2DateView()!=DatabaseHelper.NULL_STRING)
+			weather2Date = mSkicentre.getWeather2DateView() + " " + getDayName(mSkicentre.getWeather2Date().getDay());
+		String weather3Date = "";
+		if(mSkicentre.getWeather3DateView()!=DatabaseHelper.NULL_STRING)
+			weather3Date = mSkicentre.getWeather3DateView() + " " + getDayName(mSkicentre.getWeather3Date().getDay());
+		String weather4Date = "";
+		if(mSkicentre.getWeather4DateView()!=DatabaseHelper.NULL_STRING)
+			weather4Date = mSkicentre.getWeather4DateView() + " " + getDayName(mSkicentre.getWeather4Date().getDay());
+		String weather5Date = "";
+		if(mSkicentre.getWeather5DateView()!=DatabaseHelper.NULL_STRING)
+			weather5Date = mSkicentre.getWeather5DateView() + " " + getDayName(mSkicentre.getWeather5Date().getDay());
+		String weather6Date = "";
+		if(mSkicentre.getWeather6DateView()!=DatabaseHelper.NULL_STRING)
+			weather6Date = mSkicentre.getWeather6DateView() + " " + getDayName(mSkicentre.getWeather6Date().getDay());
 		textWeather1Date.setText(Html.fromHtml(weather1Date));
 		textWeather2Date.setText(Html.fromHtml(weather2Date));
 		textWeather3Date.setText(Html.fromHtml(weather3Date));

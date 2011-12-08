@@ -31,11 +31,7 @@
 	<color name="layout_detail_weather_min">#77a</color> <!-- sedomodra -->
 	<color name="layout_detail_weather_max">#a77</color> <!-- sedocervena -->
 	
-	<!-- 
-		Uprava barevnosti btn_star_on_normal_holo_light.png:
-			Hue/saturation in PhotoShop:
-				-115
-				+0
-				-10
-	 -->
+	<color name="layout_map_infobox_text">#fff</color> <!-- bila -->
+	<color name="layout_map_infobox_text_shadow">#000</color> <!-- cerna -->
+	<color name="layout_map_infobox_background">#6000</color> <!-- polopruhledna cerna -->
 </resources>

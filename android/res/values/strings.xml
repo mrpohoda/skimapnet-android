@@ -3,7 +3,7 @@
     <string name="app_name">SkiMap</string>
     
     <string name="map_api_key_debug">0ED6_e2Y9kSFAVxC_CN1Jdme6afF_pvPQhIlrHA</string>
-    <string name="map_api_key_release">0ED6_e2Y9kSFAVxC_CN1Jdme6afF_pvPQhIlrHA</string>
+    <string name="map_api_key_release">0ED6_e2Y9kSF-CBNSeZQCjS5p2JssXa_u7zdLLQ</string>
     
     <string name="ab_button_list">List</string>
     <string name="ab_button_map">Map</string>
@@ -27,6 +27,8 @@
     <string name="ab_tab_all">All</string>
     <string name="ab_tab_favourites">Favourites</string>
     <string name="ab_tab_recommended">Recommended</string>
+    
+    <string name="layout_map_infobox">Zoom in for show ski tracks...</string>
     
     <string name="layout_listing_item_snow">cm of snow</string>
     

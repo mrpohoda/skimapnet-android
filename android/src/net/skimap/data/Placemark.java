@@ -25,7 +25,7 @@ public class Placemark
 	
 	public int getColor()
 	{
-		int color = Color.BLACK;
+		int color = Color.GRAY;
 		try
 		{
 			// ziskani hexa-barvy z mStyle

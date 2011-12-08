@@ -20,6 +20,7 @@ public class PopupItemizedOverlay extends BalloonItemizedOverlay<OverlayItem>
 	{
 		super(boundCenter(defaultMarker), mapView);
 		mContext = mapView.getContext();
+		populate();
 	}
 
 	
@@ -47,6 +48,7 @@ public class PopupItemizedOverlay extends BalloonItemizedOverlay<OverlayItem>
 	@Override
 	protected boolean onBalloonTap(int index, OverlayItem item)
 	{
+		// TODO: otevrit detail, nesplest index a id
 		Toast.makeText(mContext, "SHOW SKICENTRE " + index, Toast.LENGTH_SHORT).show();
 		return true;
 	}

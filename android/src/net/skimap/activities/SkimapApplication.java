@@ -23,7 +23,7 @@ public class SkimapApplication extends Application
         } 
         catch (ClassCastException e)
         {
-            throw new ClassCastException(fragment.toString() + " must implement OnSynchroListener");
+            throw new ClassCastException(fragment.toString() + " must implement OnSynchroListener.");
         }
 	}
 	

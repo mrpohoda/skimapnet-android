@@ -1,15 +1,10 @@
 package net.skimap.fragments;
 
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import net.skimap.R;
 import net.skimap.activities.ListingActivity;
@@ -21,18 +16,12 @@ import net.skimap.data.Placemark;
 import net.skimap.data.SkicentreShort;
 import net.skimap.database.Database;
 import net.skimap.database.DatabaseHelper;
+import net.skimap.map.CustomMapView;
 import net.skimap.map.PathUtility;
 import net.skimap.map.PopupItemizedOverlay;
-import net.skimap.map.PathOverlay;
 import net.skimap.network.Synchronization;
-import net.skimap.parser.KmlParser;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -42,28 +31,29 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
-import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-public class MapFragment extends Fragment implements SkimapApplication.OnSynchroListener
+public class MapFragment extends Fragment implements SkimapApplication.OnSynchroListener, CustomMapView.OnPanAndZoomListener
 {
 	public static final String ITEM_ID = "item_id";
 	private final int EMPTY_ID = -1;
 	private final int ZOOM_DEFAULT = 13;
+	private final int ZOOM_MINIMUM_FOR_DRAW = 12;
 	private enum MapLocationMode { DEVICE_POSITION, NEAREST_SKICENTRE, SKICENTRE_POSITION };
 	
-	private MapView mMapView;
+	private CustomMapView mMapView;
 	private int mItemId;
+	private int[] mPathsDataBounds; // souradnice hranicnich bodu datasetu v E6 formatu, poradi jako hodiny - top, right, bottom, left
 	
 	
 	@Override
@@ -86,18 +76,30 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		View view = inflater.inflate(R.layout.layout_map, container, false);
 		
 		// nastaveni mapy
-		mMapView = (MapView) view.findViewById(R.id.layout_map_mapview);
+		mMapView = (CustomMapView) view.findViewById(R.id.layout_map_mapview);
 		mMapView.setBuiltInZoomControls(true);
+		mMapView.setPanListenerSensitivity(10000);
 		
+        // naslouchani manipulaci s mapou
+        mMapView.setOnPanListener(this);
+
 		// lokace na mape
 		if(mItemId == EMPTY_ID) setMapLocation(MapLocationMode.DEVICE_POSITION);
 		else setMapLocation(MapLocationMode.SKICENTRE_POSITION);
 		
-		// pridani POI
-		//addPois(); // TODO
+		// inicializace bounds
+		mPathsDataBounds = new int[4];
+		mPathsDataBounds[0] = 0;
+		mPathsDataBounds[1] = 0;
+		mPathsDataBounds[2] = 0;
+		mPathsDataBounds[3] = 0;
 		
-		// pridani sjezdovek a vleku
-		addDownhills();
+		// pridani POI
+		addPois();
+		
+		// vykresleni sjezdovek a vleku
+		tryRedrawPaths();
+		mMapView.invalidate();
 		
 		return view;
 	}
@@ -110,7 +112,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 
         // naslouchani synchronizace
         ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
-        
+
         // aktualizace stavu progress baru
     	boolean synchro = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchro();
     	getSupportActivity().setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
@@ -212,6 +214,32 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	}
 	
 	
+	@Override
+	public void onPan()
+	{
+		if(mMapView.getZoomLevel()>=ZOOM_MINIMUM_FOR_DRAW)
+		{
+			tryRedrawPaths();
+		}
+	}
+
+
+	@Override
+	public void onZoom()
+	{
+		TextView infoBox = (TextView) getSupportActivity().findViewById(R.id.layout_map_infobox);
+		if(mMapView.getZoomLevel()>=ZOOM_MINIMUM_FOR_DRAW)
+		{
+			tryRedrawPaths();
+			infoBox.setVisibility(View.GONE);
+		}
+		else
+		{
+			infoBox.setVisibility(View.VISIBLE);
+		}
+	}
+	
+
 	private void refreshViewsAfterSynchro()
 	{
 		// TODO: ziskat referenci ke vsem list fragmentum a zavolat pro ne metodu refreshListView(), obnovit map view
@@ -312,7 +340,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		mapOverlays = mMapView.getOverlays();
 		
 		// ikona skicentra
-		drawable = getResources().getDrawable(R.drawable.icon_skicentre);
+		drawable = getResources().getDrawable(R.drawable.ic_map_skicentre);
 		
 		// vlastni overlay vrstva
 		itemizedOverlay = new PopupItemizedOverlay(drawable, mMapView);
@@ -362,20 +390,58 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	}
 	
 	
-	
-	
+	private void tryRedrawPaths()
+	{
+		// sirka a delka mapview
+		int spanLatitudeE6 = mMapView.getLatitudeSpan();
+		int spanLongitudeE6 = mMapView.getLongitudeSpan();
+		
+		// nejde zjistit bounds
+		if ((spanLatitudeE6 == 0) && (spanLongitudeE6 == 360000000)) return;
+			
+		int halfLatitudeE6 = spanLatitudeE6/2;
+		int halfLongitudeE6 = spanLongitudeE6/2;
+
+		// hranicni body mapview
+		GeoPoint centerPoint = mMapView.getMapCenter();
+		int viewBoundLeftE6 = centerPoint.getLongitudeE6()-halfLongitudeE6;
+		int viewBoundBottomE6 = centerPoint.getLatitudeE6()-halfLatitudeE6;
+		int viewBoundRightE6 = centerPoint.getLongitudeE6()+halfLongitudeE6;
+		int viewBoundTopE6 = centerPoint.getLatitudeE6()+halfLatitudeE6;
+		
+		// hranicni body vykresleneho datasetu, poradi jako hodiny - top, right, bottom, left
+		int dataBoundLeftE6 = mPathsDataBounds[3];
+		int dataBoundBottomE6 = mPathsDataBounds[2];
+		int dataBoundRightE6 = mPathsDataBounds[1];
+		int dataBoundTopE6 = mPathsDataBounds[0];
+		
+		// mapview je cele uvnitr datasetu, neni potreba prekreslovat cesty
+		if(dataBoundLeftE6 < viewBoundLeftE6 &&
+			dataBoundRightE6 > viewBoundRightE6 &&
+			dataBoundBottomE6 < viewBoundBottomE6 &&
+			dataBoundTopE6 > viewBoundTopE6)
+		{
+			//Toast.makeText(getActivity(), "NEPREKRESLUJ", Toast.LENGTH_SHORT).show();
+		}
+		// je potreba prekreslit
+		else
+		{
+			//Toast.makeText(getActivity(), "PREKRESLUJ", Toast.LENGTH_SHORT).show();
+			
+			// vypocet novych hranicnich bodu datasetu
+			mPathsDataBounds[3] = viewBoundLeftE6 - halfLongitudeE6;
+			mPathsDataBounds[2] = viewBoundBottomE6 - halfLatitudeE6;
+			mPathsDataBounds[1] = viewBoundRightE6 + halfLongitudeE6;
+			mPathsDataBounds[0] = viewBoundTopE6 + halfLatitudeE6;
+
+			// prekresleni starych cest za nove
+			redrawPaths();
+		}
+	}
 	
 
-	
-	
-	
-	
-	// TODO: vykreslovat cary pri zoom >= 11
-	// TODO: vykreslit kdyz neposouvam mapu a zmenil jsem pozici o vetsi kus
-	// TODO: prekreslit pri zoomu, pri prekreslovani smazat predchozi overlays: mMapView.getOverlays().clear();
-	//http://ski-map.net/skimapnet/php/common.php?fce=lines_list&nelat=50.76669766709482&nelng=15.796450982910073&swlat=50.68193459347409&swlng=15.422229181152261
-	//http://maps.google.com/maps?f=d&hl=en&saddr=49.1857979,16.593846775&daddr=49.2857979,16.693846775&ie=UTF8&0&om=0&output=kml
-	private void addDownhills()
+	//http://stackoverflow.com/questions/2013443/on-zoom-event-for-google-maps-on-android
+	private void redrawPaths()
 	{
 		// odchyceni zpravy z vlakna
 		final Handler handler = new Handler() 
@@ -385,14 +451,23 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
             {
             	@SuppressWarnings("unchecked")
 				ArrayList<Placemark> placemarks = (ArrayList<Placemark>) message.obj;
-            	
+
             	// vykresleni placemarks
-            	Iterator<Placemark> iterator = placemarks.iterator();
-        		while(iterator.hasNext())
-        		{
-        			Placemark placemark = iterator.next();
-        	        PathUtility.drawPath(placemark, mMapView);
-        		}
+            	if(placemarks!=null)
+            	{
+            		// smazani predchozich cest
+            		removePaths();
+        			
+	            	Iterator<Placemark> iterator = placemarks.iterator();
+	        		while(iterator.hasNext())
+	        		{
+	        			Placemark placemark = iterator.next();
+	        	        PathUtility.drawPath(placemark, mMapView);
+	        		}
+	        		
+	        		// aktualizace overlays v mape
+	        		mMapView.invalidate();
+            	}
             }
 	    };
 			    
@@ -402,7 +477,18 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
         	public void run() 
 		    {
         		// ziskani url adresy
-                String url = "http://ski-map.net/skimapnet/php/common.php?fce=lines_list&nelat=50.76669766709482&nelng=15.796450982910073&swlat=50.68193459347409&swlng=15.422229181152261";
+                //String url = "http://ski-map.net/skimapnet/php/common.php?fce=lines_list&nelat=50.76669766709482&nelng=15.796450982910073&swlat=50.68193459347409&swlng=15.422229181152261";
+        		StringBuilder builder = new StringBuilder();
+        		builder.append("http://ski-map.net/skimapnet/php/common.php?fce=lines_list");
+        		builder.append("&nelat=");
+        		builder.append(((double) mPathsDataBounds[0]/1000000));
+        		builder.append("&nelng=");
+        		builder.append(((double) mPathsDataBounds[1]/1000000));
+        		builder.append("&swlat=");
+        		builder.append(((double) mPathsDataBounds[2]/1000000));
+        		builder.append("&swlng=");
+        		builder.append(((double) mPathsDataBounds[3]/1000000));
+        		String url = builder.toString();
 
                 // ziskani placemarks
                 ArrayList<Placemark> placemarks = PathUtility.getPlacemarks(url);
@@ -414,55 +500,31 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		    }
         }.start();
 	}
-	
 
-	
-	
-	
-	
-	
-	
+
+	private void removePaths()
+	{
+		//Log.d("SKIMAP", "BEFORE REMOVE OVERLAYS:" + mMapView.getOverlays().size());
 		
-// bounding box		
-//		LocationManager locationManager = (LocationManager) getSupportActivity().getSystemService(Context.LOCATION_SERVICE);
-//		String locationProvider = LocationManager.NETWORK_PROVIDER;
-//		Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-//        double dest[] = { lastKnownLocation.getLatitude()+0.1, lastKnownLocation.getLongitude()+0.1 };
+		Collection<Overlay> overlaysToAddAgain = new ArrayList<Overlay>();
+		Iterator<Overlay> iterator = mMapView.getOverlays().iterator();
+		while(iterator.hasNext())
+		{
+			Object object = iterator.next();
+			
+			// jedna se o popup overlay
+	        if (PopupItemizedOverlay.class.getName().contentEquals(object.getClass().getName()))
+	        {
+	        	overlaysToAddAgain.add((Overlay) object);
+	        }
+		}
 		
-//        // find boundary by using itemized overlay
-//        GeoPoint destPoint = new GeoPoint( new Double(dest[0]*1E6).intValue(), new Double(dest[1]*1E6).intValue() );
-//        GeoPoint currentPoint = new GeoPoint( new Double(lastKnownLocation.getLatitude()*1E6).intValue() ,new Double(lastKnownLocation.getLongitude()*1E6).intValue() );
-//
-//        Drawable dot = this.getResources().getDrawable(R.drawable.pixel);
-//        MapItemizedOverlay bgItemizedOverlay = new MapItemizedOverlay(dot);
-//        OverlayItem currentPixel = new OverlayItem(destPoint, null, null );
-//        OverlayItem destPixel = new OverlayItem(currentPoint, null, null );
-//        bgItemizedOverlay.addOverlay(currentPixel);
-//        bgItemizedOverlay.addOverlay(destPixel);
-//
-//        // center and zoom in the map
-//        MapController mc = mMapView.getController();
-//        mc.zoomToSpan(bgItemizedOverlay.getLatSpanE6()*2,bgItemizedOverlay.getLonSpanE6()*2);
-//        mc.animateTo(new GeoPoint(
-//            (currentPoint.getLatitudeE6() + destPoint.getLatitudeE6()) / 2,
-//            (currentPoint.getLongitudeE6() + destPoint.getLongitudeE6()) / 2
-//        ));
+		// smazani vsech overlays
+		mMapView.getOverlays().clear();
 		
+		// pridani popup overlay
+		mMapView.getOverlays().addAll(overlaysToAddAgain);
 		
-		
-		
-// overlay vrstvy
-//	    Collection<Overlay> overlaysToAddAgain = new ArrayList<Overlay>();
-//	    for (Iterator<Overlay> iter = mapView.getOverlays().iterator(); iter.hasNext();)
-//	    {
-//	        Object o = iter.next();
-//	        //Log.d(myapp.APP, "overlay type: " + o.getClass().getName());
-//	        if (!RouteOverlay.class.getName().equals(o.getClass().getName()))
-//	        {
-//	            // mMapView01.getOverlays().remove(o);
-//	            overlaysToAddAgain.add((Overlay) o);
-//	        }
-//	    }
-//	    mapView.getOverlays().addAll(overlaysToAddAgain);
-    
+		//Log.d("SKIMAP", "AFTER REMOVE OVERLAYS:" + mMapView.getOverlays().size());
+	}
 }
