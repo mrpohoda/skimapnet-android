@@ -99,7 +99,7 @@ public class ListingActivity extends FragmentActivity implements ListingFragment
 		{
 			// aktualizace view v detail fragmentu
         	DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_detail);
-        	detailFragment.refreshData(id);
+        	detailFragment.refreshDataAndSynchronize(id);
         } 
 		else 
 		{

@@ -35,13 +35,12 @@ public class Database
 	public Database open(boolean writeable) throws SQLException
 	{
 		mHelper = new DatabaseHelper(mContext);
-		// TODO: readable nebo writable dle parametru
 		if(writeable) mDatabase = mHelper.getWritableDatabase();
 		else mDatabase = mHelper.getReadableDatabase();
 		return this;
 	}
 	
-	
+
 	public void close()
 	{
 		if(mHelper!=null) mHelper.close();
@@ -51,6 +50,19 @@ public class Database
 	protected void finalize() 
 	{
 		close();
+	}
+	
+	
+	public void beginTransaction()
+	{
+		mDatabase.beginTransaction();
+	}
+	
+	
+	public void endTransaction()
+	{
+		mDatabase.setTransactionSuccessful();
+		mDatabase.endTransaction();
 	}
 	
 	

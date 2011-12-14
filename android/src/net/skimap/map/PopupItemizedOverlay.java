@@ -13,20 +13,24 @@ import com.readystatesoftware.mapviewballons.BalloonItemizedOverlay;
 public class PopupItemizedOverlay extends BalloonItemizedOverlay<OverlayItem>
 {
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+	private ArrayList<Integer> mIds = new ArrayList<Integer>();
+	private Context mMapViewContext;
 	private Context mContext;
 	
 	
-	public PopupItemizedOverlay(Drawable defaultMarker, MapView mapView)
+	public PopupItemizedOverlay(Drawable defaultMarker, MapView mapView, Context context)
 	{
 		super(boundCenter(defaultMarker), mapView);
-		mContext = mapView.getContext();
+		mMapViewContext = mapView.getContext();
+		mContext = context;
 		populate();
 	}
 
 	
-	public void addOverlay(OverlayItem overlay)
+	public void addOverlay(OverlayItem overlay, int id)
 	{
 		mOverlays.add(overlay);
+		mIds.add(id);
 	    populate();
 	}
 
@@ -49,7 +53,15 @@ public class PopupItemizedOverlay extends BalloonItemizedOverlay<OverlayItem>
 	protected boolean onBalloonTap(int index, OverlayItem item)
 	{
 		// TODO: otevrit detail, nesplest index a id
-		Toast.makeText(mContext, "SHOW SKICENTRE " + index, Toast.LENGTH_SHORT).show();
+		Toast.makeText(mContext, "SHOW SKICENTRE " + mIds.get(index), Toast.LENGTH_SHORT).show();
+		
+//		// nova aktivita detail
+//		Intent intent = new Intent(mContext, DetailActivity.class);
+//		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//		intent.putExtra(DetailFragment.ITEM_ID, mIds.get(index));
+//		//intent.putExtra(DetailFragment.DUAL_VIEW, dualView);
+//		mContext.startActivity(intent);
+		
 		return true;
 	}
 }

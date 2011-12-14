@@ -7,6 +7,11 @@ import android.os.Message;
 
 public class Synchronization 
 {
+	private final String URL_AREAS = "http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list_areas"; // http://data.jestrab.net/skimap/skicentres_list_areas.txt
+	private final String URL_COUNTRIES = "http://ski-map.net/skimapnet/php/common.php?fce=countries_list"; // http://data.jestrab.net/skimap/countries_list.txt
+	private final String URL_SKICENTRES_SHORT = "http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&extended=1"; // http://data.jestrab.net/skimap/skicentres_list.txt
+	private final String URL_SKICENTRE_LONG = "http://ski-map.net/skimapnet/php/common.php?fce=skicentre_detail&lang=cs&id="; // http://data.jestrab.net/skimap/skicentre_detail.txt
+	
 	private final int MESSAGE_SYNCHRO_SHORT = 0;
 	private final int MESSAGE_SYNCHRO_LONG = 1;
 	
@@ -15,6 +20,7 @@ public class Synchronization
 	
 	
 	// TODO: osetrit soubeznou synchronizaci short a long
+	// TODO: vsude pri praci s databazi pouzivat transakce
 	public Synchronization(SkimapApplication application)
 	{
 		mApplication = application;
@@ -57,7 +63,7 @@ public class Synchronization
 	}
 	
 	
-	public void trySynchronizeLongData()
+	public void trySynchronizeLongData(int id)
 	{
 		boolean synchro = mApplication.isSynchro();
 		if(!synchro)
@@ -67,7 +73,7 @@ public class Synchronization
 			mApplication.startSynchro();
 			
 			// spusteni vlakna
-			synchronizeLongData();
+			synchronizeLongData(id);
 		}
 	}
 	
@@ -90,14 +96,14 @@ public class Synchronization
 	}
 	
 	
-	private void synchronizeLongData()
+	private void synchronizeLongData(final int id)
 	{
 	    // vlakno
 	    new Thread()
         {
         	public void run() 
 		    {
-        		synchronizeSkicentreLongThread();
+        		synchronizeSkicentreLongThread(id);
         		Message message = new Message();
         		message.what = MESSAGE_SYNCHRO_LONG;
         		mHandler.sendMessage(message);
@@ -106,60 +112,46 @@ public class Synchronization
 	}
 	
 	
-	private boolean synchronizeSkicentreLongThread()
+	private int synchronizeSkicentreLongThread(int id)
 	{
-		boolean state = false;
+		int count = 0;
+		String url = URL_SKICENTRE_LONG + id;
 		
-		// nacteni JSON dat z url
-		String skicentreJson = null;
+		// parsovani JSON dat a ukladani do databaze		
+		JsonParser parser = new JsonParser(mApplication.getApplicationContext());
+		parser.open();
 		try
 		{
-			// TODO
-			skicentreJson = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/skicentre_detail.txt");
-			//skicentreJson = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=skicentre_detail&id=10&lang=cs");
+			count = parser.storeSkicentreLong(url);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			return false;
 		}
+		parser.close();
 		
-		// parsovani JSON dat a ukladani do databaze
-		if(skicentreJson!=null)
-		{
-			JsonParser parser = new JsonParser(mApplication.getApplicationContext());
-			state = parser.storeSkicentreLong(skicentreJson);
-		}
-
-		return state;
+		return count;
 	}
 	
 	
 	private int synchronizeSkicentresShortThread()
 	{
 		int count = 0;
+		String url = URL_SKICENTRES_SHORT;
 		
-		// nacteni JSON dat z url
-		String skicentresJson = null;
+		// parsovani JSON dat a ukladani do databaze		
+		JsonParser parser = new JsonParser(mApplication.getApplicationContext());
+		parser.open();
 		try
 		{
-			// TODO
-			skicentresJson = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/skicentres_list.txt");
-			//skicentresJson = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&extended=1&limit=1");
+			count = parser.storeSkicentresShort(url);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			return count;
 		}
+		parser.close();
 		
-		// parsovani JSON dat a ukladani do databaze
-		if(skicentresJson!=null)
-		{
-			JsonParser parser = new JsonParser(mApplication.getApplicationContext());
-			count = parser.storeSkicentresShort(skicentresJson.trim());
-		}
-
 		return count;
 	}
 	
@@ -167,27 +159,20 @@ public class Synchronization
 	private int synchronizeAreasThread()
 	{
 		int count = 0;
+		String url = URL_AREAS;
 		
-		// nacteni JSON dat z url
-		String areasJson = null;
+		// parsovani JSON dat a ukladani do databaze		
+		JsonParser parser = new JsonParser(mApplication.getApplicationContext());
+		parser.open();
 		try
-		{		
-			// TODO
-			areasJson = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/skicentres_list_areas.txt");
-			//areasJson = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list_areas");
+		{
+			count = parser.storeAreas(url);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			return count;
 		}
-		
-		// parsovani JSON dat a ukladani do databaze		
-		if(areasJson!=null)
-		{
-			JsonParser parser = new JsonParser(mApplication.getApplicationContext());
-			count = parser.storeAreas(areasJson);
-		}
+		parser.close();
 		
 		return count;
 	}
@@ -196,27 +181,20 @@ public class Synchronization
 	private int synchronizeCountriesThread()
 	{
 		int count = 0;
+		String url = URL_COUNTRIES;
 		
-		// nacteni JSON dat z url
-		String countriesJson = null;
+		// parsovani JSON dat a ukladani do databaze		
+		JsonParser parser = new JsonParser(mApplication.getApplicationContext());
+		parser.open();
 		try
-		{		
-			// TODO
-			countriesJson = HttpCommunication.executeHttpGet("http://data.jestrab.net/skimap/countries_list.txt");
-			//countriesJson = HttpCommunication.executeHttpGet("http://ski-map.net/skimapnet/php/common.php?fce=countries_list");
+		{
+			count = parser.storeCountries(url);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			return count;
 		}
-		
-		// parsovani JSON dat a ukladani do databaze		
-		if(countriesJson!=null)
-		{
-			JsonParser parser = new JsonParser(mApplication.getApplicationContext());
-			count = parser.storeCountries(countriesJson);
-		}
+		parser.close();
 		
 		return count;
 	}

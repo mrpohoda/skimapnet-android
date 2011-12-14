@@ -54,12 +54,8 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
         // nastaveni nejblizsiho skicentra
         if(mItemId == EMPTY_ID) searchNearestSkicentre();
         
-        // synchronizace
-        Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
-        synchro.trySynchronizeLongData();
-        
-        // nacteni dat z databaze
-        refreshData(mItemId);
+        // nacteni dat z databaze (pro offline stav) a nasledne spusteni synchronizace
+        refreshDataAndSynchronize(mItemId);
     }
 	
 	
@@ -170,7 +166,38 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	}
 	
 	
-	public void refreshData(final int id)
+	public void refreshDataAndSynchronize(final int id)
+	{
+		mItemId = id;
+		
+		// odchyceni zpravy z vlakna
+		final Handler handler = new Handler()
+	    {
+            @Override
+            public void handleMessage(Message message) 
+            {
+            	setView();
+            	
+            	// synchronizace
+                Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
+                synchro.trySynchronizeLongData(mItemId);
+            }
+	    };
+			    
+		// vlakno
+	    new Thread()
+        {
+        	public void run() 
+		    {
+        		refreshDataThread(id);
+        		Message message = new Message();
+        		handler.sendMessage(message);
+		    }
+        }.start();
+	}
+	
+	
+	private void refreshData(final int id)
 	{
 		mItemId = id;
 		
@@ -207,7 +234,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		mSkicentre = null;
 		
 		// nacteni dat do pole
-		mSkicentre = db.getSkicentre(10); // TODO
+		mSkicentre = db.getSkicentre(mItemId);
 		db.close();
 	}
 	
@@ -294,6 +321,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			if(skicentreCountry!=DatabaseHelper.NULL_STRING && skicentreArea!=DatabaseHelper.NULL_STRING) skicentrePlace += ", ";
 			if(skicentreArea!=DatabaseHelper.NULL_STRING) skicentrePlace += skicentreArea;
 			textSkicentrePlace.setText(Html.fromHtml(skicentrePlace));
+			textSkicentrePlace.setVisibility(View.VISIBLE);
 		}
 				
 		// zpracovani sezony
@@ -304,6 +332,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		{
 			String skicentreSeason = getString(R.string.layout_detail_skicentre_season) + " " + skicentreSeasonStart + " - " + skicentreSeasonEnd;
 			textSkicentreSeason.setText(Html.fromHtml(skicentreSeason));
+			textSkicentreSeason.setVisibility(View.VISIBLE);
 		}
 				
 		// zpracovani nadmorske vysky
@@ -314,6 +343,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		{
 			String skicentreLocation = getString(R.string.layout_detail_skicentre_altitude) + " " + skicentreLocationUndermost + " " + getString(R.string.unit_m) + " - " + skicentreLocationTopmost + " " + getString(R.string.unit_m);
 			textSkicentreLocation.setText(Html.fromHtml(skicentreLocation));
+			textSkicentreLocation.setVisibility(View.VISIBLE);
 		}
 		
 		// zpracovani perex
@@ -324,6 +354,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			int lastSpace = skicentrePerexLong.lastIndexOf(" ", PEREX_SHORT_LENGTH);
 			final String skicentrePerexShort = skicentrePerexLong.subSequence(0, lastSpace).toString().concat("…") + " " + getString(R.string.layout_detail_skicentre_perex_more);
 			textSkicentrePerex.setText(Html.fromHtml(skicentrePerexShort));
+			textSkicentrePerex.setVisibility(View.VISIBLE);
 			textSkicentrePerex.setOnClickListener(new OnClickListener() 
 			{
 				@Override
@@ -351,6 +382,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		{
 			String skiingSnowQuantity = getString(R.string.layout_detail_skiing_snow_quantity) + " " + skiingSnowQuantityMin + " " + getString(R.string.unit_cm) + " - " + skiingSnowQuantityMax + " " + getString(R.string.unit_cm);
 			textSkiingSnowQuantity.setText(Html.fromHtml(skiingSnowQuantity));
+			textSkiingSnowQuantity.setVisibility(View.VISIBLE);
 		}
 
 		// zpracovani otevrenych lanovek
@@ -360,6 +392,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		{
 			String skiingLiftsCount = getString(R.string.layout_detail_skiing_lifts_count) + " " + skiingLiftsOpened;
 			textSkiingLiftsCount.setText(Html.fromHtml(skiingLiftsCount));
+			textSkiingLiftsCount.setVisibility(View.VISIBLE);
 		}
 
 		// zpracovani otevrenych sjezdovek
@@ -369,6 +402,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		{
 			String skiingDownhillsCount = getString(R.string.layout_detail_skiing_downhills_count) + " " + skiingDownhillsOpened;
 			textSkiingDownhillsCount.setText(Html.fromHtml(skiingDownhillsCount));
+			textSkiingDownhillsCount.setVisibility(View.VISIBLE);
 		}
 
 		// zpracovani delky sjezdovek
@@ -378,6 +412,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		{
 			String skiingDownhillsLength = getString(R.string.layout_detail_skiing_downhills_length) + " " + skiingDownhillsLengthTotal + " " + getString(R.string.unit_km);
 			textSkiingDownhillsLength.setText(Html.fromHtml(skiingDownhillsLength));
+			textSkiingDownhillsLength.setVisibility(View.VISIBLE);
 		}
 
 		// zpracovani delky bezeckych trati
@@ -387,6 +422,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		{
 			String skiingCrosscountryLength = getString(R.string.layout_detail_skiing_crosscountry_length) + " " + skiingCrosscountryLengthTotal + " " + getString(R.string.unit_km);
 			textSkiingCrosscountryLength.setText(Html.fromHtml(skiingCrosscountryLength));
+			textSkiingCrosscountryLength.setVisibility(View.VISIBLE);
 		}
 		
 		// zpracovani data pocasi
@@ -468,6 +504,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			if(priceAdults1>0 && priceAdults6>0) pricesAdults += "<br>";
 			if(priceAdults6>0) pricesAdults += getString(R.string.layout_detail_price_adults_6) + " " + priceAdults6 + " " + priceCurrency;
 			textPricesAdults.setText(Html.fromHtml(pricesAdults));
+			textPricesAdults.setVisibility(View.VISIBLE);
 		}
 		
 		int priceChildren1 = mSkicentre.getPriceChildren1();
@@ -480,6 +517,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			if(priceChildren1>0 && priceChildren6>0) pricesChildren += "<br>";
 			if(priceChildren6>0) pricesChildren += getString(R.string.layout_detail_price_children_6) + " " + priceChildren6 + " " + priceCurrency;
 			textPricesChildren.setText(Html.fromHtml(pricesChildren));
+			textPricesChildren.setVisibility(View.VISIBLE);
 		}
 
 		int priceYoung1 = mSkicentre.getPriceYoung1();
@@ -492,6 +530,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			if(priceYoung1>0 && priceYoung6>0) pricesYoung += "<br>";
 			if(priceYoung6>0) pricesYoung += getString(R.string.layout_detail_price_young_6) + " " + priceYoung6 + " " + priceCurrency;
 			textPricesYoung.setText(Html.fromHtml(pricesYoung));
+			textPricesYoung.setVisibility(View.VISIBLE);
 		}
 
 		int priceSeniors1 = mSkicentre.getPriceSeniors1();
@@ -504,6 +543,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			if(priceSeniors1>0 && priceSeniors6>0) pricesSeniors += "<br>";
 			if(priceSeniors6>0) pricesSeniors += getString(R.string.layout_detail_price_seniors_6) + " " + priceSeniors6 + " " + priceCurrency;
 			textPricesSeniors.setText(Html.fromHtml(pricesSeniors));
+			textPricesSeniors.setVisibility(View.VISIBLE);
 		}
 
 		

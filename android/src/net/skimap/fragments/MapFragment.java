@@ -13,6 +13,7 @@ import net.skimap.adapters.ListingAdapter;
 import net.skimap.data.Area;
 import net.skimap.data.Country;
 import net.skimap.data.Placemark;
+import net.skimap.data.SkicentreLong;
 import net.skimap.data.SkicentreShort;
 import net.skimap.database.Database;
 import net.skimap.database.DatabaseHelper;
@@ -75,6 +76,13 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		// nastaveni view
 		View view = inflater.inflate(R.layout.layout_map, container, false);
 		
+		// inicializace bounds
+		mPathsDataBounds = new int[4];
+		mPathsDataBounds[0] = 0;
+		mPathsDataBounds[1] = 0;
+		mPathsDataBounds[2] = 0;
+		mPathsDataBounds[3] = 0;
+		
 		// nastaveni mapy
 		mMapView = (CustomMapView) view.findViewById(R.id.layout_map_mapview);
 		mMapView.setBuiltInZoomControls(true);
@@ -86,14 +94,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		// lokace na mape
 		if(mItemId == EMPTY_ID) setMapLocation(MapLocationMode.DEVICE_POSITION);
 		else setMapLocation(MapLocationMode.SKICENTRE_POSITION);
-		
-		// inicializace bounds
-		mPathsDataBounds = new int[4];
-		mPathsDataBounds[0] = 0;
-		mPathsDataBounds[1] = 0;
-		mPathsDataBounds[2] = 0;
-		mPathsDataBounds[3] = 0;
-		
+
 		// pridani POI
 		addPois();
 		
@@ -161,6 +162,9 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	    		Toast.makeText(getActivity(), "REFRESH", Toast.LENGTH_SHORT).show();
 	    		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
 	            synchro.trySynchronizeShortData();
+	            // TODO: aktualizovat skicentre data a overlays
+	            tryRedrawPaths();
+	            mMapView.invalidate();
 				return true;
 				
 	    	case R.id.ab_button_preferences:
@@ -272,8 +276,19 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	    		
 	    	// poloha aktualniho skicentra dle mItemId
 	    	case SKICENTRE_POSITION:
-		        // TODO
-	    		Toast.makeText(getActivity(), "SKICENTRE: " + mItemId, Toast.LENGTH_SHORT).show();
+	    		// nacteni skicentra z databaze
+	    		Database database = new Database(getActivity());
+	    		database.open(false);
+	    		SkicentreLong skicentre = database.getSkicentre(mItemId);
+	    		database.close();
+	    		
+	    		// zamereni skicentra v mape
+	    		GeoPoint point = new GeoPoint( (int)(skicentre.getLocationLatitude()*1E6), (int)(skicentre.getLocationLongitude()*1E6) );
+	    		controller.setCenter(point);
+	    		
+	    		// prekresleni sjezdovek
+	            tryRedrawPaths();
+	            mMapView.invalidate();
 	    		break;
     	}
 	}
@@ -333,17 +348,17 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	private void addPoisThread()
 	{
 		List<Overlay> mapOverlays;
-		Drawable drawable;
-		PopupItemizedOverlay itemizedOverlay;
 
 		// seznam overlay vrstev
 		mapOverlays = mMapView.getOverlays();
 		
 		// ikona skicentra
-		drawable = getResources().getDrawable(R.drawable.ic_map_skicentre);
+		Drawable drawableOn = getResources().getDrawable(R.drawable.ic_map_skicentre);
+		Drawable drawableOff = getResources().getDrawable(R.drawable.ic_map_skicentre_disabled);
 		
 		// vlastni overlay vrstva
-		itemizedOverlay = new PopupItemizedOverlay(drawable, mMapView);
+		PopupItemizedOverlay itemizedOverlayOn = new PopupItemizedOverlay(drawableOn, mMapView, getActivity()); // TODO: otevrit detail pri onclick na popup
+		PopupItemizedOverlay itemizedOverlayOff = new PopupItemizedOverlay(drawableOff, mMapView, getActivity());
 		
 		// nacteni skicenter a statu z databaze
 		Database database = new Database(getActivity());
@@ -384,9 +399,11 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 			// POI
 			GeoPoint point = new GeoPoint((int)(skicentre.getLocationLatitude()*1E6),(int)(skicentre.getLocationLongitude()*1E6));
 			OverlayItem overlayItem = new OverlayItem(point, skicentre.getName(), secondLine);
-			itemizedOverlay.addOverlay(overlayItem);
+			if(skicentre.isFlagOpened()) itemizedOverlayOn.addOverlay(overlayItem, skicentre.getId());
+			else itemizedOverlayOff.addOverlay(overlayItem, skicentre.getId());
 		}
-		mapOverlays.add(itemizedOverlay);
+		mapOverlays.add(itemizedOverlayOff);
+		mapOverlays.add(itemizedOverlayOn);
 	}
 	
 	
