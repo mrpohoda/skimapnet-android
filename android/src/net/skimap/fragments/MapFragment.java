@@ -50,7 +50,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	private final int EMPTY_ID = -1;
 	private final int ZOOM_DEFAULT = 13;
 	private final int ZOOM_MINIMUM_FOR_DRAW = 12;
-	private enum MapLocationMode { DEVICE_POSITION, NEAREST_SKICENTRE, SKICENTRE_POSITION };
+	private enum MapLocationMode { DEVICE_POSITION, LAST_SKICENTRE, NEAREST_SKICENTRE, SKICENTRE_POSITION };
 	
 	private CustomMapView mMapView;
 	private int mItemId;
@@ -91,9 +91,8 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
         // naslouchani manipulaci s mapou
         mMapView.setOnPanListener(this);
 
-		// lokace na mape
-		if(mItemId == EMPTY_ID) setMapLocation(MapLocationMode.DEVICE_POSITION);
-		else setMapLocation(MapLocationMode.SKICENTRE_POSITION);
+		// zamereni skicentra na mape
+		if(mItemId != EMPTY_ID) setMapLocation(MapLocationMode.SKICENTRE_POSITION);
 
 		// pridani POI
 		addPois();
@@ -154,9 +153,10 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		        startActivity(intent);
 				return true;
 				
-	    	case R.id.ab_button_search:
-	    		Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
-				return true;
+			// TODO
+//	    	case R.id.ab_button_search:
+//	    		Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
+//				return true;
 				
 	    	case R.id.ab_button_refresh:
 	    		Toast.makeText(getActivity(), "REFRESH", Toast.LENGTH_SHORT).show();
@@ -175,9 +175,14 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	    		setMapLocation(MapLocationMode.DEVICE_POSITION);
 				return true;
 				
-	    	case R.id.ab_button_location_nearest:
-	    		setMapLocation(MapLocationMode.NEAREST_SKICENTRE);
+	    	case R.id.ab_button_location_last:
+	    		setMapLocation(MapLocationMode.LAST_SKICENTRE);
 				return true;
+				
+			// TODO
+//	    	case R.id.ab_button_location_nearest:
+//	    		setMapLocation(MapLocationMode.NEAREST_SKICENTRE);
+//				return true;
 				
 	    	case R.id.ab_button_layers_normal:
 	    		mMapView.setSatellite(false);
@@ -198,9 +203,6 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	{
 		// zapnuti progress baru
 		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
-		
-		// start
-		Toast.makeText(getActivity(), "SYNCHRO START", Toast.LENGTH_SHORT).show();
 	}
 
 
@@ -209,9 +211,6 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	{
 		// vypnuti progress baru
 		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
-		
-		// hotovo
-		Toast.makeText(getActivity(), "SYNCHRO DONE", Toast.LENGTH_SHORT).show();
 		
 		// aktualizace listview
 		refreshViewsAfterSynchro();
@@ -255,14 +254,12 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		// nastaveni zoomu
 		final MapController controller = mMapView.getController();		
 		controller.setZoom(ZOOM_DEFAULT);
-		
-		// poloha zarizeni
-		GeoPoint deviceLocation;
-				
+	
 		switch (mode) 
     	{
-			// aktualni poloha
+			// aktualni poloha zarizeni
 	    	case DEVICE_POSITION:
+	    		GeoPoint deviceLocation;
 	    		deviceLocation = getDeviceLocation();
 	    		if(deviceLocation!=null) controller.animateTo(deviceLocation);
 	    		break;
@@ -270,12 +267,16 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	    	// poloha nejblizsiho skicentra k aktualni poloze
 	    	case NEAREST_SKICENTRE:
 		        // TODO
-	    		deviceLocation = getDeviceLocation();
 	    		Toast.makeText(getActivity(), "NEAREST SKICENTRE", Toast.LENGTH_SHORT).show();
 	    		break;
 	    		
+	    	// poloha posledniho zobrazeneho skicentra
+	    	case LAST_SKICENTRE:
+	    		
 	    	// poloha aktualniho skicentra dle mItemId
 	    	case SKICENTRE_POSITION:
+	    		if(mItemId==EMPTY_ID) break;
+	    	
 	    		// nacteni skicentra z databaze
 	    		Database database = new Database(getActivity());
 	    		database.open(false);
@@ -285,12 +286,12 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	    		// zamereni skicentra v mape
 	    		GeoPoint point = new GeoPoint( (int)(skicentre.getLocationLatitude()*1E6), (int)(skicentre.getLocationLongitude()*1E6) );
 	    		controller.setCenter(point);
-	    		
-	    		// prekresleni sjezdovek
-	            tryRedrawPaths();
-	            mMapView.invalidate();
 	    		break;
     	}
+		
+		// prekresleni sjezdovek
+        tryRedrawPaths();
+        mMapView.invalidate();
 	}
 	
 	
@@ -356,9 +357,9 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		Drawable drawableOn = getResources().getDrawable(R.drawable.ic_map_skicentre);
 		Drawable drawableOff = getResources().getDrawable(R.drawable.ic_map_skicentre_disabled);
 		
-		// vlastni overlay vrstva
-		PopupItemizedOverlay itemizedOverlayOn = new PopupItemizedOverlay(drawableOn, mMapView, getActivity()); // TODO: otevrit detail pri onclick na popup
-		PopupItemizedOverlay itemizedOverlayOff = new PopupItemizedOverlay(drawableOff, mMapView, getActivity());
+		// vlastni overlay vrstvy
+		PopupItemizedOverlay itemizedOverlayOn = new PopupItemizedOverlay(drawableOn, mMapView);
+		PopupItemizedOverlay itemizedOverlayOff = new PopupItemizedOverlay(drawableOff, mMapView);
 		
 		// nacteni skicenter a statu z databaze
 		Database database = new Database(getActivity());

@@ -33,10 +33,17 @@
 				android:showAsAction="always"
 				android:orderInCategory="1" />
 		    <item 
+				android:id="@+id/ab_button_location_last"
+				android:title="@string/ab_button_location_last"
+				android:showAsAction="always"
+				android:orderInCategory="2" />
+		    <!-- TODO
+			<item 
 				android:id="@+id/ab_button_location_nearest"
 				android:title="@string/ab_button_location_nearest"
 				android:showAsAction="always"
-				android:orderInCategory="2" />
+				android:orderInCategory="3" />
+			-->
 		</menu>
 	</item>
  
@@ -54,12 +61,14 @@
 		android:showAsAction="ifRoom"
 		android:orderInCategory="21" />
     
+    <!-- TODO
 	<item 
 		android:id="@+id/ab_button_search"
 		android:title="@string/ab_button_search"
 		android:icon="@drawable/ic_menu_search"
 		android:showAsAction="always"
 		android:orderInCategory="22" />
+	-->
 	
 	<item 
 		android:id="@+id/ab_button_list"

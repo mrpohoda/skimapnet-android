@@ -15,6 +15,7 @@
     <string name="ab_button_layers_satellite">Satellite</string>
     <string name="ab_button_location">Map location</string>
     <string name="ab_button_location_current">My location</string>
+    <string name="ab_button_location_last">Current focused ski centre</string>
     <string name="ab_button_location_nearest">Nearest ski centre</string>
     <string name="ab_button_sort">Sort by</string>
     <string name="ab_button_sort_alphabet">Alphabet</string>
@@ -63,6 +64,7 @@
     <string name="layout_detail_price_seniors_6"><![CDATA[<b>Seniors 6 days:</b>]]></string>
     
     <string name="toast_help_opened">Skicentre opened</string>
+    <string name="toast_help_closed">Skicentre closed</string>
     <string name="toast_help_nightski">Night skiing</string>
     <string name="toast_help_valley">Desc to valley</string>
     <string name="toast_help_snowpark">Snowpark</string>

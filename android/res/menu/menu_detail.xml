@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- TODO
 	<item 
 		android:id="@+id/ab_button_favourite"
 		android:title="@string/ab_button_favourite"
 		android:icon="@drawable/ic_menu_star"
 		android:showAsAction="always"
 		android:orderInCategory="1" />
+	-->
 	
 	<item 
 		android:id="@+id/ab_button_share"

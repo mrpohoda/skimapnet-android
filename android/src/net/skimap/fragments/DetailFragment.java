@@ -65,7 +65,6 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		// nastaveni view
 		setHasOptionsMenu(true);
 		mRootView = inflater.inflate(R.layout.layout_detail, container, false);
-		//setView();
 		return mRootView;
 	}
 	
@@ -120,9 +119,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	    		startActivity(Intent.createChooser(shareIntent, getString(R.string.layout_detail_share)));
 				return true;
 				
-	    	case R.id.ab_button_favourite:
-	    		Toast.makeText(getActivity(), "FAV", Toast.LENGTH_SHORT).show();
-				return true;
+			// TODO
+//	    	case R.id.ab_button_favourite:
+//	    		Toast.makeText(getActivity(), "FAV", Toast.LENGTH_SHORT).show();
+//				return true;
 				
 	    	case R.id.ab_button_preferences:
 	    		Toast.makeText(getActivity(), "PREFERENCES", Toast.LENGTH_SHORT).show();
@@ -146,9 +146,6 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	{
 		// zapnuti progress baru
 		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
-		
-		// start
-		Toast.makeText(getActivity(), "SYNCHRO START", Toast.LENGTH_SHORT).show();
 	}
 
 
@@ -157,9 +154,6 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	{
 		// vypnuti progress baru
 		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
-		
-		// hotovo
-		Toast.makeText(getActivity(), "SYNCHRO DONE", Toast.LENGTH_SHORT).show();
 		
 		// aktualizace view
 		refreshData(mItemId);
@@ -578,7 +572,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			@Override
 			public void onClick(View v)
 			{
-				Toast.makeText(getActivity(), R.string.toast_help_opened, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), (mSkicentre.isFlagOpened() ? R.string.toast_help_opened : R.string.toast_help_closed), Toast.LENGTH_SHORT).show();
 			}
 		});
 		imageSkicentreNightski.setOnClickListener(new OnClickListener() 

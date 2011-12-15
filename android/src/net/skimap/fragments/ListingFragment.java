@@ -157,9 +157,9 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
     	switch (item.getItemId()) 
     	{
     		// TODO: pridat razeni a groupovani
-	    	case R.id.ab_button_search:
-	    		Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
-				return true;
+//	    	case R.id.ab_button_search:
+//	    		Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
+//				return true;
 				
 	    	case R.id.ab_button_map:
 	    		Intent intent = new Intent();
@@ -179,21 +179,22 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	    		Toast.makeText(getActivity(), "PREFERENCES", Toast.LENGTH_SHORT).show();
 				return true;
 				
-	    	case R.id.ab_button_sort_alphabet:
-	    		Toast.makeText(getActivity(), "SORT ALPHABET", Toast.LENGTH_SHORT).show();
-				return true;
-				
-	    	case R.id.ab_button_sort_country:
-	    		Toast.makeText(getActivity(), "SORT COUNTRY", Toast.LENGTH_SHORT).show();
-				return true;
-				
-	    	case R.id.ab_button_sort_distance:
-	    		Toast.makeText(getActivity(), "SORT DISTANCE", Toast.LENGTH_SHORT).show();
-				return true;
-				
-	    	case R.id.ab_button_sort_snow:
-	    		Toast.makeText(getActivity(), "SORT SNOW", Toast.LENGTH_SHORT).show();
-				return true;
+			// TODO
+//	    	case R.id.ab_button_sort_alphabet:
+//	    		Toast.makeText(getActivity(), "SORT ALPHABET", Toast.LENGTH_SHORT).show();
+//				return true;
+//				
+//	    	case R.id.ab_button_sort_country:
+//	    		Toast.makeText(getActivity(), "SORT COUNTRY", Toast.LENGTH_SHORT).show();
+//				return true;
+//				
+//	    	case R.id.ab_button_sort_distance:
+//	    		Toast.makeText(getActivity(), "SORT DISTANCE", Toast.LENGTH_SHORT).show();
+//				return true;
+//				
+//	    	case R.id.ab_button_sort_snow:
+//	    		Toast.makeText(getActivity(), "SORT SNOW", Toast.LENGTH_SHORT).show();
+//				return true;
 
     		default:
     			return super.onOptionsItemSelected(item);
@@ -206,9 +207,6 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	{
 		// zapnuti progress baru
 		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
-		
-		// start
-		Toast.makeText(getActivity(), "SYNCHRO START", Toast.LENGTH_SHORT).show();
 	}
 
 
@@ -217,9 +215,6 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	{
 		// vypnuti progress baru
 		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
-		
-		// hotovo
-		Toast.makeText(getActivity(), "SYNCHRO DONE", Toast.LENGTH_SHORT).show();
 		
 		// aktualizace listview
 		refreshDataAfterSynchro();

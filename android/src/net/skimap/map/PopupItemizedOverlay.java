@@ -2,9 +2,11 @@ package net.skimap.map;
 
 import java.util.ArrayList;
 
+import net.skimap.activities.DetailActivity;
+import net.skimap.fragments.DetailFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.widget.Toast;
 
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
@@ -15,14 +17,12 @@ public class PopupItemizedOverlay extends BalloonItemizedOverlay<OverlayItem>
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	private ArrayList<Integer> mIds = new ArrayList<Integer>();
 	private Context mMapViewContext;
-	private Context mContext;
 	
 	
-	public PopupItemizedOverlay(Drawable defaultMarker, MapView mapView, Context context)
+	public PopupItemizedOverlay(Drawable defaultMarker, MapView mapView)
 	{
 		super(boundCenter(defaultMarker), mapView);
 		mMapViewContext = mapView.getContext();
-		mContext = context;
 		populate();
 	}
 
@@ -52,16 +52,12 @@ public class PopupItemizedOverlay extends BalloonItemizedOverlay<OverlayItem>
 	@Override
 	protected boolean onBalloonTap(int index, OverlayItem item)
 	{
-		// TODO: otevrit detail, nesplest index a id
-		Toast.makeText(mContext, "SHOW SKICENTRE " + mIds.get(index), Toast.LENGTH_SHORT).show();
-		
-//		// nova aktivita detail
-//		Intent intent = new Intent(mContext, DetailActivity.class);
-//		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//		intent.putExtra(DetailFragment.ITEM_ID, mIds.get(index));
-//		//intent.putExtra(DetailFragment.DUAL_VIEW, dualView);
-//		mContext.startActivity(intent);
-		
+		// nova aktivita detail
+		Intent intent = new Intent();
+		intent.putExtra(DetailFragment.ITEM_ID, mIds.get(index));
+		intent.putExtra(DetailFragment.DUAL_VIEW, false);
+	    intent.setClass(mMapViewContext, DetailActivity.class);
+	    mMapViewContext.startActivity(intent);
 		return true;
 	}
 }

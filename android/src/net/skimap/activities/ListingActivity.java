@@ -107,7 +107,7 @@ public class ListingActivity extends FragmentActivity implements ListingFragment
 			Intent intent = new Intent();
 			intent.setClass(this, DetailActivity.class);
 			intent.putExtra(DetailFragment.ITEM_ID, id);
-			intent.putExtra(DetailFragment.DUAL_VIEW, dualView);
+			intent.putExtra(DetailFragment.DUAL_VIEW, false);
 			startActivity(intent);
         }
 	}

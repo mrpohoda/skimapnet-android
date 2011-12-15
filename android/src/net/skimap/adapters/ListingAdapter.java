@@ -62,8 +62,8 @@ public class ListingAdapter extends BaseAdapter
 		
 		// nastaveni obsahu widgetu
 		imageOpened.setImageResource(flagOpened ? R.drawable.presence_online : R.drawable.presence_busy);
-		// TODO: osetrit favourite
 		imageFavourite.setImageResource(flagOpened ? R.drawable.btn_star_on : R.drawable.btn_star_off);
+		imageFavourite.setVisibility(View.GONE); // TODO: osetrit favourite
 		textName.setText(name);
 		
 		// text druheho radku
