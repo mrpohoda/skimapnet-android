@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SkiMap</string>
-    
+    <!-- DON'T TRANSLATE -->
+    <string name="app_name">Ski Map</string>
     <string name="map_api_key_debug">0ED6_e2Y9kSFAVxC_CN1Jdme6afF_pvPQhIlrHA</string>
     <string name="map_api_key_release">0ED6_e2Y9kSF-CBNSeZQCjS5p2JssXa_u7zdLLQ</string>
+    <string name="settings_key_last_synchro">net_skimap_last_synchro</string>
+    <string name="settings_key_current_version">net_skimap_current_version</string>
     
+    <!-- LANGUAGE DEPENDENT -->
     <string name="ab_button_list">List</string>
     <string name="ab_button_map">Map</string>
     <string name="ab_button_search">Search</string>
@@ -33,6 +36,8 @@
     
     <string name="layout_listing_item_snow">cm of snow</string>
     
+    <string name="layout_detail_offline">You are in offline mode. Data may not be updated.</string>
+    
     <string name="layout_detail_share">Share skicentre</string>
     <string name="layout_detail_share_skicentre">Skicentre</string>
     <string name="layout_detail_share_url">Ski-map.net</string>
@@ -44,6 +49,7 @@
     <string name="layout_detail_images_title">Image links</string>
     <string name="layout_detail_links_title">Web links</string>
     
+    <!-- STRINGS IN HTML FORMAT -->
     <string name="layout_detail_skicentre_country"><![CDATA[<b>Country:</b>]]></string>
     <string name="layout_detail_skicentre_season"><![CDATA[<b>Season:</b>]]></string>
     <string name="layout_detail_skicentre_altitude"><![CDATA[<b>Altitude:</b>]]></string>
@@ -78,6 +84,9 @@
     <string name="toast_help_url_snow_report">Snow report page</string>
     <string name="toast_help_url_weather_report">Weather report page</string>
     <string name="toast_help_url_webcams">Webcams page</string>
+    
+    <string name="toast_synchro_offline">You are offline. Please check your internet connection.</string>
+    <string name="toast_synchro_error">Unknown error. Cannot synchronize data. Please contact developer.</string>
     
     <string name="day_sun">Sun</string>
     <string name="day_mon">Mon</string>

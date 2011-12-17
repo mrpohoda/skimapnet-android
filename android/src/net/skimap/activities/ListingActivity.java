@@ -66,15 +66,16 @@ public class ListingActivity extends FragmentActivity implements ListingFragment
         mTabsAdapter = new TabsAdapter(this, bar, mViewPager);
     	
     	ActionBar.Tab tab1 = bar.newTab().setText(R.string.ab_tab_all);
-        ActionBar.Tab tab2 = bar.newTab().setText(R.string.ab_tab_favourites);
+    	// TODO
+        //ActionBar.Tab tab2 = bar.newTab().setText(R.string.ab_tab_favourites);
         ActionBar.Tab tab3 = bar.newTab().setText(R.string.ab_tab_recommended);
                
         mTabsAdapter.addTab(tab1, ListingFragment.class);
-        mTabsAdapter.addTab(tab2, ListingFragment.class);
+        //mTabsAdapter.addTab(tab2, ListingFragment.class);
         mTabsAdapter.addTab(tab3, ListingFragment.class);
 
         // inicializace progress baru
-    	boolean synchro = ((SkimapApplication) getApplicationContext()).isSynchro();
+    	boolean synchro = ((SkimapApplication) getApplicationContext()).isSynchronizing();
     	setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
     }
     

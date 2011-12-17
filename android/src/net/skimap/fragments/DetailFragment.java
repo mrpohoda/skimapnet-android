@@ -24,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	private View mRootView;
 	private int mItemId;
 	private boolean mPerexMore;
+	private boolean mOffline = false;
 	private SkicentreLong mSkicentre;
 	
 	
@@ -78,7 +80,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
         ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
         
         // aktualizace stavu progress baru
-    	boolean synchro = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchro();
+    	boolean synchro = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchronizing();
     	getSupportActivity().setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
     }
 	
@@ -150,13 +152,18 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 
 
 	@Override
-	public void onSynchroStop()
+	public void onSynchroStop(int result)
 	{
 		// vypnuti progress baru
 		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		
 		// aktualizace view
 		refreshData(mItemId);
+		
+		// toast pro offline rezim nebo error
+		if(result==Synchronization.STATUS_OFFLINE) mOffline = true;
+		else mOffline = false;
+		if(result==Synchronization.STATUS_UNKNOWN) Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
 	}
 	
 	
@@ -242,6 +249,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		mPerexMore = false;
 		
 		// reference na textove pole
+		TextView textOffline = (TextView) mRootView.findViewById(R.id.layout_detail_offline);
 		TextView textSkicentreTitle = (TextView) mRootView.findViewById(R.id.layout_detail_skicentre_title);
 		TextView textSkicentrePlace = (TextView) mRootView.findViewById(R.id.layout_detail_skicentre_country);
 		TextView textSkicentreSeason = (TextView) mRootView.findViewById(R.id.layout_detail_skicentre_season);
@@ -298,7 +306,19 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		ImageView imageLinksSnowReport = (ImageView) mRootView.findViewById(R.id.layout_detail_links_url_snow_report);
 		ImageView imageLinksWeatherReport = (ImageView) mRootView.findViewById(R.id.layout_detail_links_url_weather_report);
 		ImageView imageLinksCamera = (ImageView) mRootView.findViewById(R.id.layout_detail_links_url_camera);
+		
+		
+		// reference na radky tabulky
+		TableRow rowWeather1 = (TableRow) mRootView.findViewById(R.id.layout_detail_weather_1);
+		TableRow rowWeather2 = (TableRow) mRootView.findViewById(R.id.layout_detail_weather_2);
+		TableRow rowWeather3 = (TableRow) mRootView.findViewById(R.id.layout_detail_weather_3);
+		TableRow rowWeather4 = (TableRow) mRootView.findViewById(R.id.layout_detail_weather_4);
+		TableRow rowWeather5 = (TableRow) mRootView.findViewById(R.id.layout_detail_weather_5);
+		TableRow rowWeather6 = (TableRow) mRootView.findViewById(R.id.layout_detail_weather_6);
 
+		
+		// zpracovani offline stavu
+		textOffline.setVisibility(mOffline ? View.VISIBLE : View.GONE);
 		
 		// zpracovani nadpisu
 		String skicentreTitle = mSkicentre.getName();
@@ -419,32 +439,58 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			textSkiingCrosscountryLength.setVisibility(View.VISIBLE);
 		}
 		
-		// zpracovani data pocasi
-		String weather1Date = "";
-		if(mSkicentre.getWeather1DateView()!=DatabaseHelper.NULL_STRING)
-			weather1Date = mSkicentre.getWeather1DateView() + " " + getDayName(mSkicentre.getWeather1Date().getDay());
-		String weather2Date = "";
-		if(mSkicentre.getWeather2DateView()!=DatabaseHelper.NULL_STRING)
-			weather2Date = mSkicentre.getWeather2DateView() + " " + getDayName(mSkicentre.getWeather2Date().getDay());
-		String weather3Date = "";
-		if(mSkicentre.getWeather3DateView()!=DatabaseHelper.NULL_STRING)
-			weather3Date = mSkicentre.getWeather3DateView() + " " + getDayName(mSkicentre.getWeather3Date().getDay());
-		String weather4Date = "";
-		if(mSkicentre.getWeather4DateView()!=DatabaseHelper.NULL_STRING)
-			weather4Date = mSkicentre.getWeather4DateView() + " " + getDayName(mSkicentre.getWeather4Date().getDay());
-		String weather5Date = "";
-		if(mSkicentre.getWeather5DateView()!=DatabaseHelper.NULL_STRING)
-			weather5Date = mSkicentre.getWeather5DateView() + " " + getDayName(mSkicentre.getWeather5Date().getDay());
-		String weather6Date = "";
-		if(mSkicentre.getWeather6DateView()!=DatabaseHelper.NULL_STRING)
-			weather6Date = mSkicentre.getWeather6DateView() + " " + getDayName(mSkicentre.getWeather6Date().getDay());
-		textWeather1Date.setText(Html.fromHtml(weather1Date));
-		textWeather2Date.setText(Html.fromHtml(weather2Date));
-		textWeather3Date.setText(Html.fromHtml(weather3Date));
-		textWeather4Date.setText(Html.fromHtml(weather4Date));
-		textWeather5Date.setText(Html.fromHtml(weather5Date));
-		textWeather6Date.setText(Html.fromHtml(weather6Date));
+		// zpracovani pocasi
+		String weather1Date = mSkicentre.getWeather1DateView();
+		String weather2Date = mSkicentre.getWeather2DateView();
+		String weather3Date = mSkicentre.getWeather3DateView();
+		String weather4Date = mSkicentre.getWeather4DateView();
+		String weather5Date = mSkicentre.getWeather5DateView();
+		String weather6Date = mSkicentre.getWeather6DateView();
 		
+		// zpracovani data pocasi a zneviditelneni v pripade ze datum neni zadano
+		if(weather1Date!=DatabaseHelper.NULL_STRING)
+		{
+			weather1Date = weather1Date + " " + getDayName(mSkicentre.getWeather1Date().getDay());
+			textWeather1Date.setText(Html.fromHtml(weather1Date));
+			rowWeather1.setVisibility(View.VISIBLE);
+		}
+		else rowWeather1.setVisibility(View.GONE);
+		if(weather2Date!=DatabaseHelper.NULL_STRING)
+		{
+			weather2Date = weather2Date + " " + getDayName(mSkicentre.getWeather2Date().getDay());
+			textWeather2Date.setText(Html.fromHtml(weather2Date));
+			rowWeather2.setVisibility(View.VISIBLE);
+		}
+		else rowWeather2.setVisibility(View.GONE);
+		if(weather3Date!=DatabaseHelper.NULL_STRING)
+		{
+			weather3Date = weather3Date + " " + getDayName(mSkicentre.getWeather3Date().getDay());
+			textWeather3Date.setText(Html.fromHtml(weather3Date));
+			rowWeather3.setVisibility(View.VISIBLE);
+		}
+		else rowWeather3.setVisibility(View.GONE);
+		if(weather4Date!=DatabaseHelper.NULL_STRING)
+		{
+			weather4Date = weather4Date + " " + getDayName(mSkicentre.getWeather4Date().getDay());
+			textWeather4Date.setText(Html.fromHtml(weather4Date));
+			rowWeather4.setVisibility(View.VISIBLE);
+		}
+		else rowWeather4.setVisibility(View.GONE);
+		if(weather5Date!=DatabaseHelper.NULL_STRING)
+		{
+			weather5Date = weather5Date + " " + getDayName(mSkicentre.getWeather5Date().getDay());
+			textWeather5Date.setText(Html.fromHtml(weather5Date));
+			rowWeather5.setVisibility(View.VISIBLE);
+		}
+		else rowWeather5.setVisibility(View.GONE);
+		if(weather6Date!=DatabaseHelper.NULL_STRING)
+		{
+			weather6Date = weather6Date + " " + getDayName(mSkicentre.getWeather6Date().getDay());
+			textWeather6Date.setText(Html.fromHtml(weather6Date));
+			rowWeather6.setVisibility(View.VISIBLE);
+		}
+		else rowWeather6.setVisibility(View.GONE);
+
 		// zpracovani minimalni teploty pocasi
 		int weather1Min = mSkicentre.getWeather1TemperatureMin();
 		String weather1TemperatureMin = (weather1Min>0 ? "+" + weather1Min : weather1Min) + getString(R.string.unit_celsius);
@@ -766,6 +812,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			db.open(false);
 			area = db.getArea(id).getName();
 		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		finally
 		{
 			db.close();
@@ -782,6 +832,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		{
 			db.open(false);
 			country = db.getCountry(id).getName();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 		finally
 		{

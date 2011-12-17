@@ -47,7 +47,7 @@ public class DetailActivity extends FragmentActivity
     	bar.setDisplayHomeAsUpEnabled(true);
     	
     	// inicializace progress baru
-    	boolean synchro = ((SkimapApplication) getApplicationContext()).isSynchro();
+    	boolean synchro = ((SkimapApplication) getApplicationContext()).isSynchronizing();
     	setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
     }
     

@@ -32,6 +32,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
+import android.support.v4.view.SubMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -114,7 +115,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
         ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
 
         // aktualizace stavu progress baru
-    	boolean synchro = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchro();
+    	boolean synchro = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchronizing();
     	getSupportActivity().setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
     }
 	
@@ -136,6 +137,10 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		// vytvoreni menu
 		inflater.inflate(R.menu.menu_map, menu);
 		super.onCreateOptionsMenu(menu, inflater);
+		
+		// polozka location last	
+		SubMenu submenu = menu.findItem(R.id.ab_button_location).getSubMenu();
+		if(mItemId!=EMPTY_ID) submenu.add(Menu.NONE, R.id.ab_button_location_last, 2, R.string.ab_button_location_last);			
 	}
 	
 	
@@ -159,7 +164,6 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 //				return true;
 				
 	    	case R.id.ab_button_refresh:
-	    		Toast.makeText(getActivity(), "REFRESH", Toast.LENGTH_SHORT).show();
 	    		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
 	            synchro.trySynchronizeShortData();
 	            // TODO: aktualizovat skicentre data a overlays
@@ -207,13 +211,17 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 
 
 	@Override
-	public void onSynchroStop()
+	public void onSynchroStop(int result)
 	{
 		// vypnuti progress baru
 		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		
 		// aktualizace listview
 		refreshViewsAfterSynchro();
+		
+		// toast pro offline rezim nebo error
+		if(result==Synchronization.STATUS_OFFLINE) Toast.makeText(getActivity(), R.string.toast_synchro_offline, Toast.LENGTH_LONG).show();
+		else if(result==Synchronization.STATUS_UNKNOWN) Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
 	}
 	
 	

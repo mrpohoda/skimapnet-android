@@ -28,6 +28,7 @@
 	
 	<color name="layout_detail_title">#000</color> <!-- cerna -->
 	<color name="layout_detail_text">#777</color> <!-- seda -->
+	<color name="layout_detail_warning">#f83</color> <!-- oranz -->
 	<color name="layout_detail_weather_min">#77a</color> <!-- sedomodra -->
 	<color name="layout_detail_weather_max">#a77</color> <!-- sedocervena -->
 	

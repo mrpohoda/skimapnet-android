@@ -51,7 +51,7 @@ public class MapActivity extends FragmentMapActivity
     	}
     	
     	// inicializace progress baru
-    	boolean synchro = ((SkimapApplication) getApplicationContext()).isSynchro();
+    	boolean synchro = ((SkimapApplication) getApplicationContext()).isSynchronizing();
     	setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
     }
     

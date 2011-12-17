@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -114,7 +113,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
         ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
         
         // aktualizace stavu progress baru
-    	boolean synchro = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchro();
+    	boolean synchro = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchronizing();
     	getSupportActivity().setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
     }
 	
@@ -139,7 +138,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		// tlacitko s mapou
 		if(!mDualView)
 		{
-			MenuItem preferencesItem = menu.add(Menu.NONE, R.id.ab_button_preferences, 23, R.string.ab_button_preferences);
+			MenuItem preferencesItem = menu.add(Menu.NONE, R.id.ab_button_preferences, 21, R.string.ab_button_preferences);
 			preferencesItem.setIcon(R.drawable.ic_menu_preferences);
 			preferencesItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 			
@@ -170,7 +169,6 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 				return true;
 				
 	    	case R.id.ab_button_refresh:
-	    		Toast.makeText(getActivity(), "REFRESH", Toast.LENGTH_SHORT).show();
 	    		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
 	            synchro.trySynchronizeShortData();
 				return true;
@@ -211,13 +209,17 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 
 
 	@Override
-	public void onSynchroStop()
+	public void onSynchroStop(int result)
 	{
 		// vypnuti progress baru
 		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		
 		// aktualizace listview
 		refreshDataAfterSynchro();
+		
+		// toast pro offline rezim nebo error
+		if(result==Synchronization.STATUS_OFFLINE) Toast.makeText(getActivity(), R.string.toast_synchro_offline, Toast.LENGTH_LONG).show();
+		else if(result==Synchronization.STATUS_UNKNOWN) Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
 	}
 	
 	
@@ -346,16 +348,17 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 				showDetail(id);
 			}
 		});
-		listView.setOnItemLongClickListener(new OnItemLongClickListener() 
-		{
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long viewId) 
-			{
-				// TODO
-				Toast.makeText(getActivity(), "LONG CLICK", Toast.LENGTH_SHORT).show();
-				return true;
-			}
-		});
+		// TODO
+//		listView.setOnItemLongClickListener(new OnItemLongClickListener() 
+//		{
+//			@Override
+//			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long viewId) 
+//			{
+//				
+//				Toast.makeText(getActivity(), "LONG CLICK", Toast.LENGTH_SHORT).show();
+//				return true;
+//			}
+//		});
 		
 		// nastaveni oznaceni polozky v listu
 		if (mDualView) 

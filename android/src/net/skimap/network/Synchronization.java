@@ -1,5 +1,8 @@
 package net.skimap.network;
 
+import java.net.SocketException;
+import java.net.UnknownHostException;
+
 import net.skimap.activities.SkimapApplication;
 import net.skimap.parser.JsonParser;
 import android.os.Handler;
@@ -11,6 +14,9 @@ public class Synchronization
 	private final String URL_COUNTRIES = "http://ski-map.net/skimapnet/php/common.php?fce=countries_list"; // http://data.jestrab.net/skimap/countries_list.txt
 	private final String URL_SKICENTRES_SHORT = "http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&extended=1"; // http://data.jestrab.net/skimap/skicentres_list.txt
 	private final String URL_SKICENTRE_LONG = "http://ski-map.net/skimapnet/php/common.php?fce=skicentre_detail&lang=cs&id="; // http://data.jestrab.net/skimap/skicentre_detail.txt
+	
+	public static final int STATUS_OFFLINE = -1;
+	public static final int STATUS_UNKNOWN = -2;
 	
 	private final int MESSAGE_SYNCHRO_SHORT = 0;
 	private final int MESSAGE_SYNCHRO_LONG = 1;
@@ -34,14 +40,14 @@ public class Synchronization
             	if(message.what == MESSAGE_SYNCHRO_SHORT)
             	{
             		// zastaveni synchronizace
-        			mApplication.stopSynchro();
-        			mApplication.setSynchro(false);
+        			mApplication.stopSynchro(message.arg1);
+        			mApplication.setSynchronizing(false);
             	}
             	else if(message.what == MESSAGE_SYNCHRO_LONG)
             	{
             		// zastaveni synchronizace
-        			mApplication.stopSynchro();
-        			mApplication.setSynchro(false);
+        			mApplication.stopSynchro(message.arg1);
+        			mApplication.setSynchronizing(false);
             	}
             }
 	    };
@@ -50,11 +56,11 @@ public class Synchronization
 	
 	public void trySynchronizeShortData()
 	{
-		boolean synchro = mApplication.isSynchro();
+		boolean synchro = mApplication.isSynchronizing();
 		if(!synchro)
 		{
 			// start synchronizace
-			mApplication.setSynchro(true);
+			mApplication.setSynchronizing(true);
 			mApplication.startSynchro();
 			
 			// spusteni vlakna
@@ -65,11 +71,11 @@ public class Synchronization
 	
 	public void trySynchronizeLongData(int id)
 	{
-		boolean synchro = mApplication.isSynchro();
+		boolean synchro = mApplication.isSynchronizing();
 		if(!synchro)
 		{
 			// start synchronizace
-			mApplication.setSynchro(true);
+			mApplication.setSynchronizing(true);
 			mApplication.startSynchro();
 			
 			// spusteni vlakna
@@ -85,11 +91,15 @@ public class Synchronization
         {
         	public void run() 
 		    {
-        		synchronizeAreasThread();
-        		synchronizeCountriesThread();
-        		synchronizeSkicentresShortThread();
+        		int countAreas = synchronizeAreasThread();
+        		int countCountries = synchronizeCountriesThread();
+        		int countSkicentres = synchronizeSkicentresShortThread();
+        		int count = countAreas + countCountries + countSkicentres;
+        		if(countAreas==STATUS_OFFLINE || countCountries==STATUS_OFFLINE || countSkicentres==STATUS_OFFLINE) count = STATUS_OFFLINE;
+        		else if(countAreas==STATUS_UNKNOWN || countCountries==STATUS_UNKNOWN || countSkicentres==STATUS_UNKNOWN) count = STATUS_UNKNOWN;
         		Message message = new Message();
         		message.what = MESSAGE_SYNCHRO_SHORT;
+        		message.arg1 = count;
         		mHandler.sendMessage(message);
 		    }
         }.start();
@@ -103,9 +113,10 @@ public class Synchronization
         {
         	public void run() 
 		    {
-        		synchronizeSkicentreLongThread(id);
+        		int count = synchronizeSkicentreLongThread(id);
         		Message message = new Message();
         		message.what = MESSAGE_SYNCHRO_LONG;
+        		message.arg1 = count;
         		mHandler.sendMessage(message);
 		    }
         }.start();
@@ -124,9 +135,22 @@ public class Synchronization
 		{
 			count = parser.storeSkicentreLong(url);
 		}
+		catch (UnknownHostException e)
+		{
+			// uzivatel je offline
+			e.printStackTrace();
+			count = STATUS_OFFLINE;
+		}
+		catch (SocketException e)
+		{
+			// uzivatel je offline
+			e.printStackTrace();
+			count = STATUS_OFFLINE;
+		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			count = STATUS_UNKNOWN;
 		}
 		parser.close();
 		
@@ -146,9 +170,22 @@ public class Synchronization
 		{
 			count = parser.storeSkicentresShort(url);
 		}
+		catch (UnknownHostException e)
+		{
+			// uzivatel je offline
+			e.printStackTrace();
+			count = STATUS_OFFLINE;
+		}
+		catch (SocketException e)
+		{
+			// uzivatel je offline
+			e.printStackTrace();
+			count = STATUS_OFFLINE;
+		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			count = STATUS_UNKNOWN;
 		}
 		parser.close();
 		
@@ -168,9 +205,22 @@ public class Synchronization
 		{
 			count = parser.storeAreas(url);
 		}
+		catch (UnknownHostException e)
+		{
+			// uzivatel je offline
+			e.printStackTrace();
+			count = STATUS_OFFLINE;
+		}
+		catch (SocketException e)
+		{
+			// uzivatel je offline
+			e.printStackTrace();
+			count = STATUS_OFFLINE;
+		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			count = STATUS_UNKNOWN;
 		}
 		parser.close();
 		
@@ -190,9 +240,22 @@ public class Synchronization
 		{
 			count = parser.storeCountries(url);
 		}
+		catch (UnknownHostException e)
+		{
+			// uzivatel je offline
+			e.printStackTrace();
+			count = STATUS_OFFLINE;
+		}
+		catch (SocketException e)
+		{
+			// uzivatel je offline
+			e.printStackTrace();
+			count = STATUS_OFFLINE;
+		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			count = STATUS_UNKNOWN;
 		}
 		parser.close();
 		

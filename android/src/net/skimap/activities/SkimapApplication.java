@@ -5,12 +5,12 @@ import android.support.v4.app.Fragment;
 
 public class SkimapApplication extends Application
 {
-	private boolean mSynchro = false;
+	private boolean mSynchronizing = false;
 	private OnSynchroListener mSynchroListener;
 	
 	
-	public boolean isSynchro() { return mSynchro; }
-	public void setSynchro(boolean synchro) { mSynchro = synchro; }
+	public boolean isSynchronizing() { return mSynchronizing; }
+	public void setSynchronizing(boolean synchronizing) { mSynchronizing = synchronizing; }
 	
 	
 	// kazdy fragment, ktery chce odchytavat stav synchronizace musi implementovat rozhrani OnSynchroListener
@@ -34,15 +34,15 @@ public class SkimapApplication extends Application
 	}
 	
 	
-	public void stopSynchro()
+	public void stopSynchro(int result)
 	{
-		mSynchroListener.onSynchroStop();
+		mSynchroListener.onSynchroStop(result);
 	}
 	
 	
 	public interface OnSynchroListener 
 	{
         public void onSynchroStart();
-        public void onSynchroStop();
+        public void onSynchroStop(int result);
     }
 }

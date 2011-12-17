@@ -2,4 +2,8 @@
 <resources>
 	<item type="id" name="balloon_inner_layout" />
 	<item type="id" name="balloon_close" />
+	<item type="id" name="ab_button_location" />
+	<item type="id" name="ab_button_location_current" />
+	<item type="id" name="ab_button_location_last" />
+	<item type="id" name="ab_button_location_nearest" />
 </resources>

@@ -26,4 +26,5 @@
     <dimen name="layout_detail_weather_padding">15dp</dimen>
     <dimen name="layout_detail_title_textsize">21sp</dimen>
     <dimen name="layout_detail_text_textsize">15sp</dimen>
+    <dimen name="layout_detail_warning_textsize">12sp</dimen>
 </resources>
