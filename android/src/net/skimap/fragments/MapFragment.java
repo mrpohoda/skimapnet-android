@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -79,10 +80,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		
 		// inicializace bounds
 		mPathsDataBounds = new int[4];
-		mPathsDataBounds[0] = 0;
-		mPathsDataBounds[1] = 0;
-		mPathsDataBounds[2] = 0;
-		mPathsDataBounds[3] = 0;
+		resetBounds();
 		
 		// nastaveni mapy
 		mMapView = (CustomMapView) view.findViewById(R.id.layout_map_mapview);
@@ -94,13 +92,6 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 
 		// zamereni skicentra na mape
 		if(mItemId != EMPTY_ID) setMapLocation(MapLocationMode.SKICENTRE_POSITION);
-
-		// pridani POI
-		addPois();
-		
-		// vykresleni sjezdovek a vleku
-		tryRedrawPaths();
-		mMapView.invalidate();
 		
 		return view;
 	}
@@ -115,8 +106,17 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
         ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
 
         // aktualizace stavu progress baru
-    	boolean synchro = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchronizing();
-    	getSupportActivity().setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
+    	boolean synchronizing = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchronizing();
+    	getSupportActivity().setProgressBarIndeterminateVisibility(synchronizing ? Boolean.TRUE : Boolean.FALSE);
+    	
+    	// vykresleni skicenter, sjezdovek a vleku
+		resetBounds();
+		refreshPois();
+		tryRedrawPaths();
+		
+		// pokus o automatickou synchronizaci
+		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
+        synchro.trySynchronizeShortDataAuto();
     }
 	
 	
@@ -216,7 +216,10 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		// vypnuti progress baru
 		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		
-		// aktualizace listview
+		// aktualizace view
+		resetBounds();
+		refreshPois();
+		tryRedrawPaths();
 		refreshViewsAfterSynchro();
 		
 		// toast pro offline rezim nebo error
@@ -341,26 +344,34 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	}
 	
 	
+	private void resetBounds()
+	{
+		mPathsDataBounds[0] = 0;
+		mPathsDataBounds[1] = 0;
+		mPathsDataBounds[2] = 0;
+		mPathsDataBounds[3] = 0;
+	}
+	
+	
+	private void refreshPois()
+	{
+		// smazani vsech vrstev mapy
+		mMapView.getOverlays().clear();
+		
+		// pridani POI
+		addPois();
+	}
+	
+	
 	private void addPois()
 	{
 		// vlakno
-	    new Thread()
-        {
-        	public void run() 
-		    {
-        		addPoisThread();
-		    }
-        }.start();
+		new OverlayTask().execute();
 	}
 	
 	
 	private void addPoisThread()
 	{
-		List<Overlay> mapOverlays;
-
-		// seznam overlay vrstev
-		mapOverlays = mMapView.getOverlays();
-		
 		// ikona skicentra
 		Drawable drawableOn = getResources().getDrawable(R.drawable.ic_map_skicentre);
 		Drawable drawableOff = getResources().getDrawable(R.drawable.ic_map_skicentre_disabled);
@@ -372,7 +383,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		// nacteni skicenter a statu z databaze
 		Database database = new Database(getActivity());
 		database.open(false);
-		ArrayList<SkicentreShort> skicentres = database.getAllSkicentres();
+		ArrayList<SkicentreShort> skicentres = database.getAllSkicentres(Database.Sort.NAME);
 		HashMap<Integer, Area> areas = database.getAllAreas();
 		HashMap<Integer, Country> countries = database.getAllCountries();
 		database.close();
@@ -411,13 +422,20 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 			if(skicentre.isFlagOpened()) itemizedOverlayOn.addOverlay(overlayItem, skicentre.getId());
 			else itemizedOverlayOff.addOverlay(overlayItem, skicentre.getId());
 		}
+		
+		// seznam overlay vrstev
+		List<Overlay> mapOverlays = mMapView.getOverlays();
 		mapOverlays.add(itemizedOverlayOff);
 		mapOverlays.add(itemizedOverlayOn);
+		mMapView.postInvalidate();
 	}
 	
 	
 	private void tryRedrawPaths()
 	{
+		// kontrola zoom
+		if(mMapView.getZoomLevel()<ZOOM_MINIMUM_FOR_DRAW) return;	
+			
 		// sirka a delka mapview
 		int spanLatitudeE6 = mMapView.getLatitudeSpan();
 		int spanLongitudeE6 = mMapView.getLongitudeSpan();
@@ -488,7 +506,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	        		while(iterator.hasNext())
 	        		{
 	        			Placemark placemark = iterator.next();
-	        	        PathUtility.drawPath(placemark, mMapView);
+	        			PathUtility.drawPath(placemark, mMapView);
 	        		}
 	        		
 	        		// aktualizace overlays v mape
@@ -552,5 +570,28 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		mMapView.getOverlays().addAll(overlaysToAddAgain);
 		
 		//Log.d("SKIMAP", "AFTER REMOVE OVERLAYS:" + mMapView.getOverlays().size());
+	}
+	
+
+	//http://stackoverflow.com/questions/2870743/android-2-1-googlemaps-itemizedoverlay-concurrentmodificationexception
+	class OverlayTask extends AsyncTask<Void, Void, Void>
+	{
+	    @Override
+	    public void onPreExecute()
+	    {
+	    }
+	    
+	    // UI vlakno
+	    @Override
+	    public Void doInBackground(Void... unused)
+	    {
+	    	addPoisThread();
+	    	return(null);
+	    }
+	    
+	    @Override
+	    public void onPostExecute(Void unused)
+	    {
+	    }
 	}
 }

@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 
 import net.skimap.activities.SkimapApplication;
 import net.skimap.parser.JsonParser;
+import net.skimap.utililty.Settings;
 import android.os.Handler;
 import android.os.Message;
 
@@ -14,6 +15,8 @@ public class Synchronization
 	private final String URL_COUNTRIES = "http://ski-map.net/skimapnet/php/common.php?fce=countries_list"; // http://data.jestrab.net/skimap/countries_list.txt
 	private final String URL_SKICENTRES_SHORT = "http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&extended=1"; // http://data.jestrab.net/skimap/skicentres_list.txt
 	private final String URL_SKICENTRE_LONG = "http://ski-map.net/skimapnet/php/common.php?fce=skicentre_detail&lang=cs&id="; // http://data.jestrab.net/skimap/skicentre_detail.txt
+	
+	public static final int SYNCHRO_DELAY = 12 * 3600000; // 12 hodin
 	
 	public static final int STATUS_OFFLINE = -1;
 	public static final int STATUS_UNKNOWN = -2;
@@ -51,6 +54,21 @@ public class Synchronization
             	}
             }
 	    };
+	}
+	
+	
+	public void trySynchronizeShortDataAuto()
+	{
+		// porovnani casove prodlevy
+		Settings settings = new Settings(mApplication.getApplicationContext());
+		long lastSynchroTime = settings.getLastSynchro();
+		long currentTime = System.currentTimeMillis();
+		long diff = Math.abs(currentTime-lastSynchroTime);
+		if(diff>SYNCHRO_DELAY)
+		{
+			settings.setLastSynchro(currentTime);
+			trySynchronizeShortData();
+		}
 	}
 	
 	

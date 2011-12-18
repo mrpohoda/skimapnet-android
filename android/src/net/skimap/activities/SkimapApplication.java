@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 public class SkimapApplication extends Application
 {
 	private boolean mSynchronizing = false;
-	private OnSynchroListener mSynchroListener;
+	// TODO: 3 listenery, navic pro favourites
+	private OnSynchroListener mSynchroListener1;
+//	private OnSynchroListener mSynchroListener2;
 	
 	
 	public boolean isSynchronizing() { return mSynchronizing; }
@@ -19,7 +21,8 @@ public class SkimapApplication extends Application
 	{
 		try
         {
-			mSynchroListener = (OnSynchroListener) fragment;
+			mSynchroListener1 = (OnSynchroListener) fragment;
+//			mSynchroListener2 = null;
         } 
         catch (ClassCastException e)
         {
@@ -28,15 +31,43 @@ public class SkimapApplication extends Application
 	}
 	
 	
+//	public void setSynchroListener1(Fragment fragment1)
+//	{
+//		try
+//        {
+//			mSynchroListener1 = (OnSynchroListener) fragment1;
+//        } 
+//        catch (ClassCastException e)
+//        {
+//            throw new ClassCastException(fragment1.toString() + " must implement OnSynchroListener.");
+//        }
+//	}
+//	
+//	
+//	public void setSynchroListener2(Fragment fragment2)
+//	{
+//		try
+//        {
+//			mSynchroListener1 = (OnSynchroListener) fragment2;
+//        } 
+//        catch (ClassCastException e)
+//        {
+//            throw new ClassCastException(fragment2.toString() + " must implement OnSynchroListener.");
+//        }
+//	}
+	
+	
 	public void startSynchro() 
 	{
-		mSynchroListener.onSynchroStart();
+		if(mSynchroListener1!=null) mSynchroListener1.onSynchroStart();
+//		if(mSynchroListener2!=null) mSynchroListener2.onSynchroStart();
 	}
 	
 	
 	public void stopSynchro(int result)
 	{
-		mSynchroListener.onSynchroStop(result);
+		if(mSynchroListener1!=null) mSynchroListener1.onSynchroStop(result);
+//		if(mSynchroListener2!=null) mSynchroListener2.onSynchroStop(result);
 	}
 	
 	

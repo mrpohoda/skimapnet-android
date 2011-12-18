@@ -7,6 +7,31 @@
 	
     <include layout="@layout/widget_ab_divider" />
     
+    <!--
+	<android.support.v4.view.ViewPager
+	    android:id="@+id/layout_listing_pager"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent" />
+	-->
+	
+	<fragment
+		android:id="@+id/fragment_listing"
+		android:name="net.skimap.fragments.ListingFragment"
+		android:layout_weight="1"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
+	
+</LinearLayout>
+
+<!-- TODO: layout pro tablety
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/layout_background">
+	
+    <include layout="@layout/widget_ab_divider" />
+    
     <LinearLayout
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
@@ -28,3 +53,4 @@
 	</LinearLayout>
 
 </LinearLayout>
+-->

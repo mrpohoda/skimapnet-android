@@ -113,8 +113,12 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
         ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
         
         // aktualizace stavu progress baru
-    	boolean synchro = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchronizing();
-    	getSupportActivity().setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
+    	boolean synchronizing = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchronizing();
+    	getSupportActivity().setProgressBarIndeterminateVisibility(synchronizing ? Boolean.TRUE : Boolean.FALSE);
+    	
+    	// pokus o automatickou synchronizaci
+		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
+        synchro.trySynchronizeShortDataAuto();
     }
 	
 
@@ -215,6 +219,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		
 		// aktualizace listview
+		refreshData();
 		refreshDataAfterSynchro();
 		
 		// toast pro offline rezim nebo error
@@ -277,7 +282,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		}
 		
 		// nacteni dat do pole
-		mSkicentreList = db.getAllSkicentres();
+		mSkicentreList = db.getAllSkicentres(Database.Sort.NAME);
 		db.close();
 	}
 	

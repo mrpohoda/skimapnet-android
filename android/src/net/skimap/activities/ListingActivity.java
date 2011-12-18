@@ -1,23 +1,21 @@
 package net.skimap.activities;
 
 import net.skimap.R;
-import net.skimap.adapters.TabsAdapter;
 import net.skimap.fragments.DetailFragment;
 import net.skimap.fragments.ListingFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
 import android.support.v4.view.Window;
 import android.view.View;
 
 public class ListingActivity extends FragmentActivity implements ListingFragment.OnItemSelectedListener
 {
-	private final String SAVED_TAB_INDEX = "tab_index";
+//	private final String SAVED_TAB_INDEX = "tab_index";
 	
-	private ViewPager  mViewPager;
-	private TabsAdapter mTabsAdapter;
+//	private ViewPager  mViewPager;
+//	private TabsAdapter mTabsAdapter;
 
 	
     @Override
@@ -30,11 +28,12 @@ public class ListingActivity extends FragmentActivity implements ListingFragment
         setContentView(R.layout.activity_listing);
         setActionBar();
         
-        // nacteni pozice zalozky
-        if (savedInstanceState != null) 
-        {
-        	getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt(SAVED_TAB_INDEX));
-        }
+        // TODO
+//        // nacteni pozice zalozky
+//        if (savedInstanceState != null) 
+//        {
+//        	getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt(SAVED_TAB_INDEX));
+//        }
         
         // TODO: synchronizace dat jednou za den, explicit. refresh jen pokud neprobiha synchronizace
 //        Synchronization synchro = new Synchronization((SkimapApplication) getApplicationContext());
@@ -61,18 +60,18 @@ public class ListingActivity extends FragmentActivity implements ListingFragment
     	}
     	
     	// tabs
-    	bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-    	mViewPager = (ViewPager) findViewById(R.id.layout_listing_pager);
-        mTabsAdapter = new TabsAdapter(this, bar, mViewPager);
-    	
-    	ActionBar.Tab tab1 = bar.newTab().setText(R.string.ab_tab_all);
     	// TODO
-        //ActionBar.Tab tab2 = bar.newTab().setText(R.string.ab_tab_favourites);
-        ActionBar.Tab tab3 = bar.newTab().setText(R.string.ab_tab_recommended);
-               
-        mTabsAdapter.addTab(tab1, ListingFragment.class);
-        //mTabsAdapter.addTab(tab2, ListingFragment.class);
-        mTabsAdapter.addTab(tab3, ListingFragment.class);
+//    	bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+//    	mViewPager = (ViewPager) findViewById(R.id.layout_listing_pager);
+//        mTabsAdapter = new TabsAdapter(this, bar, mViewPager);
+//    	
+//    	ActionBar.Tab tab1 = bar.newTab().setText(R.string.ab_tab_all);
+//        ActionBar.Tab tab2 = bar.newTab().setText(R.string.ab_tab_favourites);
+//        ActionBar.Tab tab3 = bar.newTab().setText(R.string.ab_tab_recommended);
+//               
+//        mTabsAdapter.addTab(tab1, ListingFragmentAll.class);
+//        mTabsAdapter.addTab(tab2, ListingFragment.class);
+//        mTabsAdapter.addTab(tab3, ListingFragmentRecommended.class);
 
         // inicializace progress baru
     	boolean synchro = ((SkimapApplication) getApplicationContext()).isSynchronizing();
@@ -85,7 +84,8 @@ public class ListingActivity extends FragmentActivity implements ListingFragment
     {
     	// ulozeni pozice zalozky
         super.onSaveInstanceState(outState);
-        outState.putInt(SAVED_TAB_INDEX, getSupportActionBar().getSelectedNavigationIndex());
+        // TODO
+//        outState.putInt(SAVED_TAB_INDEX, getSupportActionBar().getSelectedNavigationIndex());
     }
 
 

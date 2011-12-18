@@ -23,6 +23,8 @@ public class Database
 	private DatabaseHelper mHelper;
 	private SQLiteDatabase mDatabase;
 	
+	public static enum Sort { NAME, SNOW_MAX }
+	
 	
 	// TODO: synchronizace vlaken pri praci s databazi, kvuli kolizi
 	// TODO: http://www.touchlab.co/blog/android-sqlite-locking/
@@ -173,9 +175,13 @@ public class Database
 	}
 	
 	
-	public ArrayList<SkicentreShort> getAllSkicentres()
+	public ArrayList<SkicentreShort> getAllSkicentres(Sort sort)
 	{
-		Cursor cursor = mDatabase.query(DatabaseHelper.TAB_SKICENTRE, DatabaseHelper.COLS_SKICENTRE_SHORT, null, null, null, null, DatabaseHelper.TAB_SKICENTRE_API_NAME + " COLLATE LOCALIZED ASC", null);
+		String sortExpression = null;
+		if(sort==Sort.NAME) sortExpression = DatabaseHelper.TAB_SKICENTRE_API_NAME + " COLLATE LOCALIZED ASC";
+		else if(sort==Sort.SNOW_MAX) sortExpression = DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX + " COLLATE LOCALIZED DESC";
+		
+		Cursor cursor = mDatabase.query(DatabaseHelper.TAB_SKICENTRE, DatabaseHelper.COLS_SKICENTRE_SHORT, null, null, null, null, sortExpression, null);
 		ArrayList<SkicentreShort> list = new ArrayList<SkicentreShort>();
 		
 		while (cursor.moveToNext()) 
