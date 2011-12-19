@@ -27,14 +27,24 @@ public class PopupItemizedOverlay extends BalloonItemizedOverlay<OverlayItem>
 	}
 
 	
-	public void addOverlay(OverlayItem overlay, int id)
+//	public synchronized void addOverlay(OverlayItem overlay, int id)
+//	{
+//		mOverlays.add(overlay);
+//		mIds.add(id);
+//		populate(); // popularizuje pokazde po pridani noveho POI - pravdepodobne nevhodne
+//	}
+	
+	
+	public synchronized void updateOverlays(ArrayList<OverlayItem> overlays, ArrayList<Integer> ids)
 	{
-		mOverlays.add(overlay);
-		mIds.add(id);
-	    populate();
+		mOverlays.clear();
+		mIds.clear();
+		mOverlays.addAll(overlays);
+		mIds.addAll(ids);
+	    populate(); // popularizuje jednou po pridani vsech POI
 	}
 
-	
+
 	@Override
 	protected OverlayItem createItem(int i)
 	{

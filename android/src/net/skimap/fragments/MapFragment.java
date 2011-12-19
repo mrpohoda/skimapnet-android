@@ -8,6 +8,7 @@ import java.util.List;
 
 import net.skimap.R;
 import net.skimap.activities.ListingActivity;
+import net.skimap.activities.SettingsActivity;
 import net.skimap.activities.SkimapApplication;
 import net.skimap.adapters.ListingAdapter;
 import net.skimap.data.Area;
@@ -172,7 +173,8 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 				return true;
 				
 	    	case R.id.ab_button_preferences:
-	    		Toast.makeText(getActivity(), "PREFERENCES", Toast.LENGTH_SHORT).show();
+	    		intent.setClass(getActivity(), SettingsActivity.class);
+		        startActivity(intent);
 				return true;
 				
 	    	case R.id.ab_button_location_current:
@@ -377,8 +379,18 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		Drawable drawableOff = getResources().getDrawable(R.drawable.ic_map_skicentre_disabled);
 		
 		// vlastni overlay vrstvy
-		PopupItemizedOverlay itemizedOverlayOn = new PopupItemizedOverlay(drawableOn, mMapView);
-		PopupItemizedOverlay itemizedOverlayOff = new PopupItemizedOverlay(drawableOff, mMapView);
+		PopupItemizedOverlay itemizedOverlayOn;
+		PopupItemizedOverlay itemizedOverlayOff;
+		try
+		{
+			itemizedOverlayOn = new PopupItemizedOverlay(drawableOn, mMapView);
+			itemizedOverlayOff = new PopupItemizedOverlay(drawableOff, mMapView);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return;
+		}
 		
 		// nacteni skicenter a statu z databaze
 		Database database = new Database(getActivity());
@@ -390,6 +402,10 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		
 		// pridani POI do vrstvy
 		Iterator<SkicentreShort> iterator = skicentres.iterator();
+		ArrayList<OverlayItem> overlaysOn = new ArrayList<OverlayItem>();
+		ArrayList<OverlayItem> overlaysOff = new ArrayList<OverlayItem>();
+		ArrayList<Integer> idsOn = new ArrayList<Integer>();
+		ArrayList<Integer> idsOff = new ArrayList<Integer>();
 		while(iterator.hasNext())
 		{
 			if(!this.isAdded()) break;
@@ -419,15 +435,34 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 			// POI
 			GeoPoint point = new GeoPoint((int)(skicentre.getLocationLatitude()*1E6),(int)(skicentre.getLocationLongitude()*1E6));
 			OverlayItem overlayItem = new OverlayItem(point, skicentre.getName(), secondLine);
-			if(skicentre.isFlagOpened()) itemizedOverlayOn.addOverlay(overlayItem, skicentre.getId());
-			else itemizedOverlayOff.addOverlay(overlayItem, skicentre.getId());
+			if(skicentre.isFlagOpened())
+			{
+				overlaysOn.add(overlayItem);
+				idsOn.add(skicentre.getId());
+			}
+			else 
+			{
+				overlaysOff.add(overlayItem);
+				idsOff.add(skicentre.getId());
+			}
+			//if(skicentre.isFlagOpened()) itemizedOverlayOn.addOverlay(overlayItem, skicentre.getId());
+			//else itemizedOverlayOff.addOverlay(overlayItem, skicentre.getId());
 		}
 		
 		// seznam overlay vrstev
-		List<Overlay> mapOverlays = mMapView.getOverlays();
-		mapOverlays.add(itemizedOverlayOff);
-		mapOverlays.add(itemizedOverlayOn);
-		mMapView.postInvalidate();
+		try
+		{
+			List<Overlay> mapOverlays = mMapView.getOverlays();
+			itemizedOverlayOn.updateOverlays(overlaysOff, idsOff);
+			itemizedOverlayOn.updateOverlays(overlaysOn, idsOn);
+			mapOverlays.add(itemizedOverlayOff);
+			mapOverlays.add(itemizedOverlayOn);
+			mMapView.postInvalidate();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -500,8 +535,16 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
             	if(placemarks!=null)
             	{
             		// smazani predchozich cest
-            		removePaths();
+            		try
+            		{
+            			removePaths();
+            		}
+            		catch(Exception e)
+            		{
+            			e.printStackTrace();
+            		}
         			
+            		// vykresleni cesty
 	            	Iterator<Placemark> iterator = placemarks.iterator();
 	        		while(iterator.hasNext())
 	        		{
@@ -524,6 +567,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
                 //String url = "http://ski-map.net/skimapnet/php/common.php?fce=lines_list&nelat=50.76669766709482&nelng=15.796450982910073&swlat=50.68193459347409&swlng=15.422229181152261";
         		StringBuilder builder = new StringBuilder();
         		builder.append("http://ski-map.net/skimapnet/php/common.php?fce=lines_list");
+        		builder.append("&downhill[]=black&downhill[]=red&downhill[]=blue&downhill[]=kabinky&downhill[]=lanovky&downhill[]=vleky&downhill[]=vlaky&downhill[]=metro");
         		builder.append("&nelat=");
         		builder.append(((double) mPathsDataBounds[0]/1000000));
         		builder.append("&nelng=");
@@ -573,7 +617,10 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	}
 	
 
+	//http://stackoverflow.com/questions/2553410/nullpointerexception-in-itemizedoverlay-getindextodraw
 	//http://stackoverflow.com/questions/2870743/android-2-1-googlemaps-itemizedoverlay-concurrentmodificationexception
+	//http://stackoverflow.com/questions/4374100/android-maps-array-index-out-of-bound-exception
+	//https://github.com/commonsguy/cw-advandroid/blob/master/Maps/NooYawkAsync/src/com/commonsware/android/mapasync/NooYawk.java
 	class OverlayTask extends AsyncTask<Void, Void, Void>
 	{
 	    @Override

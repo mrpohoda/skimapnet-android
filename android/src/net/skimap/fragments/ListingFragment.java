@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import net.skimap.R;
 import net.skimap.activities.MapActivity;
+import net.skimap.activities.SettingsActivity;
 import net.skimap.activities.SkimapApplication;
 import net.skimap.adapters.ListingAdapter;
 import net.skimap.data.Area;
@@ -157,6 +158,8 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	public boolean onOptionsItemSelected(MenuItem item) 
     {
     	// nastaveni chovani tlacitek
+		Intent intent = new Intent();
+		
     	switch (item.getItemId()) 
     	{
     		// TODO: pridat razeni a groupovani
@@ -165,7 +168,6 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 //				return true;
 				
 	    	case R.id.ab_button_map:
-	    		Intent intent = new Intent();
 		        intent.setClass(getActivity(), MapActivity.class);
 		        if(mDualView) intent.putExtra(MapFragment.ITEM_ID, mItemIdShown);
 		        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -178,7 +180,8 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 				return true;
 				
 	    	case R.id.ab_button_preferences:
-	    		Toast.makeText(getActivity(), "PREFERENCES", Toast.LENGTH_SHORT).show();
+	    		intent.setClass(getActivity(), SettingsActivity.class);
+		        startActivity(intent);
 				return true;
 				
 			// TODO

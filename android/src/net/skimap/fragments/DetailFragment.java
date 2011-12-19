@@ -2,6 +2,7 @@ package net.skimap.fragments;
 
 import net.skimap.R;
 import net.skimap.activities.MapActivity;
+import net.skimap.activities.SettingsActivity;
 import net.skimap.activities.SkimapApplication;
 import net.skimap.data.SkicentreLong;
 import net.skimap.data.Weather;
@@ -127,7 +128,9 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 //				return true;
 				
 	    	case R.id.ab_button_preferences:
-	    		Toast.makeText(getActivity(), "PREFERENCES", Toast.LENGTH_SHORT).show();
+	    		Intent intent = new Intent();
+	    		intent.setClass(getActivity(), SettingsActivity.class);
+		        startActivity(intent);
 				return true;
 				
 	    	case R.id.ab_button_map:	

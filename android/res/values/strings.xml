@@ -6,6 +6,9 @@
     <string name="map_api_key_release">0ED6_e2Y9kSF-CBNSeZQCjS5p2JssXa_u7zdLLQ</string>
     <string name="settings_key_last_synchro">net_skimap_last_synchro</string>
     <string name="settings_key_current_version">net_skimap_current_version</string>
+    <string name="settings_key_clear_cache">net_skimap_clear_cache</string>
+    <string name="settings_key_help">net_skimap_help</string>
+    <string name="settings_key_feedback">net_skimap_feedback</string>
     
     <!-- LANGUAGE DEPENDENT -->
     <string name="ab_button_list">List</string>
@@ -24,7 +27,7 @@
     <string name="ab_button_sort_alphabet">Alphabet</string>
     <string name="ab_button_sort_country">Country</string>
     <string name="ab_button_sort_distance">Distance</string>
-    <string name="ab_button_sort_snow">Snow minimum</string>
+    <string name="ab_button_sort_snow">Snow quantity</string>
     <string name="ab_button_share">Share</string>
     <string name="ab_button_favourite">Favourite</string>
     
@@ -32,17 +35,25 @@
     <string name="ab_tab_favourites">Favourites</string>
     <string name="ab_tab_recommended">Recommended</string>
     
+    <string name="settings_category">Settings</string>
+    <string name="settings_clear_cache">Clear cache</string>
+    <string name="settings_clear_cache_summary">Remove temporary data from database</string>
+    <string name="settings_clear_cache_toast">Temporary data has been cleared</string>
+    <string name="settings_help">Info and help</string>
+    <string name="settings_feedback">User feedback</string>
+    <string name="settings_feedback_summary">Send message to developer</string>
+    <string name="settings_feedback_subject">Ski-map user feedback</string>
+    <string name="settings_feedback_email">android@ski-map.net</string>
+    
     <string name="layout_map_infobox">Zoom in for show ski tracks...</string>
     
     <string name="layout_listing_item_snow">cm of snow</string>
     
     <string name="layout_detail_offline">You are in offline mode. Data may not be updated.</string>
-    
     <string name="layout_detail_share">Share skicentre</string>
     <string name="layout_detail_share_skicentre">Skicentre</string>
     <string name="layout_detail_share_url">Ski-map.net</string>
     <string name="layout_detail_share_url_full">http://ski-map.net</string>
-    
     <string name="layout_detail_skiing_title">Skiing info</string>
     <string name="layout_detail_weather_title">Weather info</string>
     <string name="layout_detail_prices_title">Prices</string>
@@ -68,6 +79,36 @@
     <string name="layout_detail_price_young_6"><![CDATA[<b>Young 6 days:</b>]]></string>
     <string name="layout_detail_price_seniors_1"><![CDATA[<b>Seniors 1 day:</b>]]></string>
     <string name="layout_detail_price_seniors_6"><![CDATA[<b>Seniors 6 days:</b>]]></string>
+    
+    <string name="layout_help_about_title">Ski Map</string>
+    <string name="layout_help_about_text_pre"><![CDATA[Ski Map version]]></string>
+    <string name="layout_help_about_text"><![CDATA[
+       	<br>
+       	&copy; 2011 <a href="http://liska-webdesign.cz/">Liška webdesign</a><br>
+       	Developed by Petr Nohejl, <a href="http://jestrab.net/">www.jestrab.net</a><br>
+       	All rights reserved.<br><br>
+       	Do you like Ski Map app? Make developers happy and <a href="market://details?id=net.skimap">rate the application in Market</a>. You can also try web version of the application on <a href="http://ski-map.net/">www.ski-map.net</a>.<br><br>
+       	If you have some troubles or ideas how to improve the application, contact developer on <a href="mailto:android@ski-map.net">android@ski-map.net</a>.
+    ]]></string>
+    <string name="layout_help_info_title">About app</string>
+    <string name="layout_help_info_text"><![CDATA[
+       	Ski Map is unique resource of informations for skiers and snowboarders. It brings you useful ski guide directly to your Android device. Ski Map application supports:<br><br>
+		● slopes and lifts on the real map<br>
+		● all significant Europe ski resorts<br>
+		● snow reports, weather reports, webcams<br>
+		● skipas prices<br>
+		● offline mode<br><br>
+		Comming soon:<br><br>
+		● searching ski resorts<br>
+		● sorting<br>
+		● route navigation<br>
+		● cross-country trails<br>
+		● favourite ski resorts
+    ]]></string>
+    <string name="layout_help_changes_title">Changelog</string>
+    <string name="layout_help_changes_text"><![CDATA[
+       	Not available in English.
+    ]]></string>
     
     <string name="toast_help_opened">Skicentre opened</string>
     <string name="toast_help_closed">Skicentre closed</string>
