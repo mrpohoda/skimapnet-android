@@ -34,6 +34,11 @@
     <string name="settings_feedback_summary">Zašlete vzkaz vývojáři</string>
     <string name="settings_feedback_subject">Ski-map zpětná vazba</string>
     <string name="settings_feedback_email">android@ski-map.net</string>
+    <string name="settings_feedback_app_version">Verze aplikace:</string>
+    <string name="settings_feedback_os_version">Verze OS: Android</string>
+    <string name="settings_feedback_api">API</string>
+    <string name="settings_feedback_device">Zařízení:</string>
+    <string name="settings_feedback_message">Vzkaz pro vývojáře:</string>
     
     <string name="layout_map_infobox">Pro zobrazení sjezdovek nutno přiblížit...</string>
     
@@ -88,7 +93,7 @@
 		● oblíbená střediska<br>
 		● ubytování v okolí včetně hodnocení<br>
 		● navigace přímo na místo ubytování<br>
-		● podpora běžeckých tras<br>
+		● podpora běžeckých tratí<br>
 		● rozšiřujeme i možnost wellness relaxace a rádi přivítáme vaše tipy na osvědčené lázně, termály, kluziště apod.<br>
 		● Après-ski bary<br><br>
 		Vyzkoušejte Ski Map a prohlédněte si svůj vítězný svah. Na webu <b>Ski-map.net</b> dokonce ve 3D.
@@ -99,6 +104,20 @@
        	● nové: přehled středisek<br>
        	● nové: mapa sjezdovek a vleků<br>
        	● nové: offline režim
+    ]]></string>
+    
+    <string name="dialog_intro_title">Vítejte</string>
+    <string name="dialog_intro_ok">Ok</string>
+    <string name="dialog_intro_rate">Ohodnotit</string>
+    <string name="dialog_intro_text"><![CDATA[
+		Vítejte v aplikaci Ski Map. Berte prosím na vědomí, že aplikace je nová a některé funkce zatím nebyly implementovány.<br><br>
+		Brzy se můžete těšit na:<br>
+		● vyhledávání středisek<br>
+		● řazení středisek<br>
+		● navigace<br>
+		● podpora běžeckých tratí<br>
+		● oblíbená střediska<br><br>
+		Přejeme pěknou lyžovačku!
     ]]></string>
     
     <string name="toast_help_opened">Skicentrum otevřeno</string>
@@ -118,7 +137,7 @@
     <string name="toast_help_url_webcams">Webkamery</string>
     
     <string name="toast_synchro_offline">Jste v offline režimu. Zkontrolujte prosím internetové připojení.</string>
-    <string name="toast_synchro_error">Neznámá chyba. Nelze synchronizovat data. Kontaktujte prosím vývojáře.</string>
+    <string name="toast_synchro_error">Chyba! Nelze synchronizovat některá data. Prosím aktualizujte aplikaci nebo kontaktujte vývojáře.</string>
     
     <string name="day_sun">Ne</string>
     <string name="day_mon">Po</string>

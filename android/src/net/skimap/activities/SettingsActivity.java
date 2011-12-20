@@ -3,6 +3,7 @@ package net.skimap.activities;
 import net.skimap.R;
 import net.skimap.database.Database;
 import net.skimap.utililty.Settings;
+import net.skimap.utililty.Version;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
@@ -120,11 +121,30 @@ public class SettingsActivity extends PreferenceActivity
 	    {			    	
 			public boolean onPreferenceClick(Preference preference) 
 			{
+				// informace o aplikaci a telefonu
+				StringBuilder info = new StringBuilder();
+				info.append(getString(R.string.settings_feedback_app_version) + " ");
+				info.append(getString(R.string.app_name) + " ");
+				info.append(Version.getApplicationVersion(SettingsActivity.this, MapActivity.class));
+				info.append("\n");
+				info.append(getString(R.string.settings_feedback_os_version) + " ");
+				info.append(android.os.Build.VERSION.RELEASE);
+				info.append(" " + getString(R.string.settings_feedback_api) + " ");
+				info.append(android.os.Build.VERSION.SDK_INT);
+				info.append("\n");
+				info.append(getString(R.string.settings_feedback_device) + " ");
+				info.append(android.os.Build.MANUFACTURER);
+				info.append(" ");
+				info.append(android.os.Build.MODEL);
+				info.append("\n");
+				info.append(getString(R.string.settings_feedback_message) + " ");
+				info.append("\n");
+
 				Intent intent = new Intent(android.content.Intent.ACTION_SEND);
 				intent.setType("plain/text");
 				intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{getString(R.string.settings_feedback_email)});
 				intent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.settings_feedback_subject));
-				//intent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.settings_feedback));
+				intent.putExtra(android.content.Intent.EXTRA_TEXT, info.toString());
 				startActivity(Intent.createChooser(intent, getString(R.string.settings_feedback)));
 				return false;
 			}

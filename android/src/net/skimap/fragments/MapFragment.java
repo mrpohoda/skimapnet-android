@@ -22,6 +22,7 @@ import net.skimap.map.CustomMapView;
 import net.skimap.map.PathUtility;
 import net.skimap.map.PopupItemizedOverlay;
 import net.skimap.network.Synchronization;
+import net.skimap.utililty.Version;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -68,6 +69,9 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
         // nastaveni extras
         Bundle extras = getSupportActivity().getIntent().getExtras();
         setExtras(extras, savedInstanceState);
+        
+		// pokus zobrazeni intro dialogu
+		Version.tryShowIntoDialog(getActivity());
     }
 	
 	
@@ -293,12 +297,23 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	    		// nacteni skicentra z databaze
 	    		Database database = new Database(getActivity());
 	    		database.open(false);
-	    		SkicentreLong skicentre = database.getSkicentre(mItemId);
+	    		SkicentreLong skicentre = null;
+	    		try
+	    		{
+	    			skicentre = database.getSkicentre(mItemId);
+	    		}
+	    		catch(Exception e)
+	    		{
+	    			e.printStackTrace();
+	    		}
 	    		database.close();
 	    		
 	    		// zamereni skicentra v mape
-	    		GeoPoint point = new GeoPoint( (int)(skicentre.getLocationLatitude()*1E6), (int)(skicentre.getLocationLongitude()*1E6) );
-	    		controller.setCenter(point);
+	    		if(skicentre!=null)
+	    		{
+		    		GeoPoint point = new GeoPoint( (int)(skicentre.getLocationLatitude()*1E6), (int)(skicentre.getLocationLongitude()*1E6) );
+		    		controller.setCenter(point);
+	    		}
 	    		break;
     	}
 		
@@ -453,7 +468,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		try
 		{
 			List<Overlay> mapOverlays = mMapView.getOverlays();
-			itemizedOverlayOn.updateOverlays(overlaysOff, idsOff);
+			itemizedOverlayOff.updateOverlays(overlaysOff, idsOff);
 			itemizedOverlayOn.updateOverlays(overlaysOn, idsOn);
 			mapOverlays.add(itemizedOverlayOff);
 			mapOverlays.add(itemizedOverlayOn);

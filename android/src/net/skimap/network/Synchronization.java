@@ -11,10 +11,10 @@ import android.os.Message;
 
 public class Synchronization 
 {
-	private final String URL_AREAS = "http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list_areas"; // http://data.jestrab.net/skimap/skicentres_list_areas.txt
-	private final String URL_COUNTRIES = "http://ski-map.net/skimapnet/php/common.php?fce=countries_list"; // http://data.jestrab.net/skimap/countries_list.txt
-	private final String URL_SKICENTRES_SHORT = "http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&extended=1"; // http://data.jestrab.net/skimap/skicentres_list.txt
-	private final String URL_SKICENTRE_LONG = "http://ski-map.net/skimapnet/php/common.php?fce=skicentre_detail&lang=cs&id="; // http://data.jestrab.net/skimap/skicentre_detail.txt
+	private final String URL_AREAS = "http://ski-map.net/skimapnet/php/common.php?fce=areas_list";
+	private final String URL_COUNTRIES = "http://ski-map.net/skimapnet/php/common.php?fce=countries_list";
+	private final String URL_SKICENTRES_SHORT = "http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&extended=1";
+	private final String URL_SKICENTRE_LONG = "http://ski-map.net/skimapnet/php/common.php?fce=skicentre_detail&lang=cs&id=";
 	
 	public static final int SYNCHRO_DELAY = 12 * 3600000; // 12 hodin
 	

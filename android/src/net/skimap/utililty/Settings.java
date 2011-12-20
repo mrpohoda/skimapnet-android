@@ -13,7 +13,7 @@ public class Settings
 	
 	//public static final int NULL_INT = -1;
 	public static final long NULL_LONG = -1;
-	public static final String NULL_STRING = null;
+	public static final String NULL_STRING = "";
 	//public static final double NULL_DOUBLE = -1;
 	//public static final boolean NULL_BOOLEAN = false;
 	

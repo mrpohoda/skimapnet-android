@@ -3,9 +3,7 @@ package net.skimap.fragments;
 import net.skimap.R;
 import net.skimap.activities.MapActivity;
 import net.skimap.activities.SkimapApplication;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.pm.PackageInfo;
+import net.skimap.utililty.Version;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -74,28 +72,12 @@ public class HelpFragment extends Fragment implements SkimapApplication.OnSynchr
 		TextView info = (TextView) mRootView.findViewById(R.id.layout_help_info_text);
 		TextView changes = (TextView) mRootView.findViewById(R.id.layout_help_changes_text);
 		
-		String version = getVersionName(getActivity(), MapActivity.class);
+		String version = Version.getApplicationVersion(getActivity(), MapActivity.class);
 		String versionString = getString(R.string.layout_help_about_text_pre) + " " + version + getString(R.string.layout_help_about_text);
 		about.setText(Html.fromHtml(versionString));
 		about.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		info.setText(Html.fromHtml(getString(R.string.layout_help_info_text)));
 		changes.setText(Html.fromHtml(getString(R.string.layout_help_changes_text)));
-	}
-	
-	
-	@SuppressWarnings("rawtypes")
-	public static String getVersionName(Context context, Class cls) 
-	{
-		  try 
-		  {
-			    ComponentName comp = new ComponentName(context, cls);
-			    PackageInfo pinfo = context.getPackageManager().getPackageInfo(comp.getPackageName(), 0);
-			    return pinfo.versionName;
-		  } 
-		  catch (android.content.pm.PackageManager.NameNotFoundException e) 
-		  {
-			  	return "";
-		  }
 	}
 }

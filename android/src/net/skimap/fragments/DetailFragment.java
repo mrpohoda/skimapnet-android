@@ -111,6 +111,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
     	switch (item.getItemId()) 
     	{
 	    	case R.id.ab_button_share:
+	    		if(mSkicentre==null) return true;
 	    		String url = mSkicentre.getUrlSkimap()!=null ? mSkicentre.getUrlSkimap() : getString(R.string.layout_detail_share_url_full);
 	    		String subject = mSkicentre.getName() + " - " + getString(R.string.layout_detail_share_url);
 	    		String text = getString(R.string.layout_detail_share_skicentre) + " " + mSkicentre.getName() + ": " + url;
@@ -249,6 +250,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		// TODO: pridat toasty s napovedou na flagy
 		// TODO: osetrovat null hodnoty - DatabaseHelper.NULL_STRING apod., pripadne schovat dany widget
 		// TODO: roztridit kousky kodu do dilcich funkci, pro kazde jednotlive view
+		if(mSkicentre==null) return;
 		mPerexMore = false;
 		
 		// reference na textove pole
