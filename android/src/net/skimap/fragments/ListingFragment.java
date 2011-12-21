@@ -2,6 +2,7 @@ package net.skimap.fragments;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import net.skimap.R;
 import net.skimap.activities.MapActivity;
@@ -13,6 +14,7 @@ import net.skimap.data.Country;
 import net.skimap.data.SkicentreShort;
 import net.skimap.database.Database;
 import net.skimap.network.Synchronization;
+import net.skimap.utililty.Localytics;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +31,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.localytics.android.LocalyticsSession;
 
 public class ListingFragment extends Fragment implements SkimapApplication.OnSynchroListener
 {
@@ -49,6 +53,8 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
     private HashMap<Integer, Country> mCountryList; // TODO: redundance v ramci fragmentu, slo by presunout do aktivity
     private OnItemSelectedListener mClickListener;
     private boolean mLoadingFromDatabase;
+    
+    private LocalyticsSession mLocalyticsSession;
 
     
     @Override
@@ -70,6 +76,14 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        
+        // Localytics
+	    this.mLocalyticsSession = new LocalyticsSession(getActivity().getApplicationContext(), Localytics.KEY);
+	    this.mLocalyticsSession.open(); // otevre session
+	    this.mLocalyticsSession.upload(); // upload dat
+	    // At this point, Localytics Initialization is done.  After uploads complete nothing
+	    // more will happen due to Localytics until the next time you call it.
+	    
         mLoadingFromDatabase = true;
         refreshData();
     }
@@ -109,6 +123,9 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
     public void onResume()
 	{
         super.onResume();
+        
+        // Localytics
+        this.mLocalyticsSession.open(); // otevre session pokud neni jiz otevrena
 
         // naslouchani synchronizace
         ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
@@ -119,8 +136,22 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
     	
     	// pokus o automatickou synchronizaci
 		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
-        synchro.trySynchronizeShortDataAuto();
+        synchro.trySynchronizeShortDataAuto(mLocalyticsSession, Localytics.VALUE_SYNCHRO_FROM_LIST);
+
+        Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+        localyticsValues.put(Localytics.ATTR_ACTIVITY_FRAGMENT, Localytics.VALUE_ACTIVITY_FRAGMENT_LIST); // Localytics atribut
+		mLocalyticsSession.tagEvent(Localytics.TAG_ACTIVITY, localyticsValues); // Localytics
     }
+	
+	
+	@Override
+	public void onPause()
+	{
+		// Localytics
+	    this.mLocalyticsSession.close();
+	    this.mLocalyticsSession.upload();
+	    super.onPause();
+	}
 	
 
 	@Override
@@ -160,6 +191,8 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
     	// nastaveni chovani tlacitek
 		Intent intent = new Intent();
 		
+		Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		
     	switch (item.getItemId()) 
     	{
     		// TODO: pridat razeni a groupovani
@@ -172,16 +205,22 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		        if(mDualView) intent.putExtra(MapFragment.ITEM_ID, mItemIdShown);
 		        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		        startActivity(intent);
+		        localyticsValues.put(Localytics.ATTR_BUTTON_MAP, Localytics.VALUE_BUTTON_FROM_LIST); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
 	    	case R.id.ab_button_refresh:
 	    		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
 	            synchro.trySynchronizeShortData();
+	            localyticsValues.put(Localytics.ATTR_BUTTON_REFRESH, Localytics.VALUE_BUTTON_FROM_LIST); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
 	    	case R.id.ab_button_preferences:
 	    		intent.setClass(getActivity(), SettingsActivity.class);
 		        startActivity(intent);
+		        localyticsValues.put(Localytics.ATTR_BUTTON_PREFERENCES, Localytics.VALUE_BUTTON_FROM_LIST); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
 			// TODO
@@ -224,10 +263,27 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		// aktualizace listview
 		refreshData();
 		refreshDataAfterSynchro();
+
+		Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
 		
 		// toast pro offline rezim nebo error
-		if(result==Synchronization.STATUS_OFFLINE) Toast.makeText(getActivity(), R.string.toast_synchro_offline, Toast.LENGTH_LONG).show();
-		else if(result==Synchronization.STATUS_UNKNOWN) Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
+		if(result==Synchronization.STATUS_OFFLINE) 
+		{
+			Toast.makeText(getActivity(), R.string.toast_synchro_offline, Toast.LENGTH_LONG).show();
+			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_OFFLINE); // Localytics atribut
+		}
+		else if(result==Synchronization.STATUS_UNKNOWN) 
+		{
+			// TODO: zakomentovano kvuli chybe sychronizace areas pri cerstve instalaci
+			//Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
+			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_ERROR); // Localytics atribut
+		}
+		else
+		{
+			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_ONLINE); // Localytics atribut
+		}
+		
+		mLocalyticsSession.tagEvent(Localytics.TAG_SYNCHRO, localyticsValues); // Localytics
 	}
 	
 	

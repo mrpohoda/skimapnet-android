@@ -2,9 +2,14 @@ package net.skimap.network;
 
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.localytics.android.LocalyticsSession;
 
 import net.skimap.activities.SkimapApplication;
 import net.skimap.parser.JsonParser;
+import net.skimap.utililty.Localytics;
 import net.skimap.utililty.Settings;
 import android.os.Handler;
 import android.os.Message;
@@ -57,7 +62,7 @@ public class Synchronization
 	}
 	
 	
-	public void trySynchronizeShortDataAuto()
+	public void trySynchronizeShortDataAuto(LocalyticsSession localyticsSession, String localyticsValueFrom)
 	{
 		// porovnani casove prodlevy
 		Settings settings = new Settings(mApplication.getApplicationContext());
@@ -68,6 +73,10 @@ public class Synchronization
 		{
 			settings.setLastSynchro(currentTime);
 			trySynchronizeShortData();
+			
+			Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+	        localyticsValues.put(Localytics.ATTR_SYNCHRO_AUTO, localyticsValueFrom); // Localytics atribut
+			localyticsSession.tagEvent(Localytics.TAG_SYNCHRO, localyticsValues); // Localytics
 		}
 	}
 	
@@ -148,9 +157,9 @@ public class Synchronization
 		
 		// parsovani JSON dat a ukladani do databaze		
 		JsonParser parser = new JsonParser(mApplication.getApplicationContext());
-		parser.open();
 		try
 		{
+			parser.open();
 			count = parser.storeSkicentreLong(url);
 		}
 		catch (UnknownHostException e)
@@ -183,9 +192,9 @@ public class Synchronization
 		
 		// parsovani JSON dat a ukladani do databaze		
 		JsonParser parser = new JsonParser(mApplication.getApplicationContext());
-		parser.open();
 		try
 		{
+			parser.open();
 			count = parser.storeSkicentresShort(url);
 		}
 		catch (UnknownHostException e)
@@ -218,9 +227,9 @@ public class Synchronization
 		
 		// parsovani JSON dat a ukladani do databaze		
 		JsonParser parser = new JsonParser(mApplication.getApplicationContext());
-		parser.open();
 		try
 		{
+			parser.open();
 			count = parser.storeAreas(url);
 		}
 		catch (UnknownHostException e)
@@ -253,9 +262,9 @@ public class Synchronization
 		
 		// parsovani JSON dat a ukladani do databaze		
 		JsonParser parser = new JsonParser(mApplication.getApplicationContext());
-		parser.open();
 		try
 		{
+			parser.open();
 			count = parser.storeCountries(url);
 		}
 		catch (UnknownHostException e)

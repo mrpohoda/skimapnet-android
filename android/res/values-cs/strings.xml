@@ -100,10 +100,14 @@
     ]]></string>
     <string name="layout_help_changes_title">Změny</string>
     <string name="layout_help_changes_text"><![CDATA[
-       	<b>0.9</b> <i>(20.12.2011)</i><br>
-       	● nové: přehled středisek<br>
+       	<b>0.9</b> <i>(21.12.2011)</i><br>
        	● nové: mapa sjezdovek a vleků<br>
-       	● nové: offline režim
+       	● nové: abecední přehled středisek<br>
+       	● nové: detail střediska, sněhové zpravodajství, počasí, ceny skipasů, webkamery, odkazy<br>
+       	● nové: sdílení středisek<br>
+       	● nové: offline režim<br>
+       	● nové: info a nápověda<br>
+       	● nové: zpětná vazba
     ]]></string>
     
     <string name="dialog_intro_title">Vítejte</string>

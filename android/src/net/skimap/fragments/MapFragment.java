@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.skimap.R;
 import net.skimap.activities.ListingActivity;
@@ -22,6 +23,7 @@ import net.skimap.map.CustomMapView;
 import net.skimap.map.PathUtility;
 import net.skimap.map.PopupItemizedOverlay;
 import net.skimap.network.Synchronization;
+import net.skimap.utililty.Localytics;
 import net.skimap.utililty.Version;
 import android.content.Context;
 import android.content.Intent;
@@ -47,6 +49,7 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
+import com.localytics.android.LocalyticsSession;
 
 public class MapFragment extends Fragment implements SkimapApplication.OnSynchroListener, CustomMapView.OnPanAndZoomListener
 {
@@ -60,18 +63,27 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	private int mItemId;
 	private int[] mPathsDataBounds; // souradnice hranicnich bodu datasetu v E6 formatu, poradi jako hodiny - top, right, bottom, left
 	
+	private LocalyticsSession mLocalyticsSession;
+	
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         
+        // Localytics
+	    this.mLocalyticsSession = new LocalyticsSession(getActivity().getApplicationContext(), Localytics.KEY);
+	    this.mLocalyticsSession.open(); // otevre session
+	    this.mLocalyticsSession.upload(); // upload dat
+	    // At this point, Localytics Initialization is done.  After uploads complete nothing
+	    // more will happen due to Localytics until the next time you call it.
+        
         // nastaveni extras
         Bundle extras = getSupportActivity().getIntent().getExtras();
         setExtras(extras, savedInstanceState);
         
 		// pokus zobrazeni intro dialogu
-		Version.tryShowIntoDialog(getActivity());
+		Version.tryShowIntoDialog(getActivity(), mLocalyticsSession);
     }
 	
 	
@@ -106,6 +118,9 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
     public void onResume()
 	{
         super.onResume();
+        
+        // Localytics
+        this.mLocalyticsSession.open(); // otevre session pokud neni jiz otevrena
 
         // naslouchani synchronizace
         ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
@@ -121,8 +136,22 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		
 		// pokus o automatickou synchronizaci
 		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
-        synchro.trySynchronizeShortDataAuto();
+        synchro.trySynchronizeShortDataAuto(mLocalyticsSession, Localytics.VALUE_SYNCHRO_FROM_MAP);
+
+        Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+        localyticsValues.put(Localytics.ATTR_ACTIVITY_FRAGMENT, Localytics.VALUE_ACTIVITY_FRAGMENT_MAP); // Localytics atribut
+		mLocalyticsSession.tagEvent(Localytics.TAG_ACTIVITY, localyticsValues); // Localytics
     }
+	
+	
+	@Override
+	public void onPause()
+	{
+		// Localytics
+	    this.mLocalyticsSession.close();
+	    this.mLocalyticsSession.upload();
+	    super.onPause();
+	}
 	
 	
 	@Override
@@ -155,12 +184,16 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
     	// nastaveni chovani tlacitek
     	Intent intent = new Intent();
     	
+    	Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+    	
     	switch (item.getItemId()) 
     	{
 	    	case R.id.ab_button_list:				
 		        intent.setClass(getActivity(), ListingActivity.class);
 		        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		        startActivity(intent);
+		        localyticsValues.put(Localytics.ATTR_BUTTON_LIST, Localytics.VALUE_BUTTON_FROM_MAP); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
 			// TODO
@@ -174,19 +207,27 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	            // TODO: aktualizovat skicentre data a overlays
 	            tryRedrawPaths();
 	            mMapView.invalidate();
+	            localyticsValues.put(Localytics.ATTR_BUTTON_REFRESH, Localytics.VALUE_BUTTON_FROM_MAP); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
 	    	case R.id.ab_button_preferences:
 	    		intent.setClass(getActivity(), SettingsActivity.class);
 		        startActivity(intent);
+		        localyticsValues.put(Localytics.ATTR_BUTTON_PREFERENCES, Localytics.VALUE_BUTTON_FROM_MAP); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
 	    	case R.id.ab_button_location_current:
 	    		setMapLocation(MapLocationMode.DEVICE_POSITION);
+	    		localyticsValues.put(Localytics.ATTR_BUTTON_LOCATION, Localytics.VALUE_BUTTON_LOCATION_CURRENT); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
 	    	case R.id.ab_button_location_last:
 	    		setMapLocation(MapLocationMode.LAST_SKICENTRE);
+	    		localyticsValues.put(Localytics.ATTR_BUTTON_LOCATION, Localytics.VALUE_BUTTON_LOCATION_LAST); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
 			// TODO
@@ -196,10 +237,14 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 				
 	    	case R.id.ab_button_layers_normal:
 	    		mMapView.setSatellite(false);
+	    		localyticsValues.put(Localytics.ATTR_BUTTON_LAYER, Localytics.VALUE_BUTTON_LAYER_NORMAL); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
 	    	case R.id.ab_button_layers_satellite:
 	    		mMapView.setSatellite(true);
+	    		localyticsValues.put(Localytics.ATTR_BUTTON_LAYER, Localytics.VALUE_BUTTON_LAYER_SATELLITE); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
     		default:
@@ -228,9 +273,26 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		tryRedrawPaths();
 		refreshViewsAfterSynchro();
 		
+		Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		
 		// toast pro offline rezim nebo error
-		if(result==Synchronization.STATUS_OFFLINE) Toast.makeText(getActivity(), R.string.toast_synchro_offline, Toast.LENGTH_LONG).show();
-		else if(result==Synchronization.STATUS_UNKNOWN) Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
+		if(result==Synchronization.STATUS_OFFLINE) 
+		{
+			Toast.makeText(getActivity(), R.string.toast_synchro_offline, Toast.LENGTH_LONG).show();
+			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_OFFLINE); // Localytics atribut
+		}
+		else if(result==Synchronization.STATUS_UNKNOWN) 
+		{
+			// TODO: zakomentovano kvuli chybe sychronizace areas pri cerstve instalaci
+			//Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
+			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_ERROR); // Localytics atribut
+		}
+		else
+		{
+			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_ONLINE); // Localytics atribut
+		}
+		
+		mLocalyticsSession.tagEvent(Localytics.TAG_SYNCHRO, localyticsValues); // Localytics
 	}
 	
 	
@@ -257,6 +319,10 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		{
 			infoBox.setVisibility(View.VISIBLE);
 		}
+		
+		Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+        localyticsValues.put(Localytics.ATTR_MAP_ZOOM, Integer.toString(mMapView.getZoomLevel())); // Localytics atribut
+		mLocalyticsSession.tagEvent(Localytics.TAG_MAP, localyticsValues); // Localytics
 	}
 	
 

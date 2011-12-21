@@ -1,24 +1,40 @@
 package net.skimap.activities;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.skimap.R;
 import net.skimap.database.Database;
+import net.skimap.utililty.Localytics;
 import net.skimap.utililty.Settings;
 import net.skimap.utililty.Version;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.preference.PreferenceActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.localytics.android.LocalyticsSession;
+
 public class SettingsActivity extends PreferenceActivity
 {
+	private LocalyticsSession mLocalyticsSession;
+	
+	
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        
+        // Localytics
+	    this.mLocalyticsSession = new LocalyticsSession(getApplicationContext(), Localytics.KEY);
+	    this.mLocalyticsSession.open(); // otevre session
+	    this.mLocalyticsSession.upload(); // upload dat
+	    // At this point, Localytics Initialization is done.  After uploads complete nothing
+	    // more will happen due to Localytics until the next time you call it.
 
         // nastaveni layoutu
 	    addPreferencesFromResource(R.layout.layout_settings);
@@ -38,6 +54,30 @@ public class SettingsActivity extends PreferenceActivity
 	    // nastaveni tlacitek
 	    setPreferences();
     }
+    
+    
+    @Override
+    public void onResume()
+	{
+        super.onResume();
+        
+        // Localytics
+        this.mLocalyticsSession.open(); // otevre session pokud neni jiz otevrena
+        
+        Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+        localyticsValues.put(Localytics.ATTR_ACTIVITY_FRAGMENT, Localytics.VALUE_ACTIVITY_FRAGMENT_PREFERENCES); // Localytics atribut
+		mLocalyticsSession.tagEvent(Localytics.TAG_ACTIVITY, localyticsValues); // Localytics
+    }
+	
+	
+	@Override
+	public void onPause()
+	{
+		// Localytics
+	    this.mLocalyticsSession.close();
+	    this.mLocalyticsSession.upload();
+	    super.onPause();
+	}
     
     
     private void setActionBar()
@@ -83,6 +123,10 @@ public class SettingsActivity extends PreferenceActivity
 				Intent intent = new Intent();
 				intent.setClass(SettingsActivity.this, HelpActivity.class);
 		        startActivity(intent);
+		        
+		        Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		        localyticsValues.put(Localytics.ATTR_PREFERENCE_HELP, Localytics.VALUE_PREFERENCE_FROM_PREFERENCES); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_PREFERENCE, localyticsValues); // Localytics
 				return false;
 			}
 	    });
@@ -109,6 +153,10 @@ public class SettingsActivity extends PreferenceActivity
 				
 				// toast
 				Toast.makeText(SettingsActivity.this, R.string.settings_clear_cache_toast, Toast.LENGTH_SHORT).show();
+				
+				Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		        localyticsValues.put(Localytics.ATTR_PREFERENCE_CACHE, Localytics.VALUE_PREFERENCE_FROM_PREFERENCES); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_PREFERENCE, localyticsValues); // Localytics
 				return false;
 			}
 	    });
@@ -146,6 +194,10 @@ public class SettingsActivity extends PreferenceActivity
 				intent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.settings_feedback_subject));
 				intent.putExtra(android.content.Intent.EXTRA_TEXT, info.toString());
 				startActivity(Intent.createChooser(intent, getString(R.string.settings_feedback)));
+				
+				Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		        localyticsValues.put(Localytics.ATTR_PREFERENCE_FEEDBACK, Localytics.VALUE_PREFERENCE_FROM_PREFERENCES); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_PREFERENCE, localyticsValues); // Localytics
 				return false;
 			}
 	    });

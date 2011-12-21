@@ -1,5 +1,8 @@
 package net.skimap.fragments;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.skimap.R;
 import net.skimap.activities.MapActivity;
 import net.skimap.activities.SettingsActivity;
@@ -9,6 +12,8 @@ import net.skimap.data.Weather;
 import net.skimap.database.Database;
 import net.skimap.database.DatabaseHelper;
 import net.skimap.network.Synchronization;
+import net.skimap.utililty.Localytics;
+import net.skimap.utililty.Version;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +34,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.localytics.android.LocalyticsSession;
+
 public class DetailFragment extends Fragment implements SkimapApplication.OnSynchroListener
 {
 	public static final String ITEM_ID = "item_id";
@@ -44,11 +51,20 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	private boolean mOffline = false;
 	private SkicentreLong mSkicentre;
 	
+	private LocalyticsSession mLocalyticsSession;
+	
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        
+        // Localytics
+	    this.mLocalyticsSession = new LocalyticsSession(getActivity().getApplicationContext(), Localytics.KEY);
+	    this.mLocalyticsSession.open(); // otevre session
+	    this.mLocalyticsSession.upload(); // upload dat
+	    // At this point, Localytics Initialization is done.  After uploads complete nothing
+	    // more will happen due to Localytics until the next time you call it.
         
         // nastaveni extras
         Bundle extras = getSupportActivity().getIntent().getExtras();
@@ -76,6 +92,9 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
     public void onResume()
 	{
         super.onResume();
+        
+        // Localytics
+        this.mLocalyticsSession.open(); // otevre session pokud neni jiz otevrena
 
         // naslouchani synchronizace
         ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
@@ -83,7 +102,21 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
         // aktualizace stavu progress baru
     	boolean synchro = ((SkimapApplication) getSupportActivity().getApplicationContext()).isSynchronizing();
     	getSupportActivity().setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
+
+        Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+        localyticsValues.put(Localytics.ATTR_ACTIVITY_FRAGMENT, Localytics.VALUE_ACTIVITY_FRAGMENT_DETAIL); // Localytics atribut
+		mLocalyticsSession.tagEvent(Localytics.TAG_ACTIVITY, localyticsValues); // Localytics
     }
+	
+	
+	@Override
+	public void onPause()
+	{
+		// Localytics
+	    this.mLocalyticsSession.close();
+	    this.mLocalyticsSession.upload();
+	    super.onPause();
+	}
 	
 	
 	@Override
@@ -107,6 +140,8 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) 
     {
+		Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		
     	// nastaveni chovani tlacitek
     	switch (item.getItemId()) 
     	{
@@ -121,6 +156,9 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	    		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
 	    		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);	
 	    		startActivity(Intent.createChooser(shareIntent, getString(R.string.layout_detail_share)));
+	    		
+	    		localyticsValues.put(Localytics.ATTR_BUTTON_SHARE, Localytics.VALUE_BUTTON_FROM_DETAIL); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
 			// TODO
@@ -132,6 +170,8 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	    		Intent intent = new Intent();
 	    		intent.setClass(getActivity(), SettingsActivity.class);
 		        startActivity(intent);
+		        localyticsValues.put(Localytics.ATTR_BUTTON_PREFERENCES, Localytics.VALUE_BUTTON_FROM_DETAIL); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
 	    	case R.id.ab_button_map:	
@@ -139,6 +179,8 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	    		mapIntent.setClass(getActivity(), MapActivity.class);
 	    		mapIntent.putExtra(MapFragment.ITEM_ID, mItemId);
 		        startActivity(mapIntent);
+		        localyticsValues.put(Localytics.ATTR_BUTTON_MAP, Localytics.VALUE_BUTTON_FROM_DETAIL); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
     		default:
@@ -164,10 +206,27 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		// aktualizace view
 		refreshData(mItemId);
 		
+		Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		
 		// toast pro offline rezim nebo error
-		if(result==Synchronization.STATUS_OFFLINE) mOffline = true;
-		else mOffline = false;
-		if(result==Synchronization.STATUS_UNKNOWN) Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
+		if(result==Synchronization.STATUS_OFFLINE)
+		{
+			mOffline = true;
+			localyticsValues.put(Localytics.ATTR_SYNCHRO_LONG_STATUS, Localytics.VALUE_SYNCHRO_STATUS_OFFLINE); // Localytics atribut
+		}
+		else if(result==Synchronization.STATUS_UNKNOWN)
+		{
+			Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
+			mOffline = false;
+			localyticsValues.put(Localytics.ATTR_SYNCHRO_LONG_STATUS, Localytics.VALUE_SYNCHRO_STATUS_ERROR); // Localytics atribut
+		}
+		else
+		{
+			mOffline = false;
+			localyticsValues.put(Localytics.ATTR_SYNCHRO_LONG_STATUS, Localytics.VALUE_SYNCHRO_STATUS_ONLINE); // Localytics atribut
+		}
+
+		mLocalyticsSession.tagEvent(Localytics.TAG_SYNCHRO, localyticsValues); // Localytics
 	}
 	
 	
@@ -367,7 +426,13 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		
 		// zpracovani perex
 		final String skicentrePerexLong = mSkicentre.getInfoPerex();
-		if(skicentrePerexLong==DatabaseHelper.NULL_STRING || skicentrePerexLong.trim().contentEquals("")) textSkicentrePerex.setVisibility(View.GONE);
+		if(skicentrePerexLong==DatabaseHelper.NULL_STRING || 
+				skicentrePerexLong.trim().contentEquals("") ||
+				!(Version.getLanguage().contentEquals(Version.LANGUAGE_CS) || Version.getLanguage().contentEquals(Version.LANGUAGE_SK))
+		)
+		{
+			textSkicentrePerex.setVisibility(View.GONE);
+		}
 		else
 		{
 			int lastSpace = skicentrePerexLong.lastIndexOf(" ", PEREX_SHORT_LENGTH);
@@ -738,6 +803,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			@Override
 			public void onClick(View v)
 			{
+				Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		        localyticsValues.put(Localytics.ATTR_LINK_IMAGE, Localytics.VALUE_LINK_IMAGE_MAP); // Localytics atribut
+				mLocalyticsSession.tagEvent(Localytics.TAG_LINK, localyticsValues); // Localytics
+				
 				Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(mSkicentre.getUrlImgMap()));
 				startActivity(viewIntent);
 			}
@@ -747,6 +816,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			@Override
 			public void onClick(View v)
 			{
+				Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		        localyticsValues.put(Localytics.ATTR_LINK_IMAGE, Localytics.VALUE_LINK_IMAGE_METEOGRAM); // Localytics atribut
+				mLocalyticsSession.tagEvent(Localytics.TAG_LINK, localyticsValues); // Localytics
+				
 				Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(mSkicentre.getUrlImgMeteogram()));
 				startActivity(viewIntent);
 			}
@@ -756,6 +829,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			@Override
 			public void onClick(View v)
 			{
+				Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		        localyticsValues.put(Localytics.ATTR_LINK_IMAGE, Localytics.VALUE_LINK_IMAGE_WEBCAM); // Localytics atribut
+				mLocalyticsSession.tagEvent(Localytics.TAG_LINK, localyticsValues); // Localytics
+				
 				Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(mSkicentre.getUrlImgWebcam()));
 				startActivity(viewIntent);
 			}
@@ -765,6 +842,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			@Override
 			public void onClick(View v)
 			{
+				Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		        localyticsValues.put(Localytics.ATTR_LINK_WEB, Localytics.VALUE_LINK_WEB_SKIMAP); // Localytics atribut
+				mLocalyticsSession.tagEvent(Localytics.TAG_LINK, localyticsValues); // Localytics
+				
 				Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(mSkicentre.getUrlSkimap()));
 				startActivity(viewIntent);
 			}
@@ -774,6 +855,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			@Override
 			public void onClick(View v)
 			{
+				Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		        localyticsValues.put(Localytics.ATTR_LINK_WEB, Localytics.VALUE_LINK_WEB_HOME); // Localytics atribut
+				mLocalyticsSession.tagEvent(Localytics.TAG_LINK, localyticsValues); // Localytics
+				
 				Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(mSkicentre.getUrlHomepage()));
 				startActivity(viewIntent);
 			}
@@ -783,6 +868,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			@Override
 			public void onClick(View v)
 			{
+				Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		        localyticsValues.put(Localytics.ATTR_LINK_WEB, Localytics.VALUE_LINK_WEB_SNOW); // Localytics atribut
+				mLocalyticsSession.tagEvent(Localytics.TAG_LINK, localyticsValues); // Localytics
+				
 				Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(mSkicentre.getUrlSnowReport()));
 				startActivity(viewIntent);
 			}
@@ -792,6 +881,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			@Override
 			public void onClick(View v)
 			{
+				Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		        localyticsValues.put(Localytics.ATTR_LINK_WEB, Localytics.VALUE_LINK_WEB_WEATHER); // Localytics atribut
+				mLocalyticsSession.tagEvent(Localytics.TAG_LINK, localyticsValues); // Localytics
+				
 				Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(mSkicentre.getUrlWeatherReport()));
 				startActivity(viewIntent);
 			}
@@ -801,6 +894,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			@Override
 			public void onClick(View v)
 			{
+				Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		        localyticsValues.put(Localytics.ATTR_LINK_WEB, Localytics.VALUE_LINK_WEB_WEBCAMS); // Localytics atribut
+				mLocalyticsSession.tagEvent(Localytics.TAG_LINK, localyticsValues); // Localytics
+				
 				Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(mSkicentre.getUrlWebcams()));
 				startActivity(viewIntent);
 			}

@@ -1,5 +1,9 @@
 package net.skimap.utililty;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 import net.skimap.R;
 import net.skimap.activities.MapActivity;
 import android.app.AlertDialog;
@@ -9,8 +13,14 @@ import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.text.Html;
 
+import com.localytics.android.LocalyticsSession;
+
 public class Version 
 {
+	public static String LANGUAGE_CS = "cs";
+	public static String LANGUAGE_SK = "sk";
+	
+	
 	@SuppressWarnings("rawtypes")
 	public static String getApplicationVersion(Context context, Class cls)
 	{
@@ -27,7 +37,7 @@ public class Version
 	}
 	
 	
-	public static void tryShowIntoDialog(final Context context)
+	public static void tryShowIntoDialog(final Context context, final LocalyticsSession localyticsSession)
 	{
 		Settings settings = new Settings(context);
 		String settingsVersion = settings.getCurrentVersion();
@@ -42,8 +52,16 @@ public class Version
 			alert.setMessage(Html.fromHtml(context.getString(R.string.dialog_intro_text)));
 			alert.setPositiveButton(R.string.dialog_intro_ok, new DialogInterface.OnClickListener()
 			{
+				final long startTime = System.currentTimeMillis();
+				
 				public void onClick(DialogInterface dialog, int id)
 				{
+					long stopTime = System.currentTimeMillis();
+					String value = Localytics.createValueInstallIntro(stopTime - startTime);
+					
+					Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+			        localyticsValues.put(Localytics.ATTR_INSTALL_INTRO, value); // Localytics atribut
+			        localyticsSession.tagEvent(Localytics.TAG_INSTALL, localyticsValues); // Localytics
 				}
 			});
 			// TODO: vyzva k ohodnoceni na marketu
@@ -59,5 +77,12 @@ public class Version
 			// aktualizuje settings
 			settings.setCurrentVersion(currentVersion);
 		}
+	}
+	
+	
+	public static String getLanguage()
+	{	
+		// vrati ISO 639-1 jazykovy kod, napr. cs, en, sk
+		return Locale.getDefault().getLanguage();
 	}
 }
