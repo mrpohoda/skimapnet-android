@@ -38,14 +38,22 @@ public class Database
 	{
 		mHelper = new DatabaseHelper(mContext);
 		if(writeable) mDatabase = mHelper.getWritableDatabase();
-		else mDatabase = mHelper.getReadableDatabase();
+		else mDatabase = mHelper.getReadableDatabase(); // FIXME: SQLiteException - locked db
 		return this;
 	}
 	
 
 	public void close()
 	{
+		if(mDatabase!=null) mDatabase.close();
 		if(mHelper!=null) mHelper.close();
+	}
+	
+	
+	public boolean isOpen()
+	{
+		if(mDatabase!=null) return mDatabase.isOpen();
+		else return false;
 	}
 	
 	

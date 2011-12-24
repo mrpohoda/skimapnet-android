@@ -141,6 +141,7 @@
     <string name="toast_help_url_webcams">Webkamery</string>
     
     <string name="toast_synchro_offline">Jste v offline režimu. Zkontrolujte prosím internetové připojení.</string>
+    <string name="toast_synchro_canceled">Aktualizace dat byla přerušena.</string>
     <string name="toast_synchro_error">Chyba! Nelze synchronizovat některá data. Prosím aktualizujte aplikaci nebo kontaktujte vývojáře.</string>
     
     <string name="day_sun">Ne</string>

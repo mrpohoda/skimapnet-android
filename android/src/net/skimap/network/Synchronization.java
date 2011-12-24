@@ -5,14 +5,15 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.localytics.android.LocalyticsSession;
-
 import net.skimap.activities.SkimapApplication;
+import net.skimap.database.Database;
 import net.skimap.parser.JsonParser;
 import net.skimap.utililty.Localytics;
 import net.skimap.utililty.Settings;
 import android.os.Handler;
 import android.os.Message;
+
+import com.localytics.android.LocalyticsSession;
 
 public class Synchronization 
 {
@@ -24,20 +25,23 @@ public class Synchronization
 	public static final int SYNCHRO_DELAY = 12 * 3600000; // 12 hodin
 	
 	public static final int STATUS_OFFLINE = -1;
-	public static final int STATUS_UNKNOWN = -2;
+	public static final int STATUS_CANCELED = -2;
+	public static final int STATUS_UNKNOWN = -3;
 	
 	private final int MESSAGE_SYNCHRO_SHORT = 0;
 	private final int MESSAGE_SYNCHRO_LONG = 1;
 	
 	private Handler mHandler;
+	private JsonParser mParser;
 	private SkimapApplication mApplication;
 	
 	
 	// TODO: osetrit soubeznou synchronizaci short a long
 	// TODO: vsude pri praci s databazi pouzivat transakce
-	public Synchronization(SkimapApplication application)
+	public Synchronization(SkimapApplication application, Database database)
 	{
 		mApplication = application;
+		mParser = new JsonParser(mApplication.getApplicationContext(), database);
 		
 		// odchyceni zpravy z vlakna
 		mHandler = new Handler() 
@@ -123,6 +127,7 @@ public class Synchronization
         		int countSkicentres = synchronizeSkicentresShortThread();
         		int count = countAreas + countCountries + countSkicentres;
         		if(countAreas==STATUS_OFFLINE || countCountries==STATUS_OFFLINE || countSkicentres==STATUS_OFFLINE) count = STATUS_OFFLINE;
+        		else if(countAreas==STATUS_CANCELED || countCountries==STATUS_CANCELED || countSkicentres==STATUS_CANCELED) count = STATUS_CANCELED;
         		else if(countAreas==STATUS_UNKNOWN || countCountries==STATUS_UNKNOWN || countSkicentres==STATUS_UNKNOWN) count = STATUS_UNKNOWN;
         		Message message = new Message();
         		message.what = MESSAGE_SYNCHRO_SHORT;
@@ -156,11 +161,9 @@ public class Synchronization
 		String url = URL_SKICENTRE_LONG + id;
 		
 		// parsovani JSON dat a ukladani do databaze		
-		JsonParser parser = new JsonParser(mApplication.getApplicationContext());
 		try
 		{
-			parser.open();
-			count = parser.storeSkicentreLong(url);
+			count = mParser.storeSkicentreLong(url);
 		}
 		catch (UnknownHostException e)
 		{
@@ -174,12 +177,17 @@ public class Synchronization
 			e.printStackTrace();
 			count = STATUS_OFFLINE;
 		}
+		catch (IllegalStateException e)
+		{
+			// zavrena databaze, uzivatel prerusil fragment
+			e.printStackTrace();
+			count = STATUS_CANCELED;
+		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			count = STATUS_UNKNOWN;
 		}
-		parser.close();
 		
 		return count;
 	}
@@ -191,11 +199,9 @@ public class Synchronization
 		String url = URL_SKICENTRES_SHORT;
 		
 		// parsovani JSON dat a ukladani do databaze		
-		JsonParser parser = new JsonParser(mApplication.getApplicationContext());
 		try
 		{
-			parser.open();
-			count = parser.storeSkicentresShort(url);
+			count = mParser.storeSkicentresShort(url);
 		}
 		catch (UnknownHostException e)
 		{
@@ -209,12 +215,17 @@ public class Synchronization
 			e.printStackTrace();
 			count = STATUS_OFFLINE;
 		}
+		catch (IllegalStateException e)
+		{
+			// zavrena databaze, uzivatel prerusil fragment
+			e.printStackTrace();
+			count = STATUS_CANCELED;
+		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			count = STATUS_UNKNOWN;
 		}
-		parser.close();
 		
 		return count;
 	}
@@ -226,11 +237,9 @@ public class Synchronization
 		String url = URL_AREAS;
 		
 		// parsovani JSON dat a ukladani do databaze		
-		JsonParser parser = new JsonParser(mApplication.getApplicationContext());
 		try
 		{
-			parser.open();
-			count = parser.storeAreas(url);
+			count = mParser.storeAreas(url);
 		}
 		catch (UnknownHostException e)
 		{
@@ -244,12 +253,17 @@ public class Synchronization
 			e.printStackTrace();
 			count = STATUS_OFFLINE;
 		}
+		catch (IllegalStateException e)
+		{
+			// zavrena databaze, uzivatel prerusil fragment
+			e.printStackTrace();
+			count = STATUS_CANCELED;
+		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			count = STATUS_UNKNOWN;
 		}
-		parser.close();
 		
 		return count;
 	}
@@ -261,11 +275,9 @@ public class Synchronization
 		String url = URL_COUNTRIES;
 		
 		// parsovani JSON dat a ukladani do databaze		
-		JsonParser parser = new JsonParser(mApplication.getApplicationContext());
 		try
 		{
-			parser.open();
-			count = parser.storeCountries(url);
+			count = mParser.storeCountries(url);
 		}
 		catch (UnknownHostException e)
 		{
@@ -279,12 +291,17 @@ public class Synchronization
 			e.printStackTrace();
 			count = STATUS_OFFLINE;
 		}
+		catch (IllegalStateException e)
+		{
+			// zavrena databaze, uzivatel prerusil fragment
+			e.printStackTrace();
+			count = STATUS_CANCELED;
+		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			count = STATUS_UNKNOWN;
 		}
-		parser.close();
 		
 		return count;
 	}

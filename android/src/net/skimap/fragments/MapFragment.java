@@ -62,7 +62,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	private CustomMapView mMapView;
 	private int mItemId;
 	private int[] mPathsDataBounds; // souradnice hranicnich bodu datasetu v E6 formatu, poradi jako hodiny - top, right, bottom, left
-	
+	private Database mDatabase;
 	private LocalyticsSession mLocalyticsSession;
 	
 	
@@ -77,6 +77,10 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	    this.mLocalyticsSession.upload(); // upload dat
 	    // At this point, Localytics Initialization is done.  After uploads complete nothing
 	    // more will happen due to Localytics until the next time you call it.
+	    
+	    // otevreni databaze
+	    mDatabase = new Database(getActivity());
+    	mDatabase.open(true);
         
         // nastaveni extras
         Bundle extras = getSupportActivity().getIntent().getExtras();
@@ -121,6 +125,9 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
         
         // Localytics
         this.mLocalyticsSession.open(); // otevre session pokud neni jiz otevrena
+        
+        // otevreni databaze
+        if(!mDatabase.isOpen()) mDatabase.open(true);
 
         // naslouchani synchronizace
         ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
@@ -135,7 +142,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		tryRedrawPaths();
 		
 		// pokus o automatickou synchronizaci
-		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
+		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext(), mDatabase);
         synchro.trySynchronizeShortDataAuto(mLocalyticsSession, Localytics.VALUE_SYNCHRO_FROM_MAP);
 
         Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
@@ -150,6 +157,10 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		// Localytics
 	    this.mLocalyticsSession.close();
 	    this.mLocalyticsSession.upload();
+	    
+	    // zavreni database
+	    mDatabase.close();
+	    
 	    super.onPause();
 	}
 	
@@ -202,7 +213,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 //				return true;
 				
 	    	case R.id.ab_button_refresh:
-	    		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
+	    		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext(), mDatabase);
 	            synchro.trySynchronizeShortData();
 	            // TODO: aktualizovat skicentre data a overlays
 	            tryRedrawPaths();
@@ -281,10 +292,15 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 			Toast.makeText(getActivity(), R.string.toast_synchro_offline, Toast.LENGTH_LONG).show();
 			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_OFFLINE); // Localytics atribut
 		}
+		else if(result==Synchronization.STATUS_CANCELED) 
+		{
+			Toast.makeText(getActivity(), R.string.toast_synchro_canceled, Toast.LENGTH_LONG).show();
+			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_CANCELED); // Localytics atribut
+		}
 		else if(result==Synchronization.STATUS_UNKNOWN) 
 		{
 			// TODO: zakomentovano kvuli chybe sychronizace areas pri cerstve instalaci
-			//Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
 			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_ERROR); // Localytics atribut
 		}
 		else
@@ -361,18 +377,19 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	    		if(mItemId==EMPTY_ID) break;
 	    	
 	    		// nacteni skicentra z databaze
-	    		Database database = new Database(getActivity());
-	    		database.open(false);
 	    		SkicentreLong skicentre = null;
 	    		try
 	    		{
-	    			skicentre = database.getSkicentre(mItemId);
+	    			if(mDatabase.isOpen()) skicentre = mDatabase.getSkicentre(mItemId);
+	    		}
+	    		catch(IllegalStateException e)
+	    		{
+	    			e.printStackTrace();
 	    		}
 	    		catch(Exception e)
 	    		{
 	    			e.printStackTrace();
 	    		}
-	    		database.close();
 	    		
 	    		// zamereni skicentra v mape
 	    		if(skicentre!=null)
@@ -456,7 +473,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	private void addPoisThread()
 	{
 		// ikona skicentra
-		Drawable drawableOn = getResources().getDrawable(R.drawable.ic_map_skicentre);
+		Drawable drawableOn = getResources().getDrawable(R.drawable.ic_map_skicentre); // FIXME: IllegalStateException
 		Drawable drawableOff = getResources().getDrawable(R.drawable.ic_map_skicentre_disabled);
 		
 		// vlastni overlay vrstvy
@@ -474,12 +491,23 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		}
 		
 		// nacteni skicenter a statu z databaze
-		Database database = new Database(getActivity());
-		database.open(false);
-		ArrayList<SkicentreShort> skicentres = database.getAllSkicentres(Database.Sort.NAME);
-		HashMap<Integer, Area> areas = database.getAllAreas();
-		HashMap<Integer, Country> countries = database.getAllCountries();
-		database.close();
+		ArrayList<SkicentreShort> skicentres = null;
+		HashMap<Integer, Area> areas = null;
+		HashMap<Integer, Country> countries = null;
+		try
+		{
+			if(mDatabase.isOpen())
+			{
+				skicentres = mDatabase.getAllSkicentres(Database.Sort.NAME);
+				areas = mDatabase.getAllAreas();
+				countries = mDatabase.getAllCountries();
+			}
+		}
+		catch(IllegalStateException e)
+		{
+			e.printStackTrace();
+			return;
+		}
 		
 		// pridani POI do vrstvy
 		Iterator<SkicentreShort> iterator = skicentres.iterator();

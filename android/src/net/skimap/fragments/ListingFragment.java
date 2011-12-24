@@ -53,7 +53,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
     private HashMap<Integer, Country> mCountryList; // TODO: redundance v ramci fragmentu, slo by presunout do aktivity
     private OnItemSelectedListener mClickListener;
     private boolean mLoadingFromDatabase;
-    
+    private Database mDatabase;
     private LocalyticsSession mLocalyticsSession;
 
     
@@ -83,6 +83,10 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	    this.mLocalyticsSession.upload(); // upload dat
 	    // At this point, Localytics Initialization is done.  After uploads complete nothing
 	    // more will happen due to Localytics until the next time you call it.
+	    
+	    // otevreni databaze
+	    mDatabase = new Database(getActivity());
+    	mDatabase.open(true);
 	    
         mLoadingFromDatabase = true;
         refreshData();
@@ -126,7 +130,10 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
         
         // Localytics
         this.mLocalyticsSession.open(); // otevre session pokud neni jiz otevrena
-
+        
+        // otevreni databaze
+        if(!mDatabase.isOpen()) mDatabase.open(true);
+        
         // naslouchani synchronizace
         ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
         
@@ -135,7 +142,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
     	getSupportActivity().setProgressBarIndeterminateVisibility(synchronizing ? Boolean.TRUE : Boolean.FALSE);
     	
     	// pokus o automatickou synchronizaci
-		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
+		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext(), mDatabase);
         synchro.trySynchronizeShortDataAuto(mLocalyticsSession, Localytics.VALUE_SYNCHRO_FROM_LIST);
 
         Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
@@ -150,6 +157,10 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		// Localytics
 	    this.mLocalyticsSession.close();
 	    this.mLocalyticsSession.upload();
+	    
+	    // zavreni database
+	    mDatabase.close();
+	    
 	    super.onPause();
 	}
 	
@@ -210,7 +221,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 				return true;
 				
 	    	case R.id.ab_button_refresh:
-	    		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
+	    		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext(), mDatabase);
 	            synchro.trySynchronizeShortData();
 	            localyticsValues.put(Localytics.ATTR_BUTTON_REFRESH, Localytics.VALUE_BUTTON_FROM_LIST); // Localytics atribut
 	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
@@ -272,10 +283,15 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 			Toast.makeText(getActivity(), R.string.toast_synchro_offline, Toast.LENGTH_LONG).show();
 			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_OFFLINE); // Localytics atribut
 		}
+		else if(result==Synchronization.STATUS_CANCELED) 
+		{
+			Toast.makeText(getActivity(), R.string.toast_synchro_canceled, Toast.LENGTH_LONG).show();
+			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_CANCELED); // Localytics atribut
+		}
 		else if(result==Synchronization.STATUS_UNKNOWN) 
 		{
 			// TODO: zakomentovano kvuli chybe sychronizace areas pri cerstve instalaci
-			//Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
 			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_ERROR); // Localytics atribut
 		}
 		else
@@ -328,11 +344,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 
 
 	private void loadAllSkicentres()
-	{
-		// otevreni databaze
-		Database db = new Database(getActivity());
-		db.open(false);
-		
+	{	
 		// promazani pole
 		if(mSkicentreList != null) 
 		{
@@ -341,17 +353,20 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		}
 		
 		// nacteni dat do pole
-		mSkicentreList = db.getAllSkicentres(Database.Sort.NAME);
-		db.close();
+		try
+		{
+			if(mDatabase.isOpen()) mSkicentreList = mDatabase.getAllSkicentres(Database.Sort.NAME);
+		}
+		catch(IllegalStateException e)
+		{
+			e.printStackTrace();
+			return;
+		}
 	}
 	
 	
 	private void loadAllAreas()
 	{
-		// otevreni databaze
-		Database db = new Database(getActivity());
-		db.open(false);
-		
 		// promazani pole
 		if(mAreaList != null) 
 		{
@@ -360,17 +375,20 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		}
 		
 		// nacteni dat do pole
-		mAreaList = db.getAllAreas();
-		db.close();
+		try
+		{
+			if(mDatabase.isOpen()) mAreaList = mDatabase.getAllAreas();
+		}
+		catch(IllegalStateException e)
+		{
+			e.printStackTrace();
+			return;
+		}
 	}
 	
 	
 	private void loadAllCountries()
 	{
-		// otevreni databaze
-		Database db = new Database(getActivity());
-		db.open(false);
-		
 		// promazani pole
 		if(mCountryList != null) 
 		{
@@ -379,8 +397,15 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		}
 		
 		// nacteni dat do pole
-		mCountryList = db.getAllCountries();
-		db.close();
+		try
+		{
+			if(mDatabase.isOpen()) mCountryList = mDatabase.getAllCountries();
+		}
+		catch(IllegalStateException e)
+		{
+			e.printStackTrace();
+			return;
+		}
 	}
 	
 	
@@ -394,7 +419,14 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		if (listView.getAdapter()==null) 
 		{
 			ListingAdapter adapter = new ListingAdapter(this, mSkicentreList, mAreaList, mCountryList);
-			listView.setAdapter(adapter);
+			try
+			{
+				listView.setAdapter(adapter);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 		} 
 		else 
 		{

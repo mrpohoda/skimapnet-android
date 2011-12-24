@@ -21,6 +21,7 @@ import com.localytics.android.LocalyticsSession;
 
 public class SettingsActivity extends PreferenceActivity
 {
+	private Database mDatabase;
 	private LocalyticsSession mLocalyticsSession;
 	
 	
@@ -35,6 +36,10 @@ public class SettingsActivity extends PreferenceActivity
 	    this.mLocalyticsSession.upload(); // upload dat
 	    // At this point, Localytics Initialization is done.  After uploads complete nothing
 	    // more will happen due to Localytics until the next time you call it.
+	    
+	    // otevreni databaze
+	    mDatabase = new Database(this);
+    	mDatabase.open(true);
 
         // nastaveni layoutu
 	    addPreferencesFromResource(R.layout.layout_settings);
@@ -67,6 +72,9 @@ public class SettingsActivity extends PreferenceActivity
         Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
         localyticsValues.put(Localytics.ATTR_ACTIVITY_FRAGMENT, Localytics.VALUE_ACTIVITY_FRAGMENT_PREFERENCES); // Localytics atribut
 		mLocalyticsSession.tagEvent(Localytics.TAG_ACTIVITY, localyticsValues); // Localytics
+		
+		// otevreni databaze
+		if(!mDatabase.isOpen()) mDatabase.open(true);
     }
 	
 	
@@ -76,6 +84,10 @@ public class SettingsActivity extends PreferenceActivity
 		// Localytics
 	    this.mLocalyticsSession.close();
 	    this.mLocalyticsSession.upload();
+	    
+	    // zavreni database
+	    mDatabase.close();
+	    
 	    super.onPause();
 	}
     
@@ -140,12 +152,16 @@ public class SettingsActivity extends PreferenceActivity
 			public boolean onPreferenceClick(Preference preference) 
 			{
 				// promazani databaze
-				Database db = new Database(SettingsActivity.this);
-				db.open(true);
-				db.deleteAllSkicentres();
-				db.deleteAllCountries();
-				db.deleteAllAreas();
-				db.close();
+				try
+				{
+					mDatabase.deleteAllSkicentres();
+					mDatabase.deleteAllCountries();
+					mDatabase.deleteAllAreas();
+				}
+				catch(IllegalStateException e)
+				{
+					e.printStackTrace();
+				}
 				
 				// vynulovani last synchro
 				Settings settings = new Settings(SettingsActivity.this);

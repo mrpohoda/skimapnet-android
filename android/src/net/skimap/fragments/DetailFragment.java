@@ -50,7 +50,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	private boolean mPerexMore;
 	private boolean mOffline = false;
 	private SkicentreLong mSkicentre;
-	
+	private Database mDatabase;
 	private LocalyticsSession mLocalyticsSession;
 	
 	
@@ -65,6 +65,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	    this.mLocalyticsSession.upload(); // upload dat
 	    // At this point, Localytics Initialization is done.  After uploads complete nothing
 	    // more will happen due to Localytics until the next time you call it.
+	    
+	    // otevreni databaze
+	    mDatabase = new Database(getActivity());
+    	mDatabase.open(true);
         
         // nastaveni extras
         Bundle extras = getSupportActivity().getIntent().getExtras();
@@ -95,6 +99,9 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
         
         // Localytics
         this.mLocalyticsSession.open(); // otevre session pokud neni jiz otevrena
+        
+        // otevreni databaze
+        if(!mDatabase.isOpen()) mDatabase.open(true);
 
         // naslouchani synchronizace
         ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
@@ -115,6 +122,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		// Localytics
 	    this.mLocalyticsSession.close();
 	    this.mLocalyticsSession.upload();
+	    
+	    // zavreni database
+	    mDatabase.close();
+	    
 	    super.onPause();
 	}
 	
@@ -214,6 +225,11 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			mOffline = true;
 			localyticsValues.put(Localytics.ATTR_SYNCHRO_LONG_STATUS, Localytics.VALUE_SYNCHRO_STATUS_OFFLINE); // Localytics atribut
 		}
+		else if(result==Synchronization.STATUS_CANCELED) 
+		{
+			Toast.makeText(getActivity(), R.string.toast_synchro_canceled, Toast.LENGTH_LONG).show();
+			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_CANCELED); // Localytics atribut
+		}
 		else if(result==Synchronization.STATUS_UNKNOWN)
 		{
 			Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
@@ -243,7 +259,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
             	setView();
             	
             	// synchronizace
-                Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext());
+                Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext(), mDatabase);
                 synchro.trySynchronizeLongData(mItemId);
             }
 	    };
@@ -290,16 +306,19 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	
 	private void refreshDataThread(int id)
 	{
-		// otevreni databaze
-		Database db = new Database(getActivity());
-		db.open(false);
-		
 		// promazani objektu
 		mSkicentre = null;
 		
 		// nacteni dat do pole
-		mSkicentre = db.getSkicentre(mItemId);
-		db.close();
+		try
+		{
+			if(mDatabase.isOpen()) mSkicentre = mDatabase.getSkicentre(mItemId);
+		}
+		catch(IllegalStateException e)
+		{
+			e.printStackTrace();
+			return;
+		}
 	}
 	
 	
@@ -908,19 +927,13 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	private String getAreaName(int id)
 	{
 		String area = DatabaseHelper.NULL_STRING;
-		Database db = new Database(getActivity());
 		try
 		{
-			db.open(false);
-			area = db.getArea(id).getName();
+			area = mDatabase.getArea(id).getName();
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-		}
-		finally
-		{
-			db.close();
 		}
 		return area;
 	}
@@ -929,19 +942,13 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	private String getCountryName(int id)
 	{
 		String country = DatabaseHelper.NULL_STRING;
-		Database db = new Database(getActivity());
 		try
 		{
-			db.open(false);
-			country = db.getCountry(id).getName();
+			country = mDatabase.getCountry(id).getName();
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-		}
-		finally
-		{
-			db.close();
 		}
 		return country;
 	}

@@ -24,21 +24,9 @@ public class JsonParser
 	private Database mDatabase;
 	
 	
-	public JsonParser(Context context)
+	public JsonParser(Context context, Database database)
 	{
-		mDatabase = new Database(context);
-	}
-	
-	
-	public void open()
-	{
-		mDatabase.open(true);
-	}
-	
-	
-	public void close()
-	{
-		mDatabase.close();
+		mDatabase = database;
 	}
 	
 	

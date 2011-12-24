@@ -3,8 +3,8 @@ package net.skimap.utililty;
 
 public class Localytics
 {
-	public static String KEY = "3ed8848e93e296614cc7e45-6c78e428-2b0a-11e1-0c8e-001b3da7bd76";
-	//public static String KEY = "debug";
+	//public static String KEY = "3ed8848e93e296614cc7e45-6c78e428-2b0a-11e1-0c8e-001b3da7bd76";
+	public static String KEY = "debug";
 	
 	public static String TAG_BUTTON = "button";
 	public static String ATTR_BUTTON_MAP = "map";
@@ -50,6 +50,7 @@ public class Localytics
 	public static String ATTR_SYNCHRO_AUTO = "automatic";
 	public static String VALUE_SYNCHRO_STATUS_ONLINE = "online";
 	public static String VALUE_SYNCHRO_STATUS_OFFLINE = "offline";
+	public static String VALUE_SYNCHRO_STATUS_CANCELED = "canceled";
 	public static String VALUE_SYNCHRO_STATUS_ERROR = "error";
 	public static String VALUE_SYNCHRO_FROM_MAP = "from map";
 	public static String VALUE_SYNCHRO_FROM_LIST = "from list";
