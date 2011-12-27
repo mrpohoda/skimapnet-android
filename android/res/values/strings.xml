@@ -61,6 +61,7 @@
     <string name="layout_detail_share_url_full">http://ski-map.net</string>
     <string name="layout_detail_skiing_title">Skiing info</string>
     <string name="layout_detail_weather_title">Weather info</string>
+    <string name="layout_detail_webcam_title">Camera</string>
     <string name="layout_detail_prices_title">Prices</string>
     <string name="layout_detail_images_title">Image links</string>
     <string name="layout_detail_links_title">Web links</string>
@@ -97,13 +98,7 @@
     ]]></string>
     <string name="layout_help_info_title">About app</string>
     <string name="layout_help_info_text"><![CDATA[
-       	Ski Map is unique resource of informations for skiers and snowboarders. It brings you useful ski guide directly to your Android device. Ski Map application supports:<br><br>
-		● slopes and lifts on the real map<br>
-		● all significant Europe ski resorts<br>
-		● snow reports, weather reports, webcams<br>
-		● skipas prices<br>
-		● offline mode<br><br>
-		Comming soon:<br><br>
+       	Ski Map brings you unique ski guide with overview of ski resorts, snow reports, weather forecast, skipass prices, web cameras and other useful functions. Check the real map of ski slopes and lifts of all significant skicentres in central Europe including Alps. Ski Map also support offline mode. We try to improve the application continuously and we prepared user feedback and wishes for further application development. Comming soon:<br><br>
 		● searching ski resorts<br>
 		● sorting<br>
 		● route navigation<br>

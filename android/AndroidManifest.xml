@@ -44,6 +44,8 @@
 	-overlay okenko pres mapu s informacemi o aktualnim stredisku, zmena informaci pri zmene polohy na mape (pouze tablet)
 	-dokumentovat kod
 	-zmapovani konkurence
+	-databaze pres ContentProvider
+	-vyzva k ohodnoceni aplikace - v onCreate, ale ne pri prvnim pusteni
 	-->
       
     <uses-sdk android:minSdkVersion="7" />

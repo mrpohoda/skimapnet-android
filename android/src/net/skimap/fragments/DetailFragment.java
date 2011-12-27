@@ -1,5 +1,6 @@
 package net.skimap.fragments;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import net.skimap.data.Weather;
 import net.skimap.database.Database;
 import net.skimap.database.DatabaseHelper;
 import net.skimap.network.Synchronization;
+import net.skimap.utililty.DrawableManager;
 import net.skimap.utililty.Localytics;
 import net.skimap.utililty.Version;
 import android.content.Intent;
@@ -381,6 +383,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		ImageView imageWeather4 = (ImageView) mRootView.findViewById(R.id.layout_detail_weather_4_symbol);
 		ImageView imageWeather5 = (ImageView) mRootView.findViewById(R.id.layout_detail_weather_5_symbol);
 		ImageView imageWeather6 = (ImageView) mRootView.findViewById(R.id.layout_detail_weather_6_symbol);
+		ImageView imageWebcam = (ImageView) mRootView.findViewById(R.id.layout_detail_webcam_image);
 		ImageView imageImagesMap = (ImageView) mRootView.findViewById(R.id.layout_detail_images_url_map);
 		ImageView imageImagesChart = (ImageView) mRootView.findViewById(R.id.layout_detail_images_url_chart);
 		ImageView imageImagesCamera = (ImageView) mRootView.findViewById(R.id.layout_detail_images_url_camera);
@@ -694,12 +697,29 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		imageImagesMap.setVisibility((mSkicentre.getUrlImgMap()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlImgMap().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
 		imageImagesChart.setVisibility((mSkicentre.getUrlImgMeteogram()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlImgMeteogram().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
 		imageImagesCamera.setVisibility((mSkicentre.getUrlImgWebcam()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlImgWebcam().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
-		imageLinksSkimap.setVisibility((mSkicentre.getUrlSkimap()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlSkimap().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
+		//imageLinksSkimap.setVisibility((mSkicentre.getUrlSkimap()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlSkimap().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
+		imageLinksSkimap.setVisibility(View.GONE); // schovani tlacitka
 		imageLinksHome.setVisibility((mSkicentre.getUrlHomepage()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlHomepage().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
 		imageLinksSnowReport.setVisibility((mSkicentre.getUrlSnowReport()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlSnowReport().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
 		imageLinksWeatherReport.setVisibility((mSkicentre.getUrlWeatherReport()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlWeatherReport().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
 		imageLinksCamera.setVisibility((mSkicentre.getUrlWebcams()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlWebcams().trim().contentEquals("")) ? View.GONE : View.VISIBLE);
 		
+		
+		// nastaveni obrazku webkamery
+		if(!(mSkicentre.getUrlImgWebcam()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlImgWebcam().trim().contentEquals("")))
+		{
+			// schovana view
+			View layoutDetailWebcam = (View) mRootView.findViewById(R.id.layout_detail_webcam);
+			View widgetDividerDetailWebcam = (View) mRootView.findViewById(R.id.widget_divider_detail_webcam);
+			ArrayList<View> viewsToVisible = new ArrayList<View>();
+			viewsToVisible.add(layoutDetailWebcam);
+			viewsToVisible.add(widgetDividerDetailWebcam);
+			
+			// nacteni obrazku z url
+			DrawableManager drawableManager = new DrawableManager();
+			drawableManager.fetchDrawableOnThread(mSkicentre.getUrlImgWebcam(), imageWebcam, viewsToVisible);
+		}
+
 		
 		// onclick napovedy
 		imageSkicentreOpened.setOnClickListener(new OnClickListener() 
@@ -843,7 +863,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 				startActivity(viewIntent);
 			}
 		});
-		imageImagesCamera.setOnClickListener(new OnClickListener() 
+		OnClickListener webcamListener = new OnClickListener() 
 		{
 			@Override
 			public void onClick(View v)
@@ -855,7 +875,9 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 				Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(mSkicentre.getUrlImgWebcam()));
 				startActivity(viewIntent);
 			}
-		});
+		};
+		imageImagesCamera.setOnClickListener(webcamListener);
+		imageWebcam.setOnClickListener(webcamListener);
 		imageLinksSkimap.setOnClickListener(new OnClickListener() 
 		{
 			@Override

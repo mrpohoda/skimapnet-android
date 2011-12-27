@@ -29,9 +29,9 @@ public class Placemark
 		try
 		{
 			// ziskani hexa-barvy z mStyle
-			int start = mStyle.length()-8;
+			int start = mStyle.length()-6;
 			int end = mStyle.length();
-			String hexa = "#" + mStyle.substring(start, end);
+			String hexa = "#" + (new StringBuffer(mStyle.substring(start, end)).reverse().toString());
 			color = Color.parseColor(hexa);
 		}
 		catch(Exception e)

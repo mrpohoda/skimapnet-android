@@ -55,7 +55,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 {
 	public static final String ITEM_ID = "item_id";
 	private final int EMPTY_ID = -1;
-	private final int ZOOM_DEFAULT = 13;
+	private final int ZOOM_DEFAULT = 14;
 	private final int ZOOM_MINIMUM_FOR_DRAW = 12;
 	private enum MapLocationMode { DEVICE_POSITION, LAST_SKICENTRE, NEAREST_SKICENTRE, SKICENTRE_POSITION };
 	
@@ -472,6 +472,9 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	
 	private void addPoisThread()
 	{
+		// kontrola platnosti kontextu
+		if(!this.isAdded()) return;
+		
 		// ikona skicentra
 		Drawable drawableOn = getResources().getDrawable(R.drawable.ic_map_skicentre); // FIXME: IllegalStateException
 		Drawable drawableOff = getResources().getDrawable(R.drawable.ic_map_skicentre_disabled);
@@ -501,6 +504,10 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 				skicentres = mDatabase.getAllSkicentres(Database.Sort.NAME);
 				areas = mDatabase.getAllAreas();
 				countries = mDatabase.getAllCountries();
+			}
+			else
+			{
+				return;
 			}
 		}
 		catch(IllegalStateException e)
