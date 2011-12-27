@@ -430,7 +430,14 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		} 
 		else 
 		{
-		    ((ListingAdapter) listView.getAdapter()).refill(mSkicentreList, mAreaList, mCountryList);
+			try
+			{
+				((ListingAdapter) listView.getAdapter()).refill(mSkicentreList, mAreaList, mCountryList);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 		
 		// nastaveni onclick

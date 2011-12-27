@@ -56,7 +56,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	public static final String ITEM_ID = "item_id";
 	private final int EMPTY_ID = -1;
 	private final int ZOOM_DEFAULT = 14;
-	private final int ZOOM_MINIMUM_FOR_DRAW = 12;
+	private final int ZOOM_MINIMUM_FOR_DRAW = 13;
 	private enum MapLocationMode { DEVICE_POSITION, LAST_SKICENTRE, NEAREST_SKICENTRE, SKICENTRE_POSITION };
 	
 	private CustomMapView mMapView;

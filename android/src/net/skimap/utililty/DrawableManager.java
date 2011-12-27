@@ -62,6 +62,11 @@ public class DrawableManager
         {
             return null;
         }
+        catch (Exception e) 
+        {
+        	e.printStackTrace();
+            return null;
+        }
     }
 
     

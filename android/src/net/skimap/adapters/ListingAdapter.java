@@ -47,7 +47,16 @@ public class ListingAdapter extends BaseAdapter
 		}
 
 		// nacteni dat z listu
-		SkicentreShort skicentre = mSkicentreList.get(position);
+		SkicentreShort skicentre;
+		try
+		{
+			skicentre = mSkicentreList.get(position);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return view;
+		}
 		String name = skicentre.getName();
 		int area = skicentre.getArea();
 		int country = skicentre.getCountry();
@@ -92,14 +101,16 @@ public class ListingAdapter extends BaseAdapter
 	@Override
 	public int getCount() 
 	{
-		return mSkicentreList.size();
+		if(mSkicentreList!=null) return mSkicentreList.size();
+		else return 0;
 	}
 
 
 	@Override
 	public Object getItem(int position) 
 	{
-		return mSkicentreList.get(position);
+		if(mSkicentreList!=null) return mSkicentreList.get(position);
+		else return null;
 	}
 
 

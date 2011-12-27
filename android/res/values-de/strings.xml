@@ -4,7 +4,7 @@
     <string name="ab_button_list">Liste</string>
     <string name="ab_button_map">Karte</string>
     <string name="ab_button_search">Suchen</string>
-    <string name="ab_button_refresh">Widerherstellen</string>
+    <string name="ab_button_refresh">Wiederherstellen</string>
     <string name="ab_button_preferences">Einstellung</string>
     <string name="ab_button_layers">Kartenebenen</string>
     <string name="ab_button_layers_normal">Normal</string>
@@ -83,7 +83,7 @@
        	&copy; 2011 <a href="http://liska-webdesign.cz/">Liška webdesign</a><br>
        	Entwickelt von Petr Nohejl, <a href="http://jestrab.net/">www.jestrab.net</a><br>
        	Alle Rechte vorbehalten.<br><br>
-       	Gefallen Sie applikation Ski Map? <a href="market://details?id=net.skimap">Bewerten Sie Applikation im Market</a>. Besuchen Sie auch web <a href="http://ski-map.net/">www.ski-map.net</a>.<br><br>
+       	Gefallen Sie Applikation Ski Map? <a href="market://details?id=net.skimap">Bewerten Sie Applikation im Market</a>. Besuchen Sie auch web <a href="http://ski-map.net/">www.ski-map.net</a>.<br><br>
        	Im Falle von Problemen Kontakt mit dem Autor: <a href="mailto:android@ski-map.net">android@ski-map.net</a>.
     ]]></string>
     <string name="layout_help_info_title">Info</string>

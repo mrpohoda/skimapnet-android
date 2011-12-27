@@ -54,6 +54,14 @@ public class Synchronization
             		// zastaveni synchronizace
         			mApplication.stopSynchro(message.arg1);
         			mApplication.setSynchronizing(false);
+        			
+        			// aktualizace data posledni synchronizace
+        			if(message.arg1>0)
+        			{
+        				Settings settings = new Settings(mApplication.getApplicationContext());
+        				long currentTime = System.currentTimeMillis();
+        				settings.setLastSynchro(currentTime);
+        			}
             	}
             	else if(message.what == MESSAGE_SYNCHRO_LONG)
             	{
@@ -75,7 +83,6 @@ public class Synchronization
 		long diff = Math.abs(currentTime-lastSynchroTime);
 		if(diff>SYNCHRO_DELAY)
 		{
-			settings.setLastSynchro(currentTime);
 			trySynchronizeShortData();
 			
 			Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty

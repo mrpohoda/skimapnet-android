@@ -42,9 +42,9 @@ public class Version
 		Settings settings = new Settings(context);
 		String settingsVersion = settings.getCurrentVersion();
 		String currentVersion = getApplicationVersion(context, MapActivity.class);
-		if(!currentVersion.contentEquals(settingsVersion))
+		if(!currentVersion.contentEquals(settingsVersion) && settingsVersion.contentEquals(Settings.NULL_STRING))
 		{
-			// intro dialog
+			// intro dialog po cerstve instalaci
 			AlertDialog.Builder alert = new AlertDialog.Builder(context);
 			alert.setCancelable(false);
 			alert.setIcon(R.drawable.icon);

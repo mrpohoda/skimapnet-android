@@ -11,8 +11,8 @@
     <string name="ab_button_layers_satellite">Satelitní</string>
     <string name="ab_button_location">Lokace</string>
     <string name="ab_button_location_current">Poloha zařízení</string>
-    <string name="ab_button_location_last">Aktuální skicentrum</string>
-    <string name="ab_button_location_nearest">Nejbližší skicentrum</string>
+    <string name="ab_button_location_last">Aktuální středisko</string>
+    <string name="ab_button_location_nearest">Nejbližší středisko</string>
     <string name="ab_button_sort">Řadit dle</string>
     <string name="ab_button_sort_alphabet">Abecedy</string>
     <string name="ab_button_sort_country">Státu</string>
@@ -45,8 +45,8 @@
     <string name="layout_listing_item_snow">cm sněhu</string>
     
     <string name="layout_detail_offline">Jste v offline režimu. Data nemusí být aktuální.</string>
-    <string name="layout_detail_share">Sdílet skicentrum</string>
-    <string name="layout_detail_share_skicentre">Skicentrum</string>
+    <string name="layout_detail_share">Sdílet středisko</string>
+    <string name="layout_detail_share_skicentre">Lyžařské středisko</string>
     <string name="layout_detail_share_url">Ski-map.net</string>
     <string name="layout_detail_share_url_full">http://ski-map.net</string>
     <string name="layout_detail_skiing_title">Lyžování</string>
@@ -101,6 +101,12 @@
     ]]></string>
     <string name="layout_help_changes_title">Změny</string>
     <string name="layout_help_changes_text"><![CDATA[
+        <b>0.9.1</b> <i>(27.12.2011)</i><br>
+       	● nové: foto z kamery v detailu střediska<br>
+       	● nové: německý překlad<br>
+       	● opravené: barvy sjezdovek<br>
+       	● opravené: přístup k databázi<br>
+       	<br>
        	<b>0.9</b> <i>(21.12.2011)</i><br>
        	● nové: mapa sjezdovek a vleků<br>
        	● nové: abecední přehled středisek<br>
@@ -108,7 +114,8 @@
        	● nové: sdílení středisek<br>
        	● nové: offline režim<br>
        	● nové: info a nápověda<br>
-       	● nové: zpětná vazba
+       	● nové: zpětná vazba<br>
+       	● nové: český a anglický překlad
     ]]></string>
     
     <string name="dialog_intro_title">Vítejte</string>
@@ -125,8 +132,8 @@
 		Přejeme pěknou lyžovačku!
     ]]></string>
     
-    <string name="toast_help_opened">Skicentrum otevřeno</string>
-    <string name="toast_help_closed">Skicentrum zavřeno</string>
+    <string name="toast_help_opened">Středisko otevřeno</string>
+    <string name="toast_help_closed">Středisko zavřeno</string>
     <string name="toast_help_nightski">Noční lyžování</string>
     <string name="toast_help_valley">Sjezd do údolí</string>
     <string name="toast_help_snowpark">Snowpark</string>
