@@ -172,7 +172,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	    
 	    super.onPause();
 	}
-	
+
 
 	@Override
     public void onSaveInstanceState(Bundle outState) 

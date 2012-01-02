@@ -22,6 +22,8 @@
 	 
 	<!--
 	TODO:
+	-v listingu pri vyhledavani pri rotaci zarizeni zmizi obsah
+	-jednotny styl vyhledavaciho dialogu
 	-filtr statu
 	-naseptavac stredisek
 	-opravit nahlasene vyjimky
