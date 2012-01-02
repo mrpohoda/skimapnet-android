@@ -9,16 +9,19 @@ import net.skimap.activities.MapActivity;
 import net.skimap.activities.SettingsActivity;
 import net.skimap.activities.SkimapApplication;
 import net.skimap.adapters.ListingAdapter;
+import net.skimap.content.CustomSuggestionProvider;
 import net.skimap.data.Area;
 import net.skimap.data.Country;
 import net.skimap.data.SkicentreShort;
 import net.skimap.database.Database;
 import net.skimap.network.Synchronization;
 import net.skimap.utililty.Localytics;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.SupportActivity;
 import android.support.v4.view.Menu;
@@ -26,10 +29,12 @@ import android.support.v4.view.MenuItem;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.localytics.android.LocalyticsSession;
@@ -88,8 +93,12 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	    mDatabase = new Database(getActivity());
     	mDatabase.open(true);
 	    
+    	// nacteni view
         mLoadingFromDatabase = true;
         refreshData();
+        
+        // vyhledavani
+     	handleSearchIntent(getSupportActivity().getIntent());
     }
 
 	
@@ -99,7 +108,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		// nastaveni view
 		setHasOptionsMenu(true);
 		mRootView = inflater.inflate(R.layout.layout_listing, container, false);
-		if(!mLoadingFromDatabase) setView();
+		if(!mLoadingFromDatabase) setView(null);
 		
 		// je k dispozici detail fragment?
         View detailFrame = getSupportActivity().findViewById(R.id.fragment_detail);
@@ -200,22 +209,22 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	public boolean onOptionsItemSelected(MenuItem item) 
     {
     	// nastaveni chovani tlacitek
-		Intent intent = new Intent();
-		
 		Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
 		
     	switch (item.getItemId()) 
     	{
-    		// TODO: pridat razeni a groupovani
-//	    	case R.id.ab_button_search:
-//	    		Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
-//				return true;
+	    	case R.id.ab_button_search:
+	    		getSupportActivity().onSearchRequested();
+	    		localyticsValues.put(Localytics.ATTR_BUTTON_SEARCH, Localytics.VALUE_BUTTON_FROM_LIST); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
+	    		return true;
 				
 	    	case R.id.ab_button_map:
-		        intent.setClass(getActivity(), MapActivity.class);
-		        if(mDualView) intent.putExtra(MapFragment.ITEM_ID, mItemIdShown);
-		        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		        startActivity(intent);
+	    		Intent mapIntent = new Intent();
+	    		mapIntent.setClass(getActivity(), MapActivity.class);
+		        if(mDualView) mapIntent.putExtra(MapFragment.ITEM_ID, mItemIdShown);
+		        mapIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		        startActivity(mapIntent);
 		        localyticsValues.put(Localytics.ATTR_BUTTON_MAP, Localytics.VALUE_BUTTON_FROM_LIST); // Localytics atribut
 	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
@@ -228,13 +237,14 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 				return true;
 				
 	    	case R.id.ab_button_preferences:
-	    		intent.setClass(getActivity(), SettingsActivity.class);
-		        startActivity(intent);
+	    		Intent preferencesIntent = new Intent();
+	    		preferencesIntent.setClass(getActivity(), SettingsActivity.class);
+		        startActivity(preferencesIntent);
 		        localyticsValues.put(Localytics.ATTR_BUTTON_PREFERENCES, Localytics.VALUE_BUTTON_FROM_LIST); // Localytics atribut
 	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
-			// TODO
+	    	// TODO: pridat razeni a groupovani
 //	    	case R.id.ab_button_sort_alphabet:
 //	    		Toast.makeText(getActivity(), "SORT ALPHABET", Toast.LENGTH_SHORT).show();
 //				return true;
@@ -290,7 +300,6 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		}
 		else if(result==Synchronization.STATUS_UNKNOWN) 
 		{
-			// TODO: zakomentovano kvuli chybe sychronizace areas pri cerstve instalaci
 			Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
 			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_ERROR); // Localytics atribut
 		}
@@ -309,7 +318,40 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	}
 	
 	
+	public void handleSearchIntent(Intent intent)
+	{
+		// otevreni databaze
+        if(!mDatabase.isOpen()) mDatabase.open(true);
+        
+		// zpracovani search query
+		if (Intent.ACTION_SEARCH.equals(intent.getAction()))
+		{
+			// ziskani query
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			
+			// ulozeni query pro naseptavac
+			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(getActivity(),
+					CustomSuggestionProvider.AUTHORITY,
+					CustomSuggestionProvider.MODE);
+	        suggestions.saveRecentQuery(query, null);
+
+	        // zobrazeni vysledku vyhledavani
+	        refreshData(query);
+			
+			Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+	        localyticsValues.put(Localytics.ATTR_SEARCH_SKICENTRE, Localytics.VALUE_SEARCH_FROM_LIST); // Localytics atribut
+			mLocalyticsSession.tagEvent(Localytics.TAG_SEARCH, localyticsValues); // Localytics
+		}
+	}
+	
+	
 	private void refreshData()
+	{
+		refreshData(null);
+	}
+	
+	
+	private void refreshData(final String keyword)
 	{
 		// odchyceni zpravy z vlakna
 		final Handler handler = new Handler()
@@ -318,7 +360,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
             public void handleMessage(Message message) 
             {
             	mLoadingFromDatabase = false;
-            	setView();
+            	setView(keyword);
             }
 	    };
 			    
@@ -327,7 +369,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
         {
         	public void run() 
 		    {
-        		refreshDataThread();
+        		refreshDataThread(keyword);
         		Message message = new Message();
         		handler.sendMessage(message);
 		    }
@@ -335,11 +377,34 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	}
 	
 	
-	private void refreshDataThread()
+	private void refreshDataThread(final String keyword)
 	{
 		loadAllAreas();
 		loadAllCountries();
-		loadAllSkicentres();
+		if(keyword==null) loadAllSkicentres();
+		else loadSkicentresByKeyword(keyword);
+	}
+	
+	
+	private void loadSkicentresByKeyword(final String keyword)
+	{	
+		// promazani pole
+		if(mSkicentreList != null) 
+		{
+			mSkicentreList.clear();
+			mSkicentreList = null;
+		}
+		
+		// nacteni dat do pole
+		try
+		{
+			if(mDatabase.isOpen()) mSkicentreList = mDatabase.getSkicentresByKeyword(keyword, Database.Sort.NAME);
+		}
+		catch(IllegalStateException e)
+		{
+			e.printStackTrace();
+			return;
+		}
 	}
 
 
@@ -409,14 +474,14 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	}
 	
 	
-	private void setView()
+	private void setView(final String keyword)
 	{
 		// seznam skicenter
 		if(mRootView==null) return;
 		ListView listView = (ListView) mRootView.findViewById(R.id.layout_listing_listview);
 
 		// naplneni skicenter
-		if (listView.getAdapter()==null) 
+		if(listView.getAdapter()==null) 
 		{
 			ListingAdapter adapter = new ListingAdapter(this, mSkicentreList, mAreaList, mCountryList);
 			try
@@ -462,6 +527,38 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 //				return true;
 //			}
 //		});
+		
+		// nastaveni vyhledavaciho infoboxu
+		TextView infobox = (TextView) mRootView.findViewById(R.id.layout_listing_infobox);
+		if(keyword==null)
+		{
+			infobox.setVisibility(View.GONE);
+		}
+		else
+		{
+			StringBuilder builder = new StringBuilder();
+			builder.append(getString(R.string.search_result));
+			builder.append(" '");
+			builder.append(keyword);
+			builder.append("': ");
+			builder.append(mSkicentreList.size());
+			builder.append(" ");
+			if(mSkicentreList.size()==1) builder.append(getString(R.string.search_result_skicentre_1));
+			else if(mSkicentreList.size()>0 && mSkicentreList.size()<5) builder.append(getString(R.string.search_result_skicentre_234));
+			else builder.append(getString(R.string.search_result_skicentre_5));
+			builder.append("\n");
+			builder.append(getString(R.string.search_result_cancel));
+			infobox.setVisibility(View.VISIBLE);
+			infobox.setText(builder.toString());
+			infobox.setOnClickListener(new OnClickListener() 
+			{
+				@Override
+				public void onClick(View v)
+				{
+					refreshData();
+				}
+			});
+		}
 		
 		// nastaveni oznaceni polozky v listu
 		if (mDualView) 

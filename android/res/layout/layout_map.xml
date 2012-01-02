@@ -8,7 +8,7 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:clickable="true"
-	    android:apiKey="@string/map_api_key_release" />
+	    android:apiKey="@string/map_api_key_debug" />
     
     <TextView
 	    android:id="@+id/layout_map_infobox"
@@ -16,11 +16,11 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:gravity="center"
-	    android:padding="@dimen/layout_map_infobox_padding"
-	    android:textSize="@dimen/layout_map_infobox_textsize"
-	    android:textColor="@color/layout_map_infobox_text"
-	    android:background="@color/layout_map_infobox_background"
-	    android:shadowColor="@color/layout_map_infobox_text_shadow"
+	    android:padding="@dimen/layout_infobox_padding"
+	    android:textSize="@dimen/layout_infobox_textsize"
+	    android:textColor="@color/layout_infobox_text"
+	    android:background="@color/layout_infobox_background_transparent"
+	    android:shadowColor="@color/layout_infobox_text_shadow"
 	    android:shadowRadius="2"
 	    android:text="@string/layout_map_infobox" />
 	

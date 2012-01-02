@@ -282,7 +282,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		TAB_COUNTRY_API_ISO_CODE + " TEXT);";
 			
 		// tabulka skicenter
-		String sqlSkicentre = "CREATE TABLE " + TAB_SKICENTRE + "(" +
+		//String sqlSkicentre = "CREATE VIRTUAL TABLE " + TAB_SKICENTRE + " USING FTS3 (" +
+		String sqlSkicentre = "CREATE TABLE " + TAB_SKICENTRE + " (" +
 		TAB_SKICENTRE_API_ID + " INTEGER PRIMARY KEY," +
 		TAB_SKICENTRE_API_NAME + " TEXT NOT NULL," +
 		TAB_SKICENTRE_API_COUNTRY_ID + " INTEGER," +

@@ -36,6 +36,8 @@ public class Weather
 	
 	public static Weather.Type stringToType(String str)
 	{
+		if(str==null) return Weather.Type.UNKNOWN;
+		
 		if(str.equalsIgnoreCase(SUN_CLEAR_SKY)) return Weather.Type.SUN_CLEAR_SKY;
 		else if(str.contentEquals(FAIR)) return Weather.Type.FAIR;
 		else if(str.contentEquals(PARTLY_CLOUDY)) return Weather.Type.PARTLY_CLOUDY;

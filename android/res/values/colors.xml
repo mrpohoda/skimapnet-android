@@ -32,7 +32,8 @@
 	<color name="layout_detail_weather_min">#77a</color> <!-- sedomodra -->
 	<color name="layout_detail_weather_max">#a77</color> <!-- sedocervena -->
 	
-	<color name="layout_map_infobox_text">#fff</color> <!-- bila -->
-	<color name="layout_map_infobox_text_shadow">#000</color> <!-- cerna -->
-	<color name="layout_map_infobox_background">#6000</color> <!-- polopruhledna cerna -->
+	<color name="layout_infobox_text">#fff</color> <!-- bila -->
+	<color name="layout_infobox_text_shadow">#000</color> <!-- cerna -->
+	<color name="layout_infobox_background">#000</color> <!-- cerna -->
+	<color name="layout_infobox_background_transparent">#6000</color> <!-- polopruhledna cerna -->
 </resources>

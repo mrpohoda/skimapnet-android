@@ -20,10 +20,21 @@
     <string name="ab_button_sort_snow">Schneemenge</string>
     <string name="ab_button_share">Veröffentlichen</string>
     <string name="ab_button_favourite">Lieblingszentrum</string>
+    <string name="ab_button_navigation">Navigation</string>
     
     <string name="ab_tab_all">Alles</string>
     <string name="ab_tab_favourites">Lieblings</string>
     <string name="ab_tab_recommended">Empfehlung</string>
+    
+    <string name="search_location">Suchort</string>
+    <string name="search_skicentre">Suchen Skizentrum</string>
+    <string name="search_result">Suchergebnis</string>
+    <string name="search_result_skicentre_1">Skizentrum</string>
+    <string name="search_result_skicentre_234">Zentren</string>
+    <string name="search_result_skicentre_5">Zentren</string>
+    <string name="search_result_cancel">Tippen Sie hier, um abzubrechen Suchergebnis.</string>
+    <string name="search_error_not_found">nicht gefunden.</string>
+    <string name="search_error_connection">Verbindungsfehler. Kontrollieren Sie, bitte, Ihre Internetverbindung.</string>
     
     <string name="settings_category">Einstellung</string>
     <string name="settings_clear_cache">Cache leeren</string>
@@ -89,9 +100,7 @@
     <string name="layout_help_info_title">Info</string>
     <string name="layout_help_info_text"><![CDATA[
        	Ski Map ist ein einzigartiges Guide für Skifahrer und Snowboarder. Ski Map bietet Überblick über die Skigebiete, Schneeberichte, Wetter, Skipasspreise, Webkameras und viele andere Funktionen. Besichtigen Sie sich reale Karte der Piste aller bekannte Skizentren im Mitteleuropa einschließlich Alpen. Es gibt auch einen Offline-Modus. In Kürze:<br><br>
-		● Forschungszentren<br>
 		● Sortierzentren<br>
-		● Navigation<br>
 		● Langlaufs<br>
 		● Beliebterzentren
     ]]></string>
@@ -106,9 +115,7 @@
     <string name="dialog_intro_text"><![CDATA[
 		Willkommen in der Ski Map. Die Applikation ist neu und deshalb waren einige Funktionen nicht implementieren.<br><br>
 		In Kürze:<br>
-		● Forschungszentren<br>
 		● Sortierzentren<br>
-		● Navigation<br>
 		● Langlaufs<br>
 		● Beliebterzentren<br><br>
 		Wir wünschen euch schönes Skilaufen!

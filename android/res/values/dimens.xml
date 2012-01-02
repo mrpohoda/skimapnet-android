@@ -7,8 +7,8 @@
     <dimen name="ab_divider_bottom">1dp</dimen>
     <dimen name="ab_tab_padding">5dp</dimen>
     
-    <dimen name="layout_map_infobox_padding">5dp</dimen>
-    <dimen name="layout_map_infobox_textsize">15sp</dimen>
+    <dimen name="layout_infobox_padding">5dp</dimen>
+    <dimen name="layout_infobox_textsize">15sp</dimen>
     
     <dimen name="layout_listing_listview_divider">0.5dp</dimen>
 

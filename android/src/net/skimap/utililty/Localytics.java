@@ -3,17 +3,19 @@ package net.skimap.utililty;
 
 public class Localytics
 {
-	public static String KEY = "3ed8848e93e296614cc7e45-6c78e428-2b0a-11e1-0c8e-001b3da7bd76";
-	//public static String KEY = "debug";
+	//public static String KEY = "3ed8848e93e296614cc7e45-6c78e428-2b0a-11e1-0c8e-001b3da7bd76";
+	public static String KEY = "debug";
 	
 	public static String TAG_BUTTON = "button";
 	public static String ATTR_BUTTON_MAP = "map";
 	public static String ATTR_BUTTON_LIST = "list";
+	public static String ATTR_BUTTON_SEARCH = "search";
 	public static String ATTR_BUTTON_REFRESH = "refresh";
 	public static String ATTR_BUTTON_PREFERENCES = "preferences";
 	public static String ATTR_BUTTON_LOCATION = "map location";
 	public static String ATTR_BUTTON_LAYER = "map layer";
 	public static String ATTR_BUTTON_SHARE = "share";
+	public static String ATTR_BUTTON_NAVIGATION = "navigation";
 	public static String VALUE_BUTTON_FROM_MAP = "from map";
 	public static String VALUE_BUTTON_FROM_LIST = "from list";
 	public static String VALUE_BUTTON_FROM_DETAIL = "from detail";
@@ -32,6 +34,12 @@ public class Localytics
 	
 	public static String TAG_MAP = "map";
 	public static String ATTR_MAP_ZOOM = "zoom";
+	
+	public static String TAG_SEARCH = "search";
+	public static String ATTR_SEARCH_LOCATION = "location";
+	public static String ATTR_SEARCH_SKICENTRE = "skicentre";
+	public static String VALUE_SEARCH_FROM_MAP = "from map";
+	public static String VALUE_SEARCH_FROM_LIST = "from list";
 	
 	public static String TAG_ACTIVITY = "activity";
 	public static String ATTR_ACTIVITY_FRAGMENT = "fragment";

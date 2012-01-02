@@ -20,10 +20,21 @@
     <string name="ab_button_sort_snow">Množství sněhu</string>
     <string name="ab_button_share">Sdílet</string>
     <string name="ab_button_favourite">Oblíbené</string>
+    <string name="ab_button_navigation">Navigace</string>
     
     <string name="ab_tab_all">Vše</string>
     <string name="ab_tab_favourites">Oblíbené</string>
     <string name="ab_tab_recommended">Doporučené</string>
+    
+    <string name="search_location">Hledat místo</string>
+    <string name="search_skicentre">Hledat středisko</string>
+    <string name="search_result">Výsledky hledání</string>
+    <string name="search_result_skicentre_1">středisko</string>
+    <string name="search_result_skicentre_234">střediska</string>
+    <string name="search_result_skicentre_5">středisek</string>
+    <string name="search_result_cancel">Pro zrušení vyhledávání klikněte sem.</string>
+    <string name="search_error_not_found">nenalezeno.</string>
+    <string name="search_error_connection">Chyba spojení. Zkontrolujte prosím internetové připojení.</string>
     
     <string name="settings_category">Nastavení</string>
     <string name="settings_clear_cache">Vyčistit cache</string>
@@ -89,11 +100,9 @@
     <string name="layout_help_info_title">O aplikaci</string>
     <string name="layout_help_info_text"><![CDATA[
        	Plánujete vyrazit na lyže či snowboard a chcete mít jasnější představu kam se vydat? Využijte jedinečnou aplikaci s přehledem lyžařských středisek, sněhovým zpravodajstvím, počasím, cen skipasů, webovými kamerami a řadou dalších funkcí. Prohlédněte si reálnou mapu sjezdovek, vleků a lanovek všech významných skicenter střední Evropy nejen v Alpách. Užitečnou funkcí je také offline režim, který oceníte na horách, pokud nemáte internetové připojení. Snažíme se aplikaci neustále vylepšovat a připravili jsme možnost hlášení připomínek či přání pro další vývoj aplikace. Už nyní se můžete těšit na:<br><br>
-		● rychlé vyhledávání středisek<br>
 		● řazení středisek dle různých kritérií<br>
 		● oblíbená střediska<br>
 		● ubytování v okolí včetně hodnocení<br>
-		● navigace přímo na místo ubytování<br>
 		● podpora běžkařských tratí<br>
 		● rozšiřujeme i možnost wellness relaxace a rádi přivítáme vaše tipy na osvědčené lázně, termály, kluziště apod.<br>
 		● Après-ski bary<br><br>
@@ -101,6 +110,12 @@
     ]]></string>
     <string name="layout_help_changes_title">Změny</string>
     <string name="layout_help_changes_text"><![CDATA[
+        <b>0.9.2</b> <i>(2.1.2012)</i><br>
+        ● nové: vyhledávání středisek a míst v mapě<br>
+       	● nové: navigace v detailu střediska<br>
+       	● změněné: ikona střediska v mapě<br>
+       	● opravené: zpracování počasí<br>
+       	<br>
         <b>0.9.1</b> <i>(27.12.2011)</i><br>
        	● nové: foto z kamery v detailu střediska<br>
        	● nové: německý překlad<br>
@@ -124,9 +139,7 @@
     <string name="dialog_intro_text"><![CDATA[
 		Vítejte v aplikaci Ski Map. Berte prosím na vědomí, že aplikace je nová a některé funkce zatím nebyly implementovány.<br><br>
 		Brzy se můžete těšit na:<br>
-		● vyhledávání středisek<br>
 		● řazení středisek<br>
-		● navigace<br>
 		● podpora běžeckých tratí<br>
 		● oblíbená střediska<br><br>
 		Přejeme pěknou lyžovačku!

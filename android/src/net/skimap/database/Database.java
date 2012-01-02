@@ -38,7 +38,7 @@ public class Database
 	{
 		mHelper = new DatabaseHelper(mContext);
 		if(writeable) mDatabase = mHelper.getWritableDatabase();
-		else mDatabase = mHelper.getReadableDatabase(); // FIXME: SQLiteException - locked db
+		else mDatabase = mHelper.getReadableDatabase();
 		return this;
 	}
 	
@@ -190,6 +190,33 @@ public class Database
 		else if(sort==Sort.SNOW_MAX) sortExpression = DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX + " COLLATE LOCALIZED DESC";
 		
 		Cursor cursor = mDatabase.query(DatabaseHelper.TAB_SKICENTRE, DatabaseHelper.COLS_SKICENTRE_SHORT, null, null, null, null, sortExpression, null);
+		ArrayList<SkicentreShort> list = new ArrayList<SkicentreShort>();
+		
+		while (cursor.moveToNext()) 
+	    {
+			SkicentreShort skicentre = cursorSkicentreShort(cursor);
+			list.add(skicentre);
+	    }
+		
+		cursor.close();
+		return list;
+	}
+	
+	
+	public ArrayList<SkicentreShort> getSkicentresByKeyword(String keyword, Sort sort)
+	{
+		String sortExpression = null;
+		if(sort==Sort.NAME) sortExpression = DatabaseHelper.TAB_SKICENTRE_API_NAME + " COLLATE LOCALIZED ASC";
+		else if(sort==Sort.SNOW_MAX) sortExpression = DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX + " COLLATE LOCALIZED DESC";
+		
+		Cursor cursor = mDatabase.query(DatabaseHelper.TAB_SKICENTRE, 
+				DatabaseHelper.COLS_SKICENTRE_SHORT, 
+				DatabaseHelper.TAB_SKICENTRE_API_NAME + " LIKE ?", 
+				new String[] { "%" + keyword + "%" }, 
+				null,
+				null,
+				sortExpression,
+				null);
 		ArrayList<SkicentreShort> list = new ArrayList<SkicentreShort>();
 		
 		while (cursor.moveToNext()) 

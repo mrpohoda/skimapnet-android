@@ -1,6 +1,8 @@
 package net.skimap.activities;
 
 import net.skimap.R;
+import net.skimap.fragments.MapFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentMapActivity;
@@ -30,6 +32,16 @@ public class MapActivity extends FragmentMapActivity
     {
         return false;
     }
+    
+    
+    @Override
+	public void onNewIntent(Intent intent)
+	{
+		super.onNewIntent(intent);
+		setIntent(intent);
+		MapFragment fragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
+		fragment.handleSearchIntent(intent);
+	}
     
     
     private void setActionBar()

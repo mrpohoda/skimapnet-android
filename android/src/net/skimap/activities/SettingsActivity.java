@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.skimap.R;
+import net.skimap.content.CustomSuggestionProvider;
 import net.skimap.database.Database;
 import net.skimap.utililty.Localytics;
 import net.skimap.utililty.Settings;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.provider.SearchRecentSuggestions;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -162,6 +164,12 @@ public class SettingsActivity extends PreferenceActivity
 				{
 					e.printStackTrace();
 				}
+				
+				// smazani queries pro naseptavac
+				SearchRecentSuggestions suggestions = new SearchRecentSuggestions(SettingsActivity.this,
+						CustomSuggestionProvider.AUTHORITY,
+						CustomSuggestionProvider.MODE);
+		        suggestions.clearHistory();
 				
 				// vynulovani last synchro
 				Settings settings = new Settings(SettingsActivity.this);

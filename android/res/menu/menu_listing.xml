@@ -35,12 +35,10 @@
 		android:showAsAction="ifRoom"
 		android:orderInCategory="20" />
     
-    <!-- TODO
 	<item 
 		android:id="@+id/ab_button_search"
 		android:title="@string/ab_button_search"
 		android:icon="@drawable/ic_menu_search"
 		android:showAsAction="always"
 		android:orderInCategory="22" />
-	-->
 </menu>

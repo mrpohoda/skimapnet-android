@@ -1,10 +1,12 @@
 package net.skimap.fragments;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import net.skimap.R;
@@ -12,6 +14,7 @@ import net.skimap.activities.ListingActivity;
 import net.skimap.activities.SettingsActivity;
 import net.skimap.activities.SkimapApplication;
 import net.skimap.adapters.ListingAdapter;
+import net.skimap.content.CustomSuggestionProvider;
 import net.skimap.data.Area;
 import net.skimap.data.Country;
 import net.skimap.data.Placemark;
@@ -25,15 +28,20 @@ import net.skimap.map.PopupItemizedOverlay;
 import net.skimap.network.Synchronization;
 import net.skimap.utililty.Localytics;
 import net.skimap.utililty.Version;
+import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
@@ -57,6 +65,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	private final int EMPTY_ID = -1;
 	private final int ZOOM_DEFAULT = 14;
 	private final int ZOOM_MINIMUM_FOR_DRAW = 13;
+	private final int SEARCH_MAX = 10;
 	private enum MapLocationMode { DEVICE_POSITION, LAST_SKICENTRE, NEAREST_SKICENTRE, SKICENTRE_POSITION };
 	
 	private CustomMapView mMapView;
@@ -88,6 +97,9 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
         
 		// pokus zobrazeni intro dialogu
 		Version.tryShowIntoDialog(getActivity(), mLocalyticsSession);
+		
+		// vyhledavani
+		handleSearchIntent(getSupportActivity().getIntent());
     }
 	
 	
@@ -164,7 +176,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	    super.onPause();
 	}
 	
-	
+
 	@Override
     public void onSaveInstanceState(Bundle outState) 
 	{
@@ -193,24 +205,24 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	public boolean onOptionsItemSelected(MenuItem item) 
     {
     	// nastaveni chovani tlacitek
-    	Intent intent = new Intent();
-    	
     	Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
     	
     	switch (item.getItemId()) 
     	{
-	    	case R.id.ab_button_list:				
-		        intent.setClass(getActivity(), ListingActivity.class);
-		        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		        startActivity(intent);
+	    	case R.id.ab_button_list:	
+	    		Intent listIntent = new Intent();
+	    		listIntent.setClass(getActivity(), ListingActivity.class);
+	    		listIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		        startActivity(listIntent);
 		        localyticsValues.put(Localytics.ATTR_BUTTON_LIST, Localytics.VALUE_BUTTON_FROM_MAP); // Localytics atribut
 	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
-			// TODO
-//	    	case R.id.ab_button_search:
-//	    		Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
-//				return true;
+	    	case R.id.ab_button_search:
+	    		getSupportActivity().onSearchRequested();
+	    		localyticsValues.put(Localytics.ATTR_BUTTON_SEARCH, Localytics.VALUE_BUTTON_FROM_MAP); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
+				return true;
 				
 	    	case R.id.ab_button_refresh:
 	    		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext(), mDatabase);
@@ -223,8 +235,9 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 				return true;
 				
 	    	case R.id.ab_button_preferences:
-	    		intent.setClass(getActivity(), SettingsActivity.class);
-		        startActivity(intent);
+	    		Intent preferencesIntent = new Intent();
+	    		preferencesIntent.setClass(getActivity(), SettingsActivity.class);
+		        startActivity(preferencesIntent);
 		        localyticsValues.put(Localytics.ATTR_BUTTON_PREFERENCES, Localytics.VALUE_BUTTON_FROM_MAP); // Localytics atribut
 	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
@@ -299,7 +312,6 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		}
 		else if(result==Synchronization.STATUS_UNKNOWN) 
 		{
-			// TODO: zakomentovano kvuli chybe sychronizace areas pri cerstve instalaci
 			Toast.makeText(getActivity(), R.string.toast_synchro_error, Toast.LENGTH_LONG).show();
 			localyticsValues.put(Localytics.ATTR_SYNCHRO_SHORT_STATUS, Localytics.VALUE_SYNCHRO_STATUS_ERROR); // Localytics atribut
 		}
@@ -341,13 +353,122 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		mLocalyticsSession.tagEvent(Localytics.TAG_MAP, localyticsValues); // Localytics
 	}
 	
-
+	
 	private void refreshViewsAfterSynchro()
 	{
 		// TODO: ziskat referenci ke vsem list fragmentum a zavolat pro ne metodu refreshListView(), obnovit map view
 	}
 	
 	
+	public void handleSearchIntent(Intent intent)
+	{
+		// zpracovani search query
+		if (Intent.ACTION_SEARCH.equals(intent.getAction()))
+		{
+			// ziskani query
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			
+			// ulozeni query pro naseptavac
+			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(getActivity(),
+					CustomSuggestionProvider.AUTHORITY,
+					CustomSuggestionProvider.MODE);
+	        suggestions.saveRecentQuery(query, null);
+
+	        // vyhledani mista v mape
+			searchLocation(query);
+			
+			Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+	        localyticsValues.put(Localytics.ATTR_SEARCH_LOCATION, Localytics.VALUE_SEARCH_FROM_MAP); // Localytics atribut
+			mLocalyticsSession.tagEvent(Localytics.TAG_SEARCH, localyticsValues); // Localytics
+		}
+	}
+	
+	
+	private void searchLocation(String area)
+    {  
+        try
+        {
+        	// vyhledani geolokace dle nazvu
+	        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault()); 
+	        final List<android.location.Address> result = geocoder.getFromLocationName(area, SEARCH_MAX); 
+	        if(result.size()==1)
+	        {
+	        	android.location.Address address = result.get(0);
+	        	if(address.hasLatitude() && address.hasLongitude())
+	        	{
+	        		double lat = result.get(0).getLatitude();
+	                double lon = result.get(0).getLongitude();
+			        setMapLocation(lat, lon);
+	        	}
+	        }
+	        else if(result.size()>1)
+	        {
+	        	// seznam adres
+	        	ArrayList<CharSequence> itemList = new ArrayList<CharSequence>();
+	        	Iterator<android.location.Address> iterator = result.iterator();
+	    		while(iterator.hasNext())
+	    		{
+	    			android.location.Address address = iterator.next();
+	    			if(address.hasLatitude() && address.hasLongitude())
+	    			{
+	    				StringBuilder name = new StringBuilder();
+	    				if(address.getFeatureName()!=null) name.append(address.getFeatureName());
+	    				else name.append(area);
+	    				if(address.getAdminArea()!=null) name.append(", " + address.getAdminArea());
+	    				if(address.getCountryCode()!=null) name.append(", " + address.getCountryCode());
+	    				itemList.add(name.toString());
+	    			}
+	    		}
+	    		
+	    		final String[] items = new String[itemList.size()];
+	    		itemList.toArray(items);
+
+	    		// dialog s vice vysledky vyhledavani
+	            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	            builder.setTitle(R.string.search_result);
+	            builder.setItems(items, new DialogInterface.OnClickListener()
+	            {
+	                public void onClick(DialogInterface dialog, int item)
+	                {
+	                    double lat = result.get(item).getLatitude();
+	                    double lon = result.get(item).getLongitude();
+	    		        setMapLocation(lat, lon);
+	                }
+	            });
+	            builder.show();
+	        }   
+	        else
+	        {	        	
+	        	Toast.makeText(getActivity(), "'" + area + "' " + getString(R.string.search_error_not_found), Toast.LENGTH_LONG).show();
+	        	return;
+	        }
+        }
+        catch(IOException e)
+        {
+        	Toast.makeText(getActivity(), R.string.search_error_connection, Toast.LENGTH_LONG).show();
+        	return;
+        }
+    }
+	
+	
+	private void setMapLocation(double latitude, double longitude)
+	{
+		// souradnice mista
+        GeoPoint myLocation = new GeoPoint((int) (latitude*1E6), (int) (longitude*1E6));
+ 
+        // nastaveni pozice nalezeneho mista v mape
+        if(mMapView!=null)
+        {
+        	MapController controller = mMapView.getController();
+            controller.setZoom(ZOOM_DEFAULT);
+            controller.setCenter(myLocation);
+        }
+        
+        // prekresleni sjezdovek
+		tryRedrawPaths();
+	}
+	
+
 	private void setMapLocation(MapLocationMode mode)
 	{
 		// nastaveni zoomu
@@ -360,13 +481,13 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	    	case DEVICE_POSITION:
 	    		GeoPoint deviceLocation;
 	    		deviceLocation = getDeviceLocation();
-	    		if(deviceLocation!=null) controller.animateTo(deviceLocation);
+	    		if(deviceLocation!=null) controller.setCenter(deviceLocation);
 	    		break;
 	    		
 	    	// poloha nejblizsiho skicentra k aktualni poloze
 	    	case NEAREST_SKICENTRE:
 		        // TODO
-	    		Toast.makeText(getActivity(), "NEAREST SKICENTRE", Toast.LENGTH_SHORT).show();
+	    		//Toast.makeText(getActivity(), "NEAREST SKICENTRE", Toast.LENGTH_SHORT).show();
 	    		break;
 	    		
 	    	// poloha posledniho zobrazeneho skicentra
@@ -406,7 +527,6 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	}
 	
 	
-	// TODO: ziskavat pozici lepsim zpusobem, getLastKnownLocation zlobi
 	private GeoPoint getDeviceLocation()
 	{
 		LocationManager locationManager = (LocationManager) getSupportActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -476,7 +596,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		if(!this.isAdded()) return;
 		
 		// ikona skicentra
-		Drawable drawableOn = getResources().getDrawable(R.drawable.ic_map_skicentre); // FIXME: IllegalStateException
+		Drawable drawableOn = getResources().getDrawable(R.drawable.ic_map_skicentre);
 		Drawable drawableOff = getResources().getDrawable(R.drawable.ic_map_skicentre_disabled);
 		
 		// vlastni overlay vrstvy

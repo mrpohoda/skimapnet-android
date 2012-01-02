@@ -64,9 +64,10 @@ public class PopupItemizedOverlay extends BalloonItemizedOverlay<OverlayItem>
 	{
 		// nova aktivita detail
 		Intent intent = new Intent();
+		intent.setClass(mMapViewContext, DetailActivity.class);
 		intent.putExtra(DetailFragment.ITEM_ID, mIds.get(index));
 		intent.putExtra(DetailFragment.DUAL_VIEW, false);
-	    intent.setClass(mMapViewContext, DetailActivity.class);
+	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	    mMapViewContext.startActivity(intent);
 		return true;
 	}

@@ -153,9 +153,9 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) 
     {
+		// nastaveni chovani tlacitek
 		Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
 		
-    	// nastaveni chovani tlacitek
     	switch (item.getItemId()) 
     	{
 	    	case R.id.ab_button_share:
@@ -174,15 +174,25 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
+	    	case R.id.ab_button_navigation:
+	    		Intent navigationIntent = new Intent(
+	    				android.content.Intent.ACTION_VIEW, 
+	    				Uri.parse("geo:" + mSkicentre.getLocationLatitude() + "," + mSkicentre.getLocationLongitude() + "?q=" + mSkicentre.getName())
+	    		);
+				startActivity(navigationIntent);
+				localyticsValues.put(Localytics.ATTR_BUTTON_NAVIGATION, Localytics.VALUE_BUTTON_FROM_DETAIL); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
+				return true;
+				
 			// TODO
 //	    	case R.id.ab_button_favourite:
 //	    		Toast.makeText(getActivity(), "FAV", Toast.LENGTH_SHORT).show();
 //				return true;
 				
 	    	case R.id.ab_button_preferences:
-	    		Intent intent = new Intent();
-	    		intent.setClass(getActivity(), SettingsActivity.class);
-		        startActivity(intent);
+	    		Intent preferencesIntent = new Intent();
+	    		preferencesIntent.setClass(getActivity(), SettingsActivity.class);
+		        startActivity(preferencesIntent);
 		        localyticsValues.put(Localytics.ATTR_BUTTON_PREFERENCES, Localytics.VALUE_BUTTON_FROM_DETAIL); // Localytics atribut
 	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;

@@ -41,6 +41,16 @@ public class ListingActivity extends FragmentActivity implements ListingFragment
     }
     
     
+    @Override
+	public void onNewIntent(Intent intent)
+	{
+		super.onNewIntent(intent);
+		setIntent(intent);
+		ListingFragment fragment = (ListingFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_listing);
+		fragment.handleSearchIntent(intent);
+	}
+    
+    
     private void setActionBar()
     {
     	// zapnuti loga a vypnuti titulku
@@ -109,6 +119,7 @@ public class ListingActivity extends FragmentActivity implements ListingFragment
 			intent.setClass(this, DetailActivity.class);
 			intent.putExtra(DetailFragment.ITEM_ID, id);
 			intent.putExtra(DetailFragment.DUAL_VIEW, false);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
         }
 	}
