@@ -9,11 +9,13 @@ import net.skimap.data.Country;
 import net.skimap.data.SkicentreLong;
 import net.skimap.data.SkicentreShort;
 import net.skimap.data.Weather;
+import net.skimap.fragments.DetailFragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 
 
 // http://www.vogella.de/articles/AndroidSQLite/article.html#overview_sqliteopenhelper
@@ -227,6 +229,38 @@ public class Database
 		
 		cursor.close();
 		return list;
+	}
+	
+	
+	// vraci pole ve tvaru [id, vzdalenost]
+	public int[] getNearestSkicentre(Location currentLocation)
+	{
+		Cursor cursor = mDatabase.query(DatabaseHelper.TAB_SKICENTRE, DatabaseHelper.COLS_SKICENTRE_SHORT, null, null, null, null, null, null);
+		
+		float minDistance = -1;
+		int minDistanceId = DetailFragment.EMPTY_ID;
+		
+		while (cursor.moveToNext()) 
+	    {
+			SkicentreShort skicentre = cursorSkicentreShort(cursor);
+			Location skicentreLocation = new Location(currentLocation);
+			skicentreLocation.setLatitude(skicentre.getLocationLatitude());
+			skicentreLocation.setLongitude(skicentre.getLocationLongitude());
+			
+			// vzdalenost strediska
+			float distance = currentLocation.distanceTo(skicentreLocation);
+			
+			// hledani nejmensi vzdalenosti
+			if(distance<minDistance || minDistance<0)
+			{
+				minDistance = distance;
+				minDistanceId = skicentre.getId();
+			}
+	    }
+
+		cursor.close();
+		int result[] = {minDistanceId, (int) minDistance}; 
+		return result;
 	}
 	
 

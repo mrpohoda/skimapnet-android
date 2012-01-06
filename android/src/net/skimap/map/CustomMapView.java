@@ -11,12 +11,15 @@ import com.google.android.maps.MapView;
 
 public class CustomMapView extends MapView
 {
+//	private int DOUBLE_TAP_DELAY = 250;
+	
     private int mOldZoomLevel = -1;
     private GeoPoint mOldCenterGeoPoint;
     private OnPanAndZoomListener mListener;
     private int mCoordinateDifferenceE6 = 10000; // 10000e6 = 0.01deg = 800m
+//    private long mLastTouchTime = -1; // kvuli dvojtapnuti
 
-    
+
     public CustomMapView(Context context, String apiKey)
     {
         super(context, apiKey);
@@ -97,6 +100,30 @@ public class CustomMapView extends MapView
     	else
     		return false;
     }
+    
+    
+//	// http://nocivus.posterous.com/double-clicktap-detection-on-a    
+//    @Override
+//	public boolean onInterceptTouchEvent(MotionEvent ev)
+//	{
+//    	// kontrola dvojtapnuti
+//		if (ev.getAction() == MotionEvent.ACTION_DOWN)
+//		{
+//			long thisTime = System.currentTimeMillis();
+//			if (thisTime - mLastTouchTime < DOUBLE_TAP_DELAY)
+//			{
+//				// zoom
+//				this.getController().zoomInFixing((int) ev.getX(), (int) ev.getY());
+//				mLastTouchTime = -1;
+//			} 
+//			else
+//			{
+//				// velka casova prodleva
+//				mLastTouchTime = thisTime;
+//			}
+//		}
+//		return super.onInterceptTouchEvent(ev);
+//	}
 
     
     public interface OnPanAndZoomListener

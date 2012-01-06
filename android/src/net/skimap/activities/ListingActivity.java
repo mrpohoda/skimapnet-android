@@ -34,10 +34,6 @@ public class ListingActivity extends FragmentActivity implements ListingFragment
 //        {
 //        	getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt(SAVED_TAB_INDEX));
 //        }
-        
-        // TODO: synchronizace dat jednou za den, explicit. refresh jen pokud neprobiha synchronizace
-//        Synchronization synchro = new Synchronization((SkimapApplication) getApplicationContext());
-//        synchro.trySynchronizeShortData();
     }
     
     

@@ -33,6 +33,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,9 +97,6 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
     	// nacteni view
         mLoadingFromDatabase = true;
         refreshData();
-        
-        // vyhledavani
-     	handleSearchIntent(getSupportActivity().getIntent());
     }
 
 	
@@ -109,11 +107,6 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		setHasOptionsMenu(true);
 		mRootView = inflater.inflate(R.layout.layout_listing, container, false);
 		if(!mLoadingFromDatabase) setView(null);
-		
-		// je k dispozici detail fragment?
-        View detailFrame = getSupportActivity().findViewById(R.id.fragment_detail);
-        mDualView = (detailFrame != null) && (detailFrame.getVisibility() == View.VISIBLE);
-        
 		return mRootView;
 	}
 	
@@ -129,6 +122,17 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
         	mItemIdChecked = savedInstanceState.getInt(SAVED_CHOICE_CHECKED, DEFAULT_CHOICE_CHECKED);
         	mItemIdShown = savedInstanceState.getInt(SAVED_CHOICE_SHOWN, DEFAULT_CHOICE_SHOWN);
         }
+        
+        // je k dispozici detail fragment?
+        View detailFrame = getSupportActivity().findViewById(R.id.fragment_detail);
+        mDualView = (detailFrame != null) && (detailFrame.getVisibility() == View.VISIBLE);
+        
+        // aktualizace options menu po vytvoreni layoutu
+        getSupportActivity().invalidateOptionsMenu();
+        
+        Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+        localyticsValues.put(Localytics.ATTR_VIEW_DUAL, mDualView ? Localytics.VALUE_VIEW_DUAL_TRUE : Localytics.VALUE_VIEW_DUAL_FALSE); // Localytics atribut
+		mLocalyticsSession.tagEvent(Localytics.TAG_VIEW, localyticsValues); // Localytics
     }
 	
 	
@@ -190,7 +194,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		// vytvoreni menu
 		inflater.inflate(R.menu.menu_listing, menu);
 		super.onCreateOptionsMenu(menu, inflater);
-		
+
 		// tlacitko s mapou
 		if(!mDualView)
 		{
@@ -222,14 +226,23 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	    	case R.id.ab_button_map:
 	    		Intent mapIntent = new Intent();
 	    		mapIntent.setClass(getActivity(), MapActivity.class);
-		        if(mDualView) mapIntent.putExtra(MapFragment.ITEM_ID, mItemIdShown);
-		        mapIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		        if(mDualView) 
+	        	{
+	        		mapIntent.putExtra(MapFragment.ITEM_ID, mItemIdShown);
+	        	}
+		        else
+		        {
+		        	mapIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		        }
 		        startActivity(mapIntent);
 		        localyticsValues.put(Localytics.ATTR_BUTTON_MAP, Localytics.VALUE_BUTTON_FROM_LIST); // Localytics atribut
 	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
 	    	case R.id.ab_button_refresh:
+	    		// naslouchani synchronizace
+	            ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
+	    		// synchronizace
 	    		Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext(), mDatabase);
 	            synchro.trySynchronizeShortData();
 	            localyticsValues.put(Localytics.ATTR_BUTTON_REFRESH, Localytics.VALUE_BUTTON_FROM_LIST); // Localytics atribut
@@ -359,8 +372,8 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
             @Override
             public void handleMessage(Message message) 
             {
-            	mLoadingFromDatabase = false;
             	setView(keyword);
+            	mLoadingFromDatabase = false;
             }
 	    };
 			    
@@ -477,11 +490,11 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	private void setView(final String keyword)
 	{
 		// seznam skicenter
-		if(mRootView==null) return;
+		if(mRootView==null || mSkicentreList==null) return;
 		ListView listView = (ListView) mRootView.findViewById(R.id.layout_listing_listview);
 
 		// naplneni skicenter
-		if(listView.getAdapter()==null) 
+		if(listView.getAdapter()==null || keyword!=null)
 		{
 			ListingAdapter adapter = new ListingAdapter(this, mSkicentreList, mAreaList, mCountryList);
 			try
@@ -491,6 +504,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 			catch(Exception e)
 			{
 				e.printStackTrace();
+				return;
 			}
 		} 
 		else 
@@ -498,10 +512,13 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 			try
 			{
 				((ListingAdapter) listView.getAdapter()).refill(mSkicentreList, mAreaList, mCountryList);
+				BaseAdapter adapter = (BaseAdapter) listView.getAdapter();
+				adapter.notifyDataSetChanged();
 			}
 			catch(Exception e)
 			{
 				e.printStackTrace();
+				return;
 			}
 		}
 		

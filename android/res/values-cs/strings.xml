@@ -110,6 +110,11 @@
     ]]></string>
     <string name="layout_help_changes_title">Změny</string>
     <string name="layout_help_changes_text"><![CDATA[
+        <b>0.9.3</b> <i>(5.1.2012)</i><br>
+        ● nové: uživatelské rozhraní pro tablety<br>
+        ● nové: lokace nejbližšího střediska<br>
+       	● opravené: několik drobných bugů<br>
+       	<br>
         <b>0.9.2</b> <i>(2.1.2012)</i><br>
         ● nové: vyhledávání středisek a míst v mapě<br>
        	● nové: navigace v detailu střediska<br>
@@ -164,6 +169,8 @@
     <string name="toast_synchro_offline">Jste v offline režimu. Zkontrolujte prosím internetové připojení.</string>
     <string name="toast_synchro_canceled">Aktualizace dat byla přerušena.</string>
     <string name="toast_synchro_error">Chyba! Nelze synchronizovat některá data. Prosím aktualizujte aplikaci nebo kontaktujte vývojáře.</string>
+    
+    <string name="toast_location_nearest">Nejbližší středisko je</string>
     
     <string name="day_sun">Ne</string>
     <string name="day_mon">Po</string>

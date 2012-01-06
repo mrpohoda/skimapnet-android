@@ -84,14 +84,17 @@ public class ListingAdapter extends BaseAdapter
 		try { countryString = mCountryList.get(country).getName(); }
 		catch(Exception e) {}
 		
-		String secondLine = createSecondLine(
-			name,
-			areaString, 
-			countryString, 
-			snowMax, 
-			mFragment.getString(R.string.layout_listing_item_snow)
-		);
-		textSub.setText(secondLine);
+		if(mFragment.isAdded())
+		{
+			String secondLine = createSecondLine(
+				name,
+				areaString, 
+				countryString, 
+				snowMax, 
+				mFragment.getString(R.string.layout_listing_item_snow)
+			);
+			textSub.setText(secondLine);
+		}
 		
 		// vraceni view
 		return view;

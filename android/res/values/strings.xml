@@ -151,6 +151,8 @@
     <string name="toast_synchro_canceled">Updating data was canceled.</string>  
     <string name="toast_synchro_error">Error! Some data cannot be synchronized. Please update application or contact developer.</string>
     
+    <string name="toast_location_nearest">Nearest ski resort is</string>
+    
     <string name="day_sun">Sun</string>
     <string name="day_mon">Mon</string>
     <string name="day_tue">Tue</string>

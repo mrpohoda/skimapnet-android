@@ -254,10 +254,11 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
-			// TODO
-//	    	case R.id.ab_button_location_nearest:
-//	    		setMapLocation(MapLocationMode.NEAREST_SKICENTRE);
-//				return true;
+	    	case R.id.ab_button_location_nearest:
+	    		setMapLocation(MapLocationMode.NEAREST_SKICENTRE);
+	    		localyticsValues.put(Localytics.ATTR_BUTTON_LOCATION, Localytics.VALUE_BUTTON_LOCATION_NEAREST); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
+				return true;
 				
 	    	case R.id.ab_button_layers_normal:
 	    		mMapView.setSatellite(false);
@@ -474,20 +475,52 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		// nastaveni zoomu
 		final MapController controller = mMapView.getController();		
 		controller.setZoom(ZOOM_DEFAULT);
+		
+		// deklarace promennych
+		Location deviceLocation;
+		SkicentreLong skicentre = null;
 	
 		switch (mode) 
     	{
 			// aktualni poloha zarizeni
 	    	case DEVICE_POSITION:
-	    		GeoPoint deviceLocation;
 	    		deviceLocation = getDeviceLocation();
-	    		if(deviceLocation!=null) controller.setCenter(deviceLocation);
+	    		if(deviceLocation != null)
+	    		{
+	    			GeoPoint point = new GeoPoint( (int)(deviceLocation.getLatitude()*1E6), (int)(deviceLocation.getLongitude()*1E6) );
+	    			controller.setCenter(point);
+	    		}
 	    		break;
 	    		
 	    	// poloha nejblizsiho skicentra k aktualni poloze
 	    	case NEAREST_SKICENTRE:
-		        // TODO
-	    		//Toast.makeText(getActivity(), "NEAREST SKICENTRE", Toast.LENGTH_SHORT).show();
+	    		deviceLocation = getDeviceLocation();
+	    		int result[] = mDatabase.getNearestSkicentre(deviceLocation);
+	    		int id = result[0];
+	    		
+	    		// nacteni skicentra z databaze
+	    		try
+	    		{
+	    			if(mDatabase.isOpen()) skicentre = mDatabase.getSkicentre(id);
+	    		}
+	    		catch(IllegalStateException e)
+	    		{
+	    			e.printStackTrace();
+	    		}
+	    		catch(Exception e)
+	    		{
+	    			e.printStackTrace();
+	    		}
+	    		
+	    		// zamereni skicentra v mape
+	    		if(skicentre!=null)
+	    		{
+		    		GeoPoint point = new GeoPoint( (int)(skicentre.getLocationLatitude()*1E6), (int)(skicentre.getLocationLongitude()*1E6) );
+		    		controller.setCenter(point);
+		    		Toast.makeText(getActivity(), 
+	    				getString(R.string.toast_location_nearest) + " " + skicentre.getName() + " - " + String.format("%.1f", (result[1]/1000.0)) + " " + getString(R.string.unit_km) + ".", 
+	    				Toast.LENGTH_LONG).show();
+	    		}
 	    		break;
 	    		
 	    	// poloha posledniho zobrazeneho skicentra
@@ -498,7 +531,6 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	    		if(mItemId==EMPTY_ID) break;
 	    	
 	    		// nacteni skicentra z databaze
-	    		SkicentreLong skicentre = null;
 	    		try
 	    		{
 	    			if(mDatabase.isOpen()) skicentre = mDatabase.getSkicentre(mItemId);
@@ -527,16 +559,11 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	}
 	
 	
-	private GeoPoint getDeviceLocation()
+	private Location getDeviceLocation()
 	{
 		LocationManager locationManager = (LocationManager) getSupportActivity().getSystemService(Context.LOCATION_SERVICE);
 		Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		GeoPoint deviceLocation = null;
-		if(location != null)
-		{
-			deviceLocation = new GeoPoint( (int)(location.getLatitude()*1E6), (int)(location.getLongitude()*1E6) );
-		}
-		return deviceLocation;
+		return location;
 	}
 	
 	
@@ -705,7 +732,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	private void tryRedrawPaths()
 	{
 		// kontrola zoom
-		if(mMapView.getZoomLevel()<ZOOM_MINIMUM_FOR_DRAW) return;	
+		if(mMapView==null || mMapView.getZoomLevel()<ZOOM_MINIMUM_FOR_DRAW) return;
 			
 		// sirka a delka mapview
 		int spanLatitudeE6 = mMapView.getLatitudeSpan();

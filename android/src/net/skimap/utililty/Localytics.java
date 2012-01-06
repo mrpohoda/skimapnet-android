@@ -3,8 +3,8 @@ package net.skimap.utililty;
 
 public class Localytics
 {
-	public static String KEY = "3ed8848e93e296614cc7e45-6c78e428-2b0a-11e1-0c8e-001b3da7bd76";
-	//public static String KEY = "debug";
+	//public static String KEY = "3ed8848e93e296614cc7e45-6c78e428-2b0a-11e1-0c8e-001b3da7bd76";
+	public static String KEY = "debug";
 	
 	public static String TAG_BUTTON = "button";
 	public static String ATTR_BUTTON_MAP = "map";
@@ -23,6 +23,7 @@ public class Localytics
 	public static String VALUE_BUTTON_FROM_PREFERENCES = "from preferences";
 	public static String VALUE_BUTTON_LOCATION_CURRENT = "current";
 	public static String VALUE_BUTTON_LOCATION_LAST = "last";
+	public static String VALUE_BUTTON_LOCATION_NEAREST = "nearest";
 	public static String VALUE_BUTTON_LAYER_NORMAL = "normal";
 	public static String VALUE_BUTTON_LAYER_SATELLITE = "satellite";
 	
@@ -48,6 +49,11 @@ public class Localytics
 	public static String VALUE_ACTIVITY_FRAGMENT_DETAIL = "detail";
 	public static String VALUE_ACTIVITY_FRAGMENT_HELP = "help";
 	public static String VALUE_ACTIVITY_FRAGMENT_PREFERENCES = "preferences";
+	
+	public static String TAG_VIEW = "view";
+	public static String ATTR_VIEW_DUAL = "dual";
+	public static String VALUE_VIEW_DUAL_TRUE = "true";
+	public static String VALUE_VIEW_DUAL_FALSE = "false";
 	
 	public static String TAG_INSTALL = "install";
 	public static String ATTR_INSTALL_INTRO = "intro dialog";

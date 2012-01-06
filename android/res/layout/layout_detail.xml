@@ -8,6 +8,7 @@
     android:scrollbarTrackVertical="@drawable/scrollbar_track">
     
     <LinearLayout
+        android:id="@+id/layout_detail"
         android:orientation="vertical"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content">
@@ -32,8 +33,8 @@
 		<include layout="@layout/widget_divider" />
 		<include layout="@layout/layout_detail_webcam" android:id="@+id/layout_detail_webcam" android:visibility="gone" />
 		<include layout="@layout/widget_divider" android:id="@+id/widget_divider_detail_webcam" android:visibility="gone" />
-		<include layout="@layout/layout_detail_prices" />
-		<include layout="@layout/widget_divider" />
+		<include layout="@layout/layout_detail_prices" android:id="@+id/layout_detail_prices" />
+		<include layout="@layout/widget_divider" android:id="@+id/widget_divider_detail_prices" />
 		<include layout="@layout/layout_detail_images" />
 		<include layout="@layout/widget_divider" />
 		<include layout="@layout/layout_detail_links" />

@@ -141,6 +141,8 @@
     <string name="toast_synchro_canceled">Die Aktualisierung der Daten unterbrochen wurde.</string>
     <string name="toast_synchro_error">Error! Daten können nicht synchronisiert werden. Bitte aktualisieren Sie Ihre Anwendung oder Kontakt zu den Entwicklern.</string>
     
+    <string name="toast_location_nearest">Nächster Skizentrum ist</string>
+    
     <string name="day_sun">So</string>
     <string name="day_mon">Mo</string>
     <string name="day_tue">Di</string>

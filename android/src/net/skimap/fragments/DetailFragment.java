@@ -16,7 +16,10 @@ import net.skimap.network.Synchronization;
 import net.skimap.utililty.DrawableManager;
 import net.skimap.utililty.Localytics;
 import net.skimap.utililty.Version;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,6 +35,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +46,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 {
 	public static final String ITEM_ID = "item_id";
 	public static final String DUAL_VIEW = "dual_view";
-	private final int EMPTY_ID = -1;
+	public static final int EMPTY_ID = -1;
 	private final int PEREX_SHORT_LENGTH = 110;
 	
 	@SuppressWarnings("unused")
@@ -175,6 +179,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 				return true;
 				
 	    	case R.id.ab_button_navigation:
+	    		if(mSkicentre==null) return true;
 	    		Intent navigationIntent = new Intent(
 	    				android.content.Intent.ACTION_VIEW, 
 	    				Uri.parse("geo:" + mSkicentre.getLocationLatitude() + "," + mSkicentre.getLocationLongitude() + "?q=" + mSkicentre.getName())
@@ -268,11 +273,21 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
             @Override
             public void handleMessage(Message message) 
             {
-            	setView();
+            	try
+            	{
+            		setView();
+            	}
+            	catch(IllegalStateException e)
+            	{
+            		// Fragment not attached to Activity
+            	}
+            	
+            	// naslouchani synchronizace
+                ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(DetailFragment.this);
             	
             	// synchronizace
                 Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext(), mDatabase);
-                synchro.trySynchronizeLongData(mItemId);
+                if(mItemId!=EMPTY_ID) synchro.trySynchronizeLongData(mItemId);
             }
 	    };
 			    
@@ -299,7 +314,14 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
             @Override
             public void handleMessage(Message message) 
             {
-            	setView();
+            	try
+            	{
+            		setView();
+            	}
+            	catch(IllegalStateException e)
+            	{
+            		// Fragment not attached to Activity
+            	}
             }
 	    };
 			    
@@ -336,11 +358,17 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	
 	private void setView()
 	{
-		// TODO: formatovani textu: http://stackoverflow.com/questions/1529068/is-it-possible-to-have-multiple-styles-inside-a-textview
-		// TODO: pridat toasty s napovedou na flagy
-		// TODO: osetrovat null hodnoty - DatabaseHelper.NULL_STRING apod., pripadne schovat dany widget
-		// TODO: roztridit kousky kodu do dilcich funkci, pro kazde jednotlive view
-		if(mSkicentre==null) return;
+		// skryti layoutu v pripade prazdnych dat
+		LinearLayout layoutDetail = (LinearLayout) mRootView.findViewById(R.id.layout_detail);
+		if(mSkicentre==null)
+		{
+			layoutDetail.setVisibility(View.GONE);
+			return;
+		}
+		else
+		{
+			layoutDetail.setVisibility(View.VISIBLE);
+		}
 		mPerexMore = false;
 		
 		// reference na textove pole
@@ -687,7 +715,22 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			textPricesSeniors.setText(Html.fromHtml(pricesSeniors));
 			textPricesSeniors.setVisibility(View.VISIBLE);
 		}
-
+		
+		View widgetDividerDetailPrices = (View) mRootView.findViewById(R.id.widget_divider_detail_prices);
+		View layoutDetailPrices = (View) mRootView.findViewById(R.id.layout_detail_prices);
+		if(textPricesAdults.getVisibility()==View.GONE && 
+			textPricesChildren.getVisibility()==View.GONE && 
+			textPricesYoung.getVisibility()==View.GONE && 
+			textPricesSeniors.getVisibility()==View.GONE)
+		{
+			widgetDividerDetailPrices.setVisibility(View.GONE);
+			layoutDetailPrices.setVisibility(View.GONE);
+		}
+		else
+		{
+			widgetDividerDetailPrices.setVisibility(View.VISIBLE);
+			layoutDetailPrices.setVisibility(View.VISIBLE);
+		}
 		
 		// nastaveni obrazku
 		imageSkicentreOpened.setImageResource(mSkicentre.isFlagOpened() ? R.drawable.presence_online : R.drawable.presence_busy);
@@ -716,11 +759,13 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		
 		
 		// nastaveni obrazku webkamery
+		View layoutDetailWebcam = (View) mRootView.findViewById(R.id.layout_detail_webcam);
+		View widgetDividerDetailWebcam = (View) mRootView.findViewById(R.id.widget_divider_detail_webcam);
+		layoutDetailWebcam.setVisibility(View.GONE);
+		widgetDividerDetailWebcam.setVisibility(View.GONE);
 		if(!(mSkicentre.getUrlImgWebcam()==DatabaseHelper.NULL_STRING || mSkicentre.getUrlImgWebcam().trim().contentEquals("")))
 		{
 			// schovana view
-			View layoutDetailWebcam = (View) mRootView.findViewById(R.id.layout_detail_webcam);
-			View widgetDividerDetailWebcam = (View) mRootView.findViewById(R.id.widget_divider_detail_webcam);
 			ArrayList<View> viewsToVisible = new ArrayList<View>();
 			viewsToVisible.add(layoutDetailWebcam);
 			viewsToVisible.add(widgetDividerDetailWebcam);
@@ -1066,8 +1111,15 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	
 	private void searchNearestSkicentre()
 	{
-		// TODO
-		Toast.makeText(getActivity(), "NEAREST SKICENTRE", Toast.LENGTH_SHORT).show();
-		// mItemId = id;
+		int result[] = mDatabase.getNearestSkicentre(getDeviceLocation());
+		mItemId = result[0];
+	}
+	
+	
+	private Location getDeviceLocation()
+	{
+		LocationManager locationManager = (LocationManager) getSupportActivity().getSystemService(Context.LOCATION_SERVICE);
+		Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		return location;
 	}
 }
