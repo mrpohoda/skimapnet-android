@@ -26,6 +26,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.SupportActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -229,6 +230,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		        if(mDualView) 
 	        	{
 	        		mapIntent.putExtra(MapFragment.ITEM_ID, mItemIdShown);
+		    		Log.d("SKIMAP", "id:" + mItemIdShown);
 	        	}
 		        else
 		        {

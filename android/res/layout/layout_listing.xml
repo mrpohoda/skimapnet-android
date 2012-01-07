@@ -13,9 +13,7 @@
 	    android:padding="@dimen/layout_infobox_padding"
 	    android:textSize="@dimen/layout_infobox_textsize"
 	    android:textColor="@color/layout_infobox_text"
-	    android:background="@color/layout_infobox_background"
-	    android:shadowColor="@color/layout_infobox_text_shadow"
-	    android:shadowRadius="2" />
+	    android:background="@color/layout_infobox_background" />
 	
     <RelativeLayout 
 	    android:layout_width="fill_parent"

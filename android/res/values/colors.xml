@@ -34,6 +34,6 @@
 	
 	<color name="layout_infobox_text">#fff</color> <!-- bila -->
 	<color name="layout_infobox_text_shadow">#000</color> <!-- cerna -->
-	<color name="layout_infobox_background">#000</color> <!-- cerna -->
+	<color name="layout_infobox_background">#e92</color> <!-- oranz -->
 	<color name="layout_infobox_background_transparent">#6000</color> <!-- polopruhledna cerna -->
 </resources>
