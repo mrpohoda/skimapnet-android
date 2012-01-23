@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.MenuItem;
 import android.support.v4.view.Window;
 
-public class DetailActivity extends FragmentActivity
+public class DetailActivity extends FragmentActivity implements DetailFragment.OnFavouriteClickListener
 {
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -66,4 +66,10 @@ public class DetailActivity extends FragmentActivity
     			return super.onOptionsItemSelected(item);
     	}
     }
+
+
+	@Override
+	public void onFavouriteClick()
+	{
+	}
 }

@@ -17,7 +17,7 @@ public class TabsAdapter extends FragmentPagerAdapter implements ViewPager.OnPag
     private final ActionBar mActionBar;
     private final ViewPager mViewPager;
     private final ArrayList<String> mTabs = new ArrayList<String>();
-
+    
     
     public TabsAdapter(FragmentActivity activity, ActionBar actionBar, ViewPager pager) 
     {
@@ -48,7 +48,8 @@ public class TabsAdapter extends FragmentPagerAdapter implements ViewPager.OnPag
     @Override
     public Fragment getItem(int position)
     {
-        return Fragment.instantiate(mContext, mTabs.get(position), null);
+    	Fragment fragment = Fragment.instantiate(mContext, mTabs.get(position), null);
+    	return fragment;
     }
 
 

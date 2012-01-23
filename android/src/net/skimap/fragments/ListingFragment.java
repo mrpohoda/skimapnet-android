@@ -26,7 +26,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.SupportActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -34,7 +33,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,25 +43,29 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 {
 	// TODO: nastavit init hodnotu mItemIdShown
 	// TODO: pod action barem se zobrazuje rusivy transparentni prechod
-	// TODO: pri refresh nenabehne progress bar, a neukoncuje se
-	private final String SAVED_CHOICE_CHECKED = "choice_checked";
-	private final String SAVED_CHOICE_SHOWN = "choice_shown";
-	private final int DEFAULT_CHOICE_CHECKED = -1;
-	private final int DEFAULT_CHOICE_SHOWN = -1;
+	protected final String SAVED_CHOICE_CHECKED = "choice_checked";
+	protected final String SAVED_CHOICE_SHOWN = "choice_shown";
+	protected final String SAVED_SEARCH_QUERY = "search_query"; // TODO
+	protected final int DEFAULT_CHOICE_CHECKED = -1;
+	protected final int DEFAULT_CHOICE_SHOWN = -1;
+	
+	protected int LAYOUT_LISTING = R.layout.layout_listing;
+	protected int ID_LAYOUT_LISTING_LISTVIEW = R.id.layout_listing_listview;
+	protected int ID_LAYOUT_LISTING_INFOBOX = R.id.layout_listing_infobox;
      
-    private int mItemIdChecked = DEFAULT_CHOICE_CHECKED;
-    private int mItemIdShown = DEFAULT_CHOICE_SHOWN;
-    private boolean mDualView;
-    private View mRootView;
-    private ArrayList<SkicentreShort> mSkicentreList;
-    private HashMap<Integer, Area> mAreaList; // TODO: redundance v ramci fragmentu, slo by presunout do aktivity
-    private HashMap<Integer, Country> mCountryList; // TODO: redundance v ramci fragmentu, slo by presunout do aktivity
-    private OnItemSelectedListener mClickListener;
-    private boolean mLoadingFromDatabase;
-    private Database mDatabase;
-    private LocalyticsSession mLocalyticsSession;
+	protected int mItemIdChecked = DEFAULT_CHOICE_CHECKED;
+    protected int mItemIdShown = DEFAULT_CHOICE_SHOWN;
+    protected boolean mDualView;
+    protected View mRootView;
+    protected ArrayList<SkicentreShort> mSkicentreList;
+    protected HashMap<Integer, Area> mAreaList; // TODO: redundance v ramci fragmentu, slo by presunout do aktivity
+    protected HashMap<Integer, Country> mCountryList; // TODO: redundance v ramci fragmentu, slo by presunout do aktivity
+    protected OnItemSelectedListener mClickListener;
+    protected Database mDatabase;
+    protected LocalyticsSession mLocalyticsSession;
+    protected String mSearchQuery = null;
 
-    
+
     @Override
     public void onAttach(SupportActivity activity)
 	{
@@ -94,20 +96,17 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	    // otevreni databaze
 	    mDatabase = new Database(getActivity());
     	mDatabase.open(true);
-	    
-    	// nacteni view
-        mLoadingFromDatabase = true;
-        refreshData();
     }
 
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedStateInstance)
 	{	
+		super.onCreateView(inflater, container, savedStateInstance);
+		
 		// nastaveni view
 		setHasOptionsMenu(true);
-		mRootView = inflater.inflate(R.layout.layout_listing, container, false);
-		if(!mLoadingFromDatabase) setView(null);
+		mRootView = inflater.inflate(LAYOUT_LISTING, container, false);
 		return mRootView;
 	}
 	
@@ -122,6 +121,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
         {
         	mItemIdChecked = savedInstanceState.getInt(SAVED_CHOICE_CHECKED, DEFAULT_CHOICE_CHECKED);
         	mItemIdShown = savedInstanceState.getInt(SAVED_CHOICE_SHOWN, DEFAULT_CHOICE_SHOWN);
+        	//mSearchQuery = savedInstanceState.getString(SAVED_SEARCH_QUERY, null);
         }
         
         // je k dispozici detail fragment?
@@ -148,6 +148,9 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
         // otevreni databaze
         if(!mDatabase.isOpen()) mDatabase.open(true);
         
+		// nastaveni view
+		refreshData(mSearchQuery);
+        
         // naslouchani synchronizace
         ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(this);
         
@@ -163,7 +166,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
         localyticsValues.put(Localytics.ATTR_ACTIVITY_FRAGMENT, Localytics.VALUE_ACTIVITY_FRAGMENT_LIST); // Localytics atribut
 		mLocalyticsSession.tagEvent(Localytics.TAG_ACTIVITY, localyticsValues); // Localytics
     }
-	
+
 	
 	@Override
 	public void onPause()
@@ -186,6 +189,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
         super.onSaveInstanceState(outState);
         outState.putInt(SAVED_CHOICE_CHECKED, mItemIdChecked);
         outState.putInt(SAVED_CHOICE_SHOWN, mItemIdShown);
+        //outState.putString(SAVED_SEARCH_QUERY, mSearchQuery);
     }
 	
 	
@@ -230,7 +234,6 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		        if(mDualView) 
 	        	{
 	        		mapIntent.putExtra(MapFragment.ITEM_ID, mItemIdShown);
-		    		Log.d("SKIMAP", "id:" + mItemIdShown);
 	        	}
 		        else
 		        {
@@ -297,8 +300,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		
 		// aktualizace listview
-		refreshData();
-		refreshDataAfterSynchro();
+		refreshData(mSearchQuery);
 
 		Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
 		
@@ -327,12 +329,6 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	}
 	
 	
-	private void refreshDataAfterSynchro()
-	{
-		// TODO: ziskat referenci ke vsem list fragmentum a zavolat pro ne metodu refreshListView(), obnovit map view
-	}
-	
-	
 	public void handleSearchIntent(Intent intent)
 	{
 		// otevreni databaze
@@ -351,7 +347,8 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	        suggestions.saveRecentQuery(query, null);
 
 	        // zobrazeni vysledku vyhledavani
-	        refreshData(query);
+	        mSearchQuery = query;
+	        refreshData(mSearchQuery);
 			
 			Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
 	        localyticsValues.put(Localytics.ATTR_SEARCH_SKICENTRE, Localytics.VALUE_SEARCH_FROM_LIST); // Localytics atribut
@@ -360,7 +357,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	}
 	
 	
-	private void refreshData()
+	public void refreshData()
 	{
 		refreshData(null);
 	}
@@ -375,7 +372,6 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
             public void handleMessage(Message message) 
             {
             	setView(keyword);
-            	mLoadingFromDatabase = false;
             }
 	    };
 			    
@@ -401,7 +397,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	}
 	
 	
-	private void loadSkicentresByKeyword(final String keyword)
+	protected void loadSkicentresByKeyword(final String keyword)
 	{	
 		// promazani pole
 		if(mSkicentreList != null) 
@@ -423,7 +419,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	}
 
 
-	private void loadAllSkicentres()
+	protected void loadAllSkicentres()
 	{	
 		// promazani pole
 		if(mSkicentreList != null) 
@@ -489,19 +485,21 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	}
 	
 	
-	private void setView(final String keyword)
+	protected void setView(final String keyword)
 	{
 		// seznam skicenter
 		if(mRootView==null || mSkicentreList==null) return;
-		ListView listView = (ListView) mRootView.findViewById(R.id.layout_listing_listview);
+		ListView listView = (ListView) mRootView.findViewById(ID_LAYOUT_LISTING_LISTVIEW);
 
 		// naplneni skicenter
-		if(listView.getAdapter()==null || keyword!=null)
+		if(listView.getAdapter()==null)
 		{
 			ListingAdapter adapter = new ListingAdapter(this, mSkicentreList, mAreaList, mCountryList);
 			try
 			{
 				listView.setAdapter(adapter);
+				listView.requestLayout();
+				adapter.notifyDataSetChanged();
 			}
 			catch(Exception e)
 			{
@@ -513,8 +511,9 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 		{
 			try
 			{
-				((ListingAdapter) listView.getAdapter()).refill(mSkicentreList, mAreaList, mCountryList);
-				BaseAdapter adapter = (BaseAdapter) listView.getAdapter();
+				ListingAdapter adapter = (ListingAdapter) listView.getAdapter();
+				adapter.refill(mSkicentreList, mAreaList, mCountryList);
+				listView.requestLayout();
 				adapter.notifyDataSetChanged();
 			}
 			catch(Exception e)
@@ -548,7 +547,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 //		});
 		
 		// nastaveni vyhledavaciho infoboxu
-		TextView infobox = (TextView) mRootView.findViewById(R.id.layout_listing_infobox);
+		TextView infobox = (TextView) mRootView.findViewById(ID_LAYOUT_LISTING_INFOBOX);
 		if(keyword==null)
 		{
 			infobox.setVisibility(View.GONE);
@@ -560,6 +559,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 			builder.append(" '");
 			builder.append(keyword);
 			builder.append("': ");
+			if(mSkicentreList==null) return;
 			builder.append(mSkicentreList.size());
 			builder.append(" ");
 			if(mSkicentreList.size()==1) builder.append(getString(R.string.search_result_skicentre_1));
@@ -574,6 +574,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 				@Override
 				public void onClick(View v)
 				{
+					mSearchQuery = null;
 					refreshData();
 				}
 			});
@@ -589,7 +590,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
 	}
 	
 	
-	private void showDetail(int id)
+	protected void showDetail(int id)
 	{
 		mItemIdChecked = id;
 		
@@ -600,7 +601,7 @@ public class ListingFragment extends Fragment implements SkimapApplication.OnSyn
             if (mItemIdShown != mItemIdChecked)
             {
             	// TODO: zvyrazneni vybrane polozky
-            	ListView listView = (ListView) mRootView.findViewById(R.id.layout_listing_listview);
+            	ListView listView = (ListView) mRootView.findViewById(ID_LAYOUT_LISTING_LISTVIEW);
             	listView.setItemChecked(id, true);
             	
             	mClickListener.onItemSelected(id);

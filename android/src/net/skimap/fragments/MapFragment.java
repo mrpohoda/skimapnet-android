@@ -27,6 +27,7 @@ import net.skimap.map.PathUtility;
 import net.skimap.map.PopupItemizedOverlay;
 import net.skimap.network.Synchronization;
 import net.skimap.utililty.Localytics;
+import net.skimap.utililty.Settings;
 import net.skimap.utililty.Version;
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -43,6 +44,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.SupportActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.support.v4.view.SubMenu;
@@ -289,15 +291,18 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	@Override
 	public void onSynchroStop(int result)
 	{
+		SupportActivity activity = getSupportActivity();
+		if(activity==null) return;
+
 		// vypnuti progress baru
-		getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
+		activity.setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		
 		// aktualizace view
 		resetBounds();
 		refreshPois();
 		tryRedrawPaths();
 		refreshViewsAfterSynchro();
-		
+
 		Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
 		
 		// toast pro offline rezim nebo error
@@ -495,6 +500,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	    	// poloha nejblizsiho skicentra k aktualni poloze
 	    	case NEAREST_SKICENTRE:
 	    		deviceLocation = getDeviceLocation();
+	    		if(deviceLocation==null) break;
 	    		int result[] = mDatabase.getNearestSkicentre(deviceLocation);
 	    		int id = result[0];
 	    		
@@ -826,11 +832,17 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
         {
         	public void run() 
 		    {
+        		// nastaveni typu trati
+        		final Settings settings = new Settings(getActivity());
+        		String types = settings.getTrailTypes();
+        		
         		// ziskani url adresy
                 //String url = "http://ski-map.net/skimapnet/php/common.php?fce=lines_list&nelat=50.76669766709482&nelng=15.796450982910073&swlat=50.68193459347409&swlng=15.422229181152261";
         		StringBuilder builder = new StringBuilder();
         		builder.append("http://ski-map.net/skimapnet/php/common.php?fce=lines_list");
-        		builder.append("&downhill[]=black&downhill[]=red&downhill[]=blue&downhill[]=kabinky&downhill[]=lanovky&downhill[]=vleky&downhill[]=vlaky&downhill[]=metro");
+        		if(types.charAt(0)=='1') builder.append("&downhill[]=black&downhill[]=red&downhill[]=blue");
+        		if(types.charAt(1)=='1') builder.append("&downhill[]=kabinky&downhill[]=lanovky&downhill[]=vleky&downhill[]=vlaky&downhill[]=metro");
+        		if(types.charAt(2)=='1') builder.append("&downhill[]=xc");
         		builder.append("&nelat=");
         		builder.append(((double) mPathsDataBounds[0]/1000000));
         		builder.append("&nelng=");

@@ -36,11 +36,14 @@
     <string name="search_error_not_found">nicht gefunden.</string>
     <string name="search_error_connection">Verbindungsfehler. Kontrollieren Sie, bitte, Ihre Internetverbindung.</string>
     
-    <string name="settings_category">Einstellung</string>
+    <string name="settings_category_other">Übrig</string>
+    <string name="settings_category_map">Karte</string>
     <string name="settings_clear_cache">Cache leeren</string>
-    <string name="settings_clear_cache_summary">Löschen von temporären Daten aus der Datenbank</string>
+    <string name="settings_clear_cache_summary">Löschen von temporären Dateien und beliebte skizentren aus der Datenbank</string>
     <string name="settings_clear_cache_toast">Die temporären Daten werden gelöscht</string>
     <string name="settings_help">Info und Hilfe</string>
+    <string name="settings_rate">Die Applikation bewerten</string>
+    <string name="settings_rate_summary">Bewerten Sie Applikation im Market</string>
     <string name="settings_feedback">Rückkopplung</string>
     <string name="settings_feedback_summary">Eine Nachricht senden</string>
     <string name="settings_feedback_subject">Ski-map Rückkopplung</string>
@@ -50,10 +53,16 @@
     <string name="settings_feedback_api">API</string>
     <string name="settings_feedback_device">Gerätes:</string>
     <string name="settings_feedback_message">Nachricht an die Entwickler:</string>
+    <string name="settings_trail">Arten von Routen</string>
+    <string name="settings_trail_summary">Wählen Sie die Arten von Routen</string>
+    <string name="settings_trail_downhills">Pisten</string>
+    <string name="settings_trail_lifts">Lifte</string>
+    <string name="settings_trail_xc">Langlaufs</string>
     
     <string name="layout_map_infobox">Zu der Abbildung der Pisten näher zu sein...</string>
     
     <string name="layout_listing_item_snow">cm Schnee</string>
+    <string name="layout_listing_empty">Keine Favoriten. Fügen Sie den beliebten Skizentren im Detail.</string>
     
     <string name="layout_detail_offline">Sie sind offline. Daten müssen nicht aktuell sein.</string>
     <string name="layout_detail_share">Veröffentlichen</string>
@@ -99,10 +108,9 @@
     ]]></string>
     <string name="layout_help_info_title">Info</string>
     <string name="layout_help_info_text"><![CDATA[
-       	Ski Map ist ein einzigartiges Guide für Skifahrer und Snowboarder. Ski Map bietet Überblick über die Skigebiete, Schneeberichte, Wetter, Skipasspreise, Webkameras und viele andere Funktionen. Besichtigen Sie sich reale Karte der Piste aller bekannte Skizentren im Mitteleuropa einschließlich Alpen. Es gibt auch einen Offline-Modus. In Kürze:<br><br>
+       	Ski Map ist ein einzigartiges Guide für Skifahrer und Snowboarder. Ski Map bietet Überblick über die Skigebiete, Pisten, Langlaufs, Schneeberichte, Wetter, Skipasspreise, Webkameras und viele andere Funktionen. Besichtigen Sie sich reale Karte der Piste aller bekannte Skizentren im Mitteleuropa einschließlich Alpen. Es gibt auch einen Offline-Modus. In Kürze:<br><br>
 		● Sortierzentren<br>
-		● Langlaufs<br>
-		● Beliebterzentren
+		● Unterkunft
     ]]></string>
     <string name="layout_help_changes_title">Änderungen</string>
     <string name="layout_help_changes_text"><![CDATA[
@@ -116,8 +124,7 @@
 		Willkommen in der Ski Map. Die Applikation ist neu und deshalb waren einige Funktionen nicht implementieren.<br><br>
 		In Kürze:<br>
 		● Sortierzentren<br>
-		● Langlaufs<br>
-		● Beliebterzentren<br><br>
+		● Unterkunft<br><br>
 		Wir wünschen euch schönes Skilaufen!
     ]]></string>
     

@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.SupportActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.text.Html;
@@ -56,8 +57,24 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	private boolean mPerexMore;
 	private boolean mOffline = false;
 	private SkicentreLong mSkicentre;
+	private OnFavouriteClickListener mFavouriteClickListener;
 	private Database mDatabase;
 	private LocalyticsSession mLocalyticsSession;
+	
+	
+	@Override
+    public void onAttach(SupportActivity activity)
+	{
+        super.onAttach(activity);
+        try
+        {
+        	mFavouriteClickListener = (OnFavouriteClickListener) activity;
+        } 
+        catch (ClassCastException e)
+        {
+            throw new ClassCastException(activity.toString() + " must implement OnFavouriteClickListener");
+        }
+    }
 	
 	
 	@Override
@@ -151,6 +168,12 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		// vytvoreni menu
 		inflater.inflate(R.menu.menu_detail, menu);
 		super.onCreateOptionsMenu(menu, inflater);
+		
+		boolean favourite = mDatabase.isFavourite(mItemId);
+		MenuItem preferencesItem = menu.add(Menu.NONE, R.id.ab_button_favourite, 1, R.string.ab_button_favourite);
+		if(favourite) preferencesItem.setIcon(R.drawable.ic_menu_star);
+		else preferencesItem.setIcon(R.drawable.ic_menu_star_disabled);
+		preferencesItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 	}
 	
 
@@ -189,10 +212,15 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
 				return true;
 				
-			// TODO
-//	    	case R.id.ab_button_favourite:
-//	    		Toast.makeText(getActivity(), "FAV", Toast.LENGTH_SHORT).show();
-//				return true;
+	    	case R.id.ab_button_favourite:
+	    		boolean favourite = mSkicentre.isFlagFavourite();
+	    		mSkicentre.setFlagFavourite(!favourite);
+	    		mDatabase.setFavourite(mItemId, !favourite);
+	    		getSupportActivity().invalidateOptionsMenu();
+	    		mFavouriteClickListener.onFavouriteClick();
+	    		localyticsValues.put(Localytics.ATTR_BUTTON_FAVOURITE, favourite ? Localytics.VALUE_BUTTON_FAVOURITE_UNSELECT : Localytics.VALUE_BUTTON_FAVOURITE_SELECT); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_BUTTON, localyticsValues); // Localytics
+				return true;
 				
 	    	case R.id.ab_button_preferences:
 	    		Intent preferencesIntent = new Intent();
@@ -1111,8 +1139,12 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 	
 	private void searchNearestSkicentre()
 	{
-		int result[] = mDatabase.getNearestSkicentre(getDeviceLocation());
-		mItemId = result[0];
+		Location location = getDeviceLocation();
+		if(location!=null)
+		{
+			int result[] = mDatabase.getNearestSkicentre(location);
+			mItemId = result[0];
+		}
 	}
 	
 	
@@ -1122,4 +1154,10 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		return location;
 	}
+	
+	
+	public interface OnFavouriteClickListener 
+	{
+        public void onFavouriteClick();
+    }
 }

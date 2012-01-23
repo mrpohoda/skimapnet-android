@@ -48,20 +48,25 @@ public class ListingAdapter extends BaseAdapter
 
 		// nacteni dat z listu
 		SkicentreShort skicentre;
+		String name;
+		int area;
+		int country;
+		boolean flagOpened;
+		int snowMax;
 		try
 		{
 			skicentre = mSkicentreList.get(position);
+			name = skicentre.getName();
+			area = skicentre.getArea();
+			country = skicentre.getCountry();
+			flagOpened = skicentre.isFlagOpened();
+			snowMax = skicentre.getSnowMax();
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 			return view;
 		}
-		String name = skicentre.getName();
-		int area = skicentre.getArea();
-		int country = skicentre.getCountry();
-		boolean flagOpened = skicentre.isFlagOpened();
-		int snowMax = skicentre.getSnowMax();
 		
 		// reference na widgety
 		ImageView imageOpened = (ImageView) view.findViewById(R.id.layout_listing_item_opened);
@@ -140,14 +145,17 @@ public class ListingAdapter extends BaseAdapter
 	{
 		// stat
 		String countryString = "";
-		if(countryString!=DatabaseHelper.NULL_STRING)
+		if(countryName!=DatabaseHelper.NULL_STRING)
 		{
 			countryString = countryName;
 		}
 		
 		// oblast
 		String areaString = areaName;
-		if(areaString!=DatabaseHelper.NULL_STRING && !skicentreName.contains(areaName) && !areaString.contentEquals(countryString) && !areaString.contentEquals(""))
+		if(areaString!=DatabaseHelper.NULL_STRING && 
+				!skicentreName.contains(areaName) && 
+				!areaString.contentEquals(countryString) && 
+				!areaString.contentEquals(""))
 		{
 			if(countryString!=DatabaseHelper.NULL_STRING) countryString += ", ";
 			countryString += areaString;

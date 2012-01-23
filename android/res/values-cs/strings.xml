@@ -36,11 +36,14 @@
     <string name="search_error_not_found">nenalezeno.</string>
     <string name="search_error_connection">Chyba spojení. Zkontrolujte prosím internetové připojení.</string>
     
-    <string name="settings_category">Nastavení</string>
+    <string name="settings_category_other">Ostatní</string>
+    <string name="settings_category_map">Mapa</string>
     <string name="settings_clear_cache">Vyčistit cache</string>
-    <string name="settings_clear_cache_summary">Vymaže dočasná data z databáze</string>
+    <string name="settings_clear_cache_summary">Vymaže z databáze dočasná data a oblíbené</string>
     <string name="settings_clear_cache_toast">Dočasná data byla vymazána</string>
     <string name="settings_help">Info a nápověda</string>
+    <string name="settings_rate">Ohodnotit aplikaci</string>
+    <string name="settings_rate_summary">Podpořte vývojáře a ohodnoťte Ski Map v Marketu</string>
     <string name="settings_feedback">Zpětná vazba</string>
     <string name="settings_feedback_summary">Zašlete vzkaz vývojáři</string>
     <string name="settings_feedback_subject">Ski-map zpětná vazba</string>
@@ -50,10 +53,16 @@
     <string name="settings_feedback_api">API</string>
     <string name="settings_feedback_device">Zařízení:</string>
     <string name="settings_feedback_message">Vzkaz pro vývojáře:</string>
+    <string name="settings_trail">Typy tras</string>
+    <string name="settings_trail_summary">Vyberte, které trasy chcete zobrazovat</string>
+    <string name="settings_trail_downhills">Sjezdovky</string>
+    <string name="settings_trail_lifts">Vleky a lanovky</string>
+    <string name="settings_trail_xc">Běžkařské tratě</string>
     
     <string name="layout_map_infobox">Pro zobrazení sjezdovek nutno přiblížit...</string>
     
     <string name="layout_listing_item_snow">cm sněhu</string>
+    <string name="layout_listing_empty">Žádná oblíbená střediska. Oblíbené středisko můžete přidat v detailu pomocí hvězdičky.</string>
     
     <string name="layout_detail_offline">Jste v offline režimu. Data nemusí být aktuální.</string>
     <string name="layout_detail_share">Sdílet středisko</string>
@@ -99,17 +108,21 @@
     ]]></string>
     <string name="layout_help_info_title">O aplikaci</string>
     <string name="layout_help_info_text"><![CDATA[
-       	Plánujete vyrazit na lyže či snowboard a chcete mít jasnější představu kam se vydat? Využijte jedinečnou aplikaci s přehledem lyžařských středisek, sněhovým zpravodajstvím, počasím, cen skipasů, webovými kamerami a řadou dalších funkcí. Prohlédněte si reálnou mapu sjezdovek, vleků a lanovek všech významných skicenter střední Evropy nejen v Alpách. Užitečnou funkcí je také offline režim, který oceníte na horách, pokud nemáte internetové připojení. Snažíme se aplikaci neustále vylepšovat a připravili jsme možnost hlášení připomínek či přání pro další vývoj aplikace. Už nyní se můžete těšit na:<br><br>
+       	Plánujete vyrazit na lyže či snowboard a chcete mít jasnější představu kam se vydat? Využijte jedinečnou aplikaci s přehledem lyžařských středisek, sněhovým zpravodajstvím, počasím, cen skipasů, webovými kamerami a řadou dalších funkcí. Prohlédněte si reálnou mapu sjezdovek, běžkařských tratí, vleků a lanovek všech významných skicenter střední Evropy nejen v Alpách. Užitečnou funkcí je také offline režim, který oceníte na horách, pokud nemáte internetové připojení. Snažíme se aplikaci neustále vylepšovat a připravili jsme možnost hlášení připomínek či přání pro další vývoj aplikace. Už nyní se můžete těšit na:<br><br>
 		● řazení středisek dle různých kritérií<br>
-		● oblíbená střediska<br>
 		● ubytování v okolí včetně hodnocení<br>
-		● podpora běžkařských tratí<br>
-		● rozšiřujeme i možnost wellness relaxace a rádi přivítáme vaše tipy na osvědčené lázně, termály, kluziště apod.<br>
 		● Après-ski bary<br><br>
 		Vyzkoušejte Ski Map a prohlédněte si svůj oblíbený svah. Na webu Ski-map.net dokonce ve 3D.
     ]]></string>
     <string name="layout_help_changes_title">Změny</string>
     <string name="layout_help_changes_text"><![CDATA[
+        <b>0.9.4vf</b> <i>(28.1.2012)</i><br>
+        ● nové: běžkařské tratě<br>
+        ● nové: oblíbená střediska<br>
+        ● nové: výběr typu tras v nastavení<br>
+        ● nové: hodnocení aplikace v nastavení<br>
+       	● opravené: několik drobných bugů<br>
+       	<br>
         <b>0.9.3</b> <i>(7.1.2012)</i><br>
         ● nové: uživatelské rozhraní pro tablety<br>
         ● nové: lokace nejbližšího střediska<br>
@@ -145,8 +158,7 @@
 		Vítejte v aplikaci Ski Map. Berte prosím na vědomí, že aplikace je nová a některé funkce zatím nebyly implementovány.<br><br>
 		Brzy se můžete těšit na:<br>
 		● řazení středisek<br>
-		● podpora běžeckých tratí<br>
-		● oblíbená střediska<br><br>
+		● ubytování<br><br>
 		Přejeme pěknou lyžovačku!
     ]]></string>
     

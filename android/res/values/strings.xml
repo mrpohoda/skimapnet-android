@@ -2,13 +2,16 @@
 <resources>
     <!-- DON'T TRANSLATE -->
     <string name="app_name">Ski Map</string>
+    <string name="market_uri">market://details?id=net.skimap</string>
     <string name="map_api_key_debug">0ED6_e2Y9kSFAVxC_CN1Jdme6afF_pvPQhIlrHA</string>
     <string name="map_api_key_release">0ED6_e2Y9kSF-CBNSeZQCjS5p2JssXa_u7zdLLQ</string>
     <string name="settings_key_last_synchro">net_skimap_last_synchro</string>
     <string name="settings_key_current_version">net_skimap_current_version</string>
     <string name="settings_key_clear_cache">net_skimap_clear_cache</string>
     <string name="settings_key_help">net_skimap_help</string>
+    <string name="settings_key_rate">net_skimap_rate</string>
     <string name="settings_key_feedback">net_skimap_feedback</string>
+    <string name="settings_key_trail">net_skimap_trail</string>
     
     <!-- LANGUAGE DEPENDENT -->
     <string name="ab_button_list">List</string>
@@ -46,11 +49,14 @@
     <string name="search_error_not_found">not found.</string>
     <string name="search_error_connection">Connection error. Please check your internet connection.</string>
     
-    <string name="settings_category">Settings</string>
+    <string name="settings_category_other">Other</string>
+    <string name="settings_category_map">Map</string>
     <string name="settings_clear_cache">Clear cache</string>
-    <string name="settings_clear_cache_summary">Remove temporary data from database</string>
+    <string name="settings_clear_cache_summary">Remove temporary data and favourites from database</string>
     <string name="settings_clear_cache_toast">Temporary data has been cleared</string>
     <string name="settings_help">Info and help</string>
+    <string name="settings_rate">Rate the application</string>
+    <string name="settings_rate_summary">Support developers and rate Ski Map in Market</string>
     <string name="settings_feedback">User feedback</string>
     <string name="settings_feedback_summary">Send message to developer</string>
     <string name="settings_feedback_subject">Ski-map user feedback</string>
@@ -60,10 +66,16 @@
     <string name="settings_feedback_api">API</string>
     <string name="settings_feedback_device">Device:</string>
     <string name="settings_feedback_message">Message for developer:</string>
+    <string name="settings_trail">Trail layers</string>
+    <string name="settings_trail_summary">Choose type of trails to show</string>
+    <string name="settings_trail_downhills">Downhills</string>
+    <string name="settings_trail_lifts">Lifts</string>
+    <string name="settings_trail_xc">Cross country skiing</string>
     
     <string name="layout_map_infobox">Zoom in for show ski tracks...</string>
     
     <string name="layout_listing_item_snow">cm of snow</string>
+    <string name="layout_listing_empty">No favourites. Favourite resort can be added in detail using star button.</string>
     
     <string name="layout_detail_offline">You are in offline mode. Data may not be updated.</string>
     <string name="layout_detail_share">Share ski resort</string>
@@ -109,10 +121,9 @@
     ]]></string>
     <string name="layout_help_info_title">About app</string>
     <string name="layout_help_info_text"><![CDATA[
-       	Ski Map brings you unique ski guide with overview of ski resorts, snow reports, weather forecast, skipass prices, web cameras and other useful functions. Check the real map of ski slopes and lifts of all significant skicentres in central Europe including Alps. Ski Map also support offline mode. We try to improve the application continuously and we prepared user feedback and wishes for further application development. Comming soon:<br><br>
+       	Ski Map brings you unique ski guide with overview of ski resorts, snow reports, weather forecast, skipass prices, web cameras and other useful functions. Check the real map of ski slopes and lifts of all significant skicentres in central Europe including Alps. You can also view cross-country trails. Ski Map support offline mode. We try to improve the application continuously and we prepared user feedback and wishes for further application development. Comming soon:<br><br>
 		● sorting<br>
-		● cross-country trails<br>
-		● favourite ski resorts
+		● accommodation
     ]]></string>
     <string name="layout_help_changes_title">Changelog</string>
     <string name="layout_help_changes_text"><![CDATA[
@@ -126,8 +137,7 @@
 		Welcome to Ski Map. Please note that application is new and some functions are not implemented yet.<br><br>
 		Comming soon:<br>
 		● sorting<br>
-		● cross-country trails<br>
-		● favourite ski resorts<br><br>
+		● accommodation<br><br>
 		Enjoy!
     ]]></string>
     

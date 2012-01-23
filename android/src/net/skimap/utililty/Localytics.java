@@ -3,8 +3,8 @@ package net.skimap.utililty;
 
 public class Localytics
 {
-	public static String KEY = "3ed8848e93e296614cc7e45-6c78e428-2b0a-11e1-0c8e-001b3da7bd76";
-	//public static String KEY = "debug";
+	//public static String KEY = "3ed8848e93e296614cc7e45-6c78e428-2b0a-11e1-0c8e-001b3da7bd76";
+	public static String KEY = "debug";
 	
 	public static String TAG_BUTTON = "button";
 	public static String ATTR_BUTTON_MAP = "map";
@@ -16,6 +16,7 @@ public class Localytics
 	public static String ATTR_BUTTON_LAYER = "map layer";
 	public static String ATTR_BUTTON_SHARE = "share";
 	public static String ATTR_BUTTON_NAVIGATION = "navigation";
+	public static String ATTR_BUTTON_FAVOURITE = "favourite";
 	public static String VALUE_BUTTON_FROM_MAP = "from map";
 	public static String VALUE_BUTTON_FROM_LIST = "from list";
 	public static String VALUE_BUTTON_FROM_DETAIL = "from detail";
@@ -26,9 +27,12 @@ public class Localytics
 	public static String VALUE_BUTTON_LOCATION_NEAREST = "nearest";
 	public static String VALUE_BUTTON_LAYER_NORMAL = "normal";
 	public static String VALUE_BUTTON_LAYER_SATELLITE = "satellite";
+	public static String VALUE_BUTTON_FAVOURITE_SELECT = "select";
+	public static String VALUE_BUTTON_FAVOURITE_UNSELECT = "unselect";
 	
 	public static String TAG_PREFERENCE = "preference";
 	public static String ATTR_PREFERENCE_HELP = "help";
+	public static String ATTR_PREFERENCE_RATE = "rate";
 	public static String ATTR_PREFERENCE_CACHE = "clear cache";
 	public static String ATTR_PREFERENCE_FEEDBACK = "feedback";
 	public static String VALUE_PREFERENCE_FROM_PREFERENCES = "from preferences";

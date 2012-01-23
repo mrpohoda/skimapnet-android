@@ -131,36 +131,44 @@ public class Database
 	public int updateSkicentre(SkicentreShort skicentre)
 	{
 		ContentValues values = valuesSkicentreShort(skicentre);
-		return mDatabase.update(DatabaseHelper.TAB_SKICENTRE, values, DatabaseHelper.TAB_SKICENTRE_API_ID + "='" + skicentre.getId() + "'", null);
+		return mDatabase.update(DatabaseHelper.TAB_SKICENTRE,
+				values,
+				DatabaseHelper.TAB_SKICENTRE_API_ID + "=?",
+				new String[] { Integer.toString(skicentre.getId()) });
 	}
 	
 	
 	public int updateSkicentre(SkicentreLong skicentre)
 	{
 		ContentValues values = valuesSkicentreLong(skicentre);
-		return mDatabase.update(DatabaseHelper.TAB_SKICENTRE, values, DatabaseHelper.TAB_SKICENTRE_API_ID + "='" + skicentre.getId() + "'", null);
+		return mDatabase.update(DatabaseHelper.TAB_SKICENTRE,
+				values,
+				DatabaseHelper.TAB_SKICENTRE_API_ID + "=?",
+				new String[] { Integer.toString(skicentre.getId()) });
 	}
 	
 	
-	// TODO: overit funkcnost upsert
 	public long upsertSkicentre(SkicentreShort skicentre)
 	{
 		ContentValues values = valuesSkicentreShort(skicentre);
+		values.put(DatabaseHelper.TAB_SKICENTRE_APP_FLAG_FAVOURITE, isFavourite(skicentre.getId())); // nastaveni favourite
 		return mDatabase.replace(DatabaseHelper.TAB_SKICENTRE, null, values);
 	}
 	
 	
-	// TODO: overit funkcnost upsert
 	public long upsertSkicentre(SkicentreLong skicentre)
 	{
 		ContentValues values = valuesSkicentreLong(skicentre);
+		values.put(DatabaseHelper.TAB_SKICENTRE_APP_FLAG_FAVOURITE, isFavourite(skicentre.getId())); // nastaveni favourite
 		return mDatabase.replace(DatabaseHelper.TAB_SKICENTRE, null, values);
 	}
 	
 	
 	public int deleteSkicentre(int id)
 	{
-		return mDatabase.delete(DatabaseHelper.TAB_SKICENTRE, DatabaseHelper.TAB_SKICENTRE_API_ID + "='" + id + "'", null);
+		return mDatabase.delete(DatabaseHelper.TAB_SKICENTRE,
+				DatabaseHelper.TAB_SKICENTRE_API_ID + "=?",
+				new String[] { Integer.toString(id) });
 	}
 	
 	
@@ -170,9 +178,52 @@ public class Database
 	}
 	
 	
+	public boolean isFavourite(int id)
+	{
+		Cursor cursor = mDatabase.query(
+				true, 
+				DatabaseHelper.TAB_SKICENTRE, 
+				new String[] {DatabaseHelper.TAB_SKICENTRE_APP_FLAG_FAVOURITE}, 
+				DatabaseHelper.TAB_SKICENTRE_API_ID + "=?", 
+				new String[] { Integer.toString(id) },
+				null, 
+				null, 
+				null, 
+				null);
+		boolean favourite = false;
+		
+		if (cursor != null && cursor.moveToFirst())
+		{
+			int colFlagFavourite = cursor.getColumnIndex(DatabaseHelper.TAB_SKICENTRE_APP_FLAG_FAVOURITE);
+			favourite = (cursor.getInt(colFlagFavourite)==1);
+		}
+		
+		cursor.close();
+		return favourite;
+	}
+	
+	
+	public int setFavourite(int id, boolean value)
+	{
+		ContentValues values = new ContentValues();
+		values.put(DatabaseHelper.TAB_SKICENTRE_APP_FLAG_FAVOURITE, value);
+		return mDatabase.update(DatabaseHelper.TAB_SKICENTRE, values, 
+				DatabaseHelper.TAB_SKICENTRE_API_ID + "=?", 
+				new String[] { Integer.toString(id) });
+	}
+	
+	
 	public SkicentreLong getSkicentre(int id)
 	{
-		Cursor cursor = mDatabase.query(true, DatabaseHelper.TAB_SKICENTRE, DatabaseHelper.COLS_SKICENTRE_LONG, DatabaseHelper.TAB_SKICENTRE_API_ID + "='" + id + "'", null, null, null, null, null);
+		Cursor cursor = mDatabase.query(true,
+				DatabaseHelper.TAB_SKICENTRE,
+				DatabaseHelper.COLS_SKICENTRE_LONG,
+				DatabaseHelper.TAB_SKICENTRE_API_ID + "=?", 
+				new String[] { Integer.toString(id) },
+				null,
+				null,
+				null,
+				null);
 		SkicentreLong skicentre = null;
 		
 		if (cursor != null && cursor.moveToFirst())
@@ -215,6 +266,60 @@ public class Database
 				DatabaseHelper.COLS_SKICENTRE_SHORT, 
 				DatabaseHelper.TAB_SKICENTRE_API_NAME + " LIKE ?", 
 				new String[] { "%" + keyword + "%" }, 
+				null,
+				null,
+				sortExpression,
+				null);
+		ArrayList<SkicentreShort> list = new ArrayList<SkicentreShort>();
+		
+		while (cursor.moveToNext()) 
+	    {
+			SkicentreShort skicentre = cursorSkicentreShort(cursor);
+			list.add(skicentre);
+	    }
+		
+		cursor.close();
+		return list;
+	}
+	
+
+	public ArrayList<SkicentreShort> getFavouriteSkicentres(Sort sort)
+	{
+		String sortExpression = null;
+		if(sort==Sort.NAME) sortExpression = DatabaseHelper.TAB_SKICENTRE_API_NAME + " COLLATE LOCALIZED ASC";
+		else if(sort==Sort.SNOW_MAX) sortExpression = DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX + " COLLATE LOCALIZED DESC";
+		
+		Cursor cursor = mDatabase.query(DatabaseHelper.TAB_SKICENTRE, 
+				DatabaseHelper.COLS_SKICENTRE_SHORT,
+				DatabaseHelper.TAB_SKICENTRE_APP_FLAG_FAVOURITE + "='1'",
+				null,
+				null,
+				null,
+				sortExpression,
+				null);
+		ArrayList<SkicentreShort> list = new ArrayList<SkicentreShort>();
+		
+		while (cursor.moveToNext()) 
+	    {
+			SkicentreShort skicentre = cursorSkicentreShort(cursor);
+			list.add(skicentre);
+	    }
+		
+		cursor.close();
+		return list;
+	}
+	
+	
+	public ArrayList<SkicentreShort> getFavouriteSkicentresByKeyword(String keyword, Sort sort)
+	{
+		String sortExpression = null;
+		if(sort==Sort.NAME) sortExpression = DatabaseHelper.TAB_SKICENTRE_API_NAME + " COLLATE LOCALIZED ASC";
+		else if(sort==Sort.SNOW_MAX) sortExpression = DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX + " COLLATE LOCALIZED DESC";
+		
+		Cursor cursor = mDatabase.query(DatabaseHelper.TAB_SKICENTRE, 
+				DatabaseHelper.COLS_SKICENTRE_SHORT, 
+				DatabaseHelper.TAB_SKICENTRE_APP_FLAG_FAVOURITE + "=? AND " + DatabaseHelper.TAB_SKICENTRE_API_NAME + " LIKE ?", 
+				new String[] { "1", "%" + keyword + "%" }, 
 				null,
 				null,
 				sortExpression,
@@ -508,8 +613,8 @@ public class Database
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_6_SYMBOL_NAME, skicentre.getWeather6Symbol().ordinal());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_6_TEMPERATURE_MIN, skicentre.getWeather6TemperatureMin());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_WEATHER_6_TEMPERATURE_MAX, skicentre.getWeather6TemperatureMax());
-		values.put(DatabaseHelper.TAB_SKICENTRE_APP_FLAG_FAVOURITE, skicentre.isFlagFavourite());
-		values.put(DatabaseHelper.TAB_SKICENTRE_APP_DATE_LAST_UPDATE, skicentre.getDateLastUpdateDatabase());
+		//values.put(DatabaseHelper.TAB_SKICENTRE_APP_FLAG_FAVOURITE, skicentre.isFlagFavourite());
+		//values.put(DatabaseHelper.TAB_SKICENTRE_APP_DATE_LAST_UPDATE, skicentre.getDateLastUpdateDatabase());
 		return values;
 	}
 	

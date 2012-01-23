@@ -10,7 +10,11 @@ import net.skimap.utililty.Localytics;
 import net.skimap.utililty.Settings;
 import net.skimap.utililty.Version;
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -127,6 +131,57 @@ public class SettingsActivity extends PreferenceActivity
     
     private void setPreferences()
 	{
+    	// typy tras	    
+	    CharSequence trailKey = getResources().getString(R.string.settings_key_trail);
+	    Preference trail = (Preference) findPreference(trailKey);
+	    trail.setOnPreferenceClickListener(new OnPreferenceClickListener() 
+	    {			
+	    	private StringBuilder mTypes = new StringBuilder();
+	    	
+			public boolean onPreferenceClick(Preference preference) 
+			{
+				// textove popisky
+				CharSequence items[] = {getResources().getString(R.string.settings_trail_downhills), 
+						getResources().getString(R.string.settings_trail_lifts),
+						getResources().getString(R.string.settings_trail_xc)};
+				
+				// pocatecni nastaveni
+				final Settings settings = new Settings(SettingsActivity.this);
+				mTypes.append(settings.getTrailTypes());				
+				boolean checkedItems[] = new boolean[3];
+				for(int i=0;i<checkedItems.length;i++)
+				{
+					checkedItems[i] = mTypes.charAt(i)=='1' ? true : false;
+				}
+
+				// dialog
+				AlertDialog.Builder alert = new AlertDialog.Builder(SettingsActivity.this);
+				alert.setCancelable(true);
+				alert.setIcon(R.drawable.icon);
+				alert.setTitle(R.string.settings_trail);
+				alert.setMultiChoiceItems(items, checkedItems, new OnMultiChoiceClickListener()
+				{
+					@Override
+					public void onClick(DialogInterface dialog, int which, boolean isChecked)
+					{
+						// zmena nastaveni
+						mTypes.setCharAt(which, isChecked ? '1' : '0');
+					}
+				});
+				alert.setPositiveButton(R.string.dialog_intro_ok, new DialogInterface.OnClickListener()
+				{
+					public void onClick(DialogInterface dialog, int id)
+					{
+						// ulozeni nastaveni
+						settings.setTrailTypes(mTypes.toString());
+					}
+				});
+				alert.show();
+				return false;
+			}
+	    });
+	    
+	    
     	// napoveda	    
 	    CharSequence helpKey = getResources().getString(R.string.settings_key_help);
 	    Preference help = (Preference) findPreference(helpKey);
@@ -140,6 +195,24 @@ public class SettingsActivity extends PreferenceActivity
 		        
 		        Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
 		        localyticsValues.put(Localytics.ATTR_PREFERENCE_HELP, Localytics.VALUE_PREFERENCE_FROM_PREFERENCES); // Localytics atribut
+	    		mLocalyticsSession.tagEvent(Localytics.TAG_PREFERENCE, localyticsValues); // Localytics
+				return false;
+			}
+	    });
+	    
+	    
+	    // hodnoceni	    
+	    CharSequence rateKey = getResources().getString(R.string.settings_key_rate);
+	    Preference rate = (Preference) findPreference(rateKey);
+	    rate.setOnPreferenceClickListener(new OnPreferenceClickListener() 
+	    {			    	
+			public boolean onPreferenceClick(Preference preference) 
+			{
+				Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(getString(R.string.market_uri)));
+		        startActivity(intent);
+		        
+		        Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+		        localyticsValues.put(Localytics.ATTR_PREFERENCE_RATE, Localytics.VALUE_PREFERENCE_FROM_PREFERENCES); // Localytics atribut
 	    		mLocalyticsSession.tagEvent(Localytics.TAG_PREFERENCE, localyticsValues); // Localytics
 				return false;
 			}

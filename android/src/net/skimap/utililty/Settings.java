@@ -54,6 +54,15 @@ public class Settings
 	}
 	
 	
+	public String getTrailTypes()
+	{
+		String key = mContext.getString(R.string.settings_key_trail);
+		String defaultValue = "111";
+		String value = mSharedPrefs.getString(key, defaultValue);
+		return value;
+	}
+	
+	
 	// SETTERS ////////////////////////////////////////////////////////////////////////////////////
 	
 	
@@ -71,6 +80,15 @@ public class Settings
 		String key = mContext.getString(R.string.settings_key_current_version);
 		SharedPreferences.Editor editor = mSharedPrefs.edit();
 		editor.putString(key, version);
+	 	editor.commit();
+	}
+	
+	
+	public void setTrailTypes(String types)
+	{
+		String key = mContext.getString(R.string.settings_key_trail);
+		SharedPreferences.Editor editor = mSharedPrefs.edit();
+		editor.putString(key, types);
 	 	editor.commit();
 	}
 }
