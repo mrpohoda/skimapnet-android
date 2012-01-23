@@ -213,6 +213,7 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 				return true;
 				
 	    	case R.id.ab_button_favourite:
+	    		if(mSkicentre==null) return true;
 	    		boolean favourite = mSkicentre.isFlagFavourite();
 	    		mSkicentre.setFlagFavourite(!favourite);
 	    		mDatabase.setFavourite(mItemId, !favourite);
@@ -309,6 +310,9 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
             	{
             		// Fragment not attached to Activity
             	}
+            	catch(NullPointerException e)
+            	{
+            	}
             	
             	// naslouchani synchronizace
                 ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(DetailFragment.this);
@@ -349,6 +353,11 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
             	catch(IllegalStateException e)
             	{
             		// Fragment not attached to Activity
+            		return;
+            	}
+            	catch(NullPointerException e)
+            	{
+            		return;
             	}
             }
 	    };

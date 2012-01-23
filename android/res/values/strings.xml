@@ -134,8 +134,7 @@
     <string name="dialog_intro_ok">Ok</string>
     <string name="dialog_intro_rate">Rate</string>
     <string name="dialog_intro_text"><![CDATA[
-		Welcome to Ski Map. Please note that application is new and some functions are not implemented yet.<br><br>
-		Comming soon:<br>
+		Welcome to Ski Map. Please note that application is new and some functions are not implemented yet. Comming soon:<br><br>
 		● sorting<br>
 		● accommodation<br><br>
 		Enjoy!

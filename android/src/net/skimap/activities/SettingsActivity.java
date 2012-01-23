@@ -136,7 +136,7 @@ public class SettingsActivity extends PreferenceActivity
 	    Preference trail = (Preference) findPreference(trailKey);
 	    trail.setOnPreferenceClickListener(new OnPreferenceClickListener() 
 	    {			
-	    	private StringBuilder mTypes = new StringBuilder();
+	    	private StringBuilder mTypes;
 	    	
 			public boolean onPreferenceClick(Preference preference) 
 			{
@@ -147,7 +147,7 @@ public class SettingsActivity extends PreferenceActivity
 				
 				// pocatecni nastaveni
 				final Settings settings = new Settings(SettingsActivity.this);
-				mTypes.append(settings.getTrailTypes());				
+				mTypes = new StringBuilder(settings.getTrailTypes());			
 				boolean checkedItems[] = new boolean[3];
 				for(int i=0;i<checkedItems.length;i++)
 				{
@@ -174,6 +174,10 @@ public class SettingsActivity extends PreferenceActivity
 					{
 						// ulozeni nastaveni
 						settings.setTrailTypes(mTypes.toString());
+						
+						Map<String,String> localyticsValues = new HashMap<String,String>(); // Localytics hodnoty
+				        localyticsValues.put(Localytics.ATTR_PREFERENCE_TRAIL, mTypes.toString()); // Localytics atribut
+			    		mLocalyticsSession.tagEvent(Localytics.TAG_PREFERENCE, localyticsValues); // Localytics
 					}
 				});
 				alert.show();

@@ -40,8 +40,9 @@ public class ListingAdapter extends BaseAdapter
     {
     	// nastaveni view
 		View view = convertView;
-		if (view == null) 
+		if(view==null) 
 		{
+			if(mFragment==null) return view;
 			LayoutInflater inflater = (LayoutInflater) mFragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.layout_listing_item, null);			
 		}

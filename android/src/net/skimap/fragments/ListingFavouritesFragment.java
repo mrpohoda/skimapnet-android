@@ -73,7 +73,7 @@ public class ListingFavouritesFragment extends ListingFragment
 		
 		// prazdny seznam
 		TextView emptyView = (TextView) mRootView.findViewById(R.id.layout_listing_favourites_empty);
-		if(mSkicentreList.size()<1) emptyView.setVisibility(View.VISIBLE);
+		if(mSkicentreList.size()<1 && keyword==null) emptyView.setVisibility(View.VISIBLE);
 		else emptyView.setVisibility(View.GONE);
 		
 		// seznam skicenter

@@ -8,7 +8,7 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:clickable="true"
-	    android:apiKey="@string/map_api_key_debug" />
+	    android:apiKey="@string/map_api_key_release" />
     
     <TextView
 	    android:id="@+id/layout_map_infobox"

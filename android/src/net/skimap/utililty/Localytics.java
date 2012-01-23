@@ -3,8 +3,8 @@ package net.skimap.utililty;
 
 public class Localytics
 {
-	//public static String KEY = "3ed8848e93e296614cc7e45-6c78e428-2b0a-11e1-0c8e-001b3da7bd76";
-	public static String KEY = "debug";
+	public static String KEY = "3ed8848e93e296614cc7e45-6c78e428-2b0a-11e1-0c8e-001b3da7bd76";
+	//public static String KEY = "debug";
 	
 	public static String TAG_BUTTON = "button";
 	public static String ATTR_BUTTON_MAP = "map";
@@ -31,6 +31,7 @@ public class Localytics
 	public static String VALUE_BUTTON_FAVOURITE_UNSELECT = "unselect";
 	
 	public static String TAG_PREFERENCE = "preference";
+	public static String ATTR_PREFERENCE_TRAIL = "trail";
 	public static String ATTR_PREFERENCE_HELP = "help";
 	public static String ATTR_PREFERENCE_RATE = "rate";
 	public static String ATTR_PREFERENCE_CACHE = "clear cache";

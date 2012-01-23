@@ -54,7 +54,7 @@
     <string name="settings_feedback_device">Zařízení:</string>
     <string name="settings_feedback_message">Vzkaz pro vývojáře:</string>
     <string name="settings_trail">Typy tras</string>
-    <string name="settings_trail_summary">Vyberte, které trasy chcete zobrazovat</string>
+    <string name="settings_trail_summary">Vyberte trasy, které chcete zobrazovat</string>
     <string name="settings_trail_downhills">Sjezdovky</string>
     <string name="settings_trail_lifts">Vleky a lanovky</string>
     <string name="settings_trail_xc">Běžkařské tratě</string>
@@ -155,8 +155,7 @@
     <string name="dialog_intro_ok">Ok</string>
     <string name="dialog_intro_rate">Ohodnotit</string>
     <string name="dialog_intro_text"><![CDATA[
-		Vítejte v aplikaci Ski Map. Berte prosím na vědomí, že aplikace je nová a některé funkce zatím nebyly implementovány.<br><br>
-		Brzy se můžete těšit na:<br>
+		Vítejte v aplikaci Ski Map. Berte prosím na vědomí, že aplikace je nová a některé funkce zatím nebyly implementovány. Brzy se můžete těšit na:<br><br>
 		● řazení středisek<br>
 		● ubytování<br><br>
 		Přejeme pěknou lyžovačku!
