@@ -38,7 +38,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -48,6 +47,7 @@ import android.support.v4.app.SupportActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.support.v4.view.SubMenu;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -606,24 +606,27 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	}
 	
 	
-	private void refreshPois()
+	private synchronized void refreshPois()
 	{
 		// smazani vsech vrstev mapy
 		mMapView.getOverlays().clear();
 		
 		// pridani POI
 		addPois();
+		
+		Log.d("SKIMAP", "refreshPois()");
 	}
 	
 	
-	private void addPois()
+	private synchronized void addPois()
 	{
 		// vlakno
-		new OverlayTask().execute();
+		//new OverlayTask().execute();
+		addPoisThread();
 	}
 	
 	
-	private void addPoisThread()
+	private synchronized void addPoisThread()
 	{
 		// kontrola platnosti kontextu
 		if(!this.isAdded()) return;
@@ -735,8 +738,36 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	}
 	
 	
-	private void tryRedrawPaths()
+//	//http://stackoverflow.com/questions/2553410/nullpointerexception-in-itemizedoverlay-getindextodraw
+//	//http://stackoverflow.com/questions/2870743/android-2-1-googlemaps-itemizedoverlay-concurrentmodificationexception
+//	//http://stackoverflow.com/questions/4374100/android-maps-array-index-out-of-bound-exception
+//	//https://github.com/commonsguy/cw-advandroid/blob/master/Maps/NooYawkAsync/src/com/commonsware/android/mapasync/NooYawk.java
+//	class OverlayTask extends AsyncTask<Void, Void, Void>
+//	{
+//	    @Override
+//	    public void onPreExecute()
+//	    {
+//	    }
+//	    
+//	    // UI vlakno
+//	    @Override
+//	    public Void doInBackground(Void... unused)
+//	    {
+//	    	addPoisThread();
+//	    	return(null);
+//	    }
+//	    
+//	    @Override
+//	    public void onPostExecute(Void unused)
+//	    {
+//	    }
+//	}
+	
+	
+	private synchronized void tryRedrawPaths()
 	{
+		Log.d("SKIMAP", "tryRedrawPaths()");
+		
 		// kontrola zoom
 		if(mMapView==null || mMapView.getZoomLevel()<ZOOM_MINIMUM_FOR_DRAW) return;
 			
@@ -789,7 +820,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	
 
 	//http://stackoverflow.com/questions/2013443/on-zoom-event-for-google-maps-on-android
-	private void redrawPaths()
+	private synchronized void redrawPaths()
 	{
 		// odchyceni zpravy z vlakna
 		final Handler handler = new Handler() 
@@ -865,7 +896,7 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	}
 
 
-	private void removePaths()
+	private synchronized void removePaths()
 	{
 		//Log.d("SKIMAP", "BEFORE REMOVE OVERLAYS:" + mMapView.getOverlays().size());
 		
@@ -889,31 +920,5 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		mMapView.getOverlays().addAll(overlaysToAddAgain);
 		
 		//Log.d("SKIMAP", "AFTER REMOVE OVERLAYS:" + mMapView.getOverlays().size());
-	}
-	
-
-	//http://stackoverflow.com/questions/2553410/nullpointerexception-in-itemizedoverlay-getindextodraw
-	//http://stackoverflow.com/questions/2870743/android-2-1-googlemaps-itemizedoverlay-concurrentmodificationexception
-	//http://stackoverflow.com/questions/4374100/android-maps-array-index-out-of-bound-exception
-	//https://github.com/commonsguy/cw-advandroid/blob/master/Maps/NooYawkAsync/src/com/commonsware/android/mapasync/NooYawk.java
-	class OverlayTask extends AsyncTask<Void, Void, Void>
-	{
-	    @Override
-	    public void onPreExecute()
-	    {
-	    }
-	    
-	    // UI vlakno
-	    @Override
-	    public Void doInBackground(Void... unused)
-	    {
-	    	addPoisThread();
-	    	return(null);
-	    }
-	    
-	    @Override
-	    public void onPostExecute(Void unused)
-	    {
-	    }
 	}
 }
