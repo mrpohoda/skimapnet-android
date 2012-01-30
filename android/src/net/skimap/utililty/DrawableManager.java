@@ -2,6 +2,7 @@ package net.skimap.utililty;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.SoftReference;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,66 +22,106 @@ import android.widget.ImageView;
 //http://stackoverflow.com/questions/541966/android-how-do-i-do-a-lazy-load-of-images-in-listview
 public class DrawableManager 
 {
-    private final Map<String, Drawable> mDrawableMap;
+    private final Map<String, SoftReference<Drawable>> mDrawableMap;
 
     
     public DrawableManager() 
     {
-    	mDrawableMap = new HashMap<String, Drawable>();
+    	mDrawableMap = new HashMap<String, SoftReference<Drawable>>();
     }
 
     
     public Drawable fetchDrawable(String urlString) 
     {
-        if (mDrawableMap.containsKey(urlString)) 
-        {
-            return mDrawableMap.get(urlString);
+    	SoftReference<Drawable> drawableRef = mDrawableMap.get(urlString);
+    	if (drawableRef != null) 
+    	{
+            Drawable drawable = drawableRef.get();
+            if (drawable != null) return drawable;
+            // Reference has expired so remove the key from drawableMap
+            mDrawableMap.remove(urlString);
         }
 
-        try 
-        {
+    	try
+    	{
             InputStream is = fetch(urlString);
             Drawable drawable = Drawable.createFromStream(is, "src");
-
-
-            if (drawable != null) 
-            {
-            	mDrawableMap.put(urlString, drawable);
-            } 
-            else 
-            {
-
-            }
-
-            return drawable;
-        } 
-        catch (MalformedURLException e) 
-        {
-            return null;
-        } 
-        catch (IOException e) 
+            drawableRef = new SoftReference<Drawable>(drawable);
+            mDrawableMap.put(urlString, drawableRef);
+            return drawableRef.get();
+        }
+    	catch (MalformedURLException e)
         {
             return null;
         }
-        catch (Exception e) 
+    	catch (IOException e)
+        {
+            return null;
+        }
+    	catch (Exception e) 
         {
         	e.printStackTrace();
             return null;
         }
+
+//        if (mDrawableMap.containsKey(urlString)) 
+//        {
+//            return mDrawableMap.get(urlString);
+//        }
+//
+//        try 
+//        {
+//            InputStream is = fetch(urlString);
+//            Drawable drawable = Drawable.createFromStream(is, "src");
+//
+//
+//            if (drawable != null) 
+//            {
+//            	mDrawableMap.put(urlString, drawable);
+//            } 
+//            else 
+//            {
+//
+//            }
+//
+//            return drawable;
+//        } 
+//        catch (MalformedURLException e) 
+//        {
+//            return null;
+//        } 
+//        catch (IOException e) 
+//        {
+//            return null;
+//        }
+//        catch (Exception e) 
+//        {
+//        	e.printStackTrace();
+//            return null;
+//        }
     }
 
     
     public void fetchDrawableOnThread(final String urlString, final ImageView imageView, final ArrayList<View> viewsToVisible) 
     {
-        if (mDrawableMap.containsKey(urlString)) 
-        {
-            imageView.setImageDrawable(mDrawableMap.get(urlString));
+    	SoftReference<Drawable> drawableRef = mDrawableMap.get(urlString);
+    	
+    	if (drawableRef != null)
+    	{
+            Drawable drawable = drawableRef.get();
+            if (drawable != null)
+            {
+                imageView.setImageDrawable(drawableRef.get());
+                return;
+            }
+            // Reference has expired so remove the key from drawableMap
+            mDrawableMap.remove(urlString);
         }
 
-        final Handler handler = new Handler() 
+        final Handler handler = new Handler()
         {
             @Override
-            public void handleMessage(Message message) 
+            public void handleMessage(Message message)
             {
             	Drawable drawable = (Drawable) message.obj;
                 imageView.setImageDrawable(drawable);
@@ -88,10 +129,10 @@ public class DrawableManager
             }
         };
 
-        Thread thread = new Thread() 
+        Thread thread = new Thread()
         {
             @Override
-            public void run() 
+            public void run()
             {
                 Drawable drawable = fetchDrawable(urlString);
                 Message message = handler.obtainMessage(1, drawable);
@@ -99,6 +140,34 @@ public class DrawableManager
             }
         };
         thread.start();
+
+//    	if (mDrawableMap.containsKey(urlString)) 
+//        {
+//            imageView.setImageDrawable(mDrawableMap.get(urlString));
+//        }
+//
+//        final Handler handler = new Handler() 
+//        {
+//            @Override
+//            public void handleMessage(Message message) 
+//            {
+//            	Drawable drawable = (Drawable) message.obj;
+//                imageView.setImageDrawable(drawable);
+//                if(drawable!=null) showViews(viewsToVisible);
+//            }
+//        };
+//
+//        Thread thread = new Thread() 
+//        {
+//            @Override
+//            public void run() 
+//            {
+//                Drawable drawable = fetchDrawable(urlString);
+//                Message message = handler.obtainMessage(1, drawable);
+//                handler.sendMessage(message);
+//            }
+//        };
+//        thread.start();
     }
 
     

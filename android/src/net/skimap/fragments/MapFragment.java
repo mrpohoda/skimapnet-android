@@ -47,7 +47,6 @@ import android.support.v4.app.SupportActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.support.v4.view.SubMenu;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -613,8 +612,6 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 		
 		// pridani POI
 		addPois();
-		
-		Log.d("SKIMAP", "refreshPois()");
 	}
 	
 	
@@ -766,8 +763,6 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 	
 	private synchronized void tryRedrawPaths()
 	{
-		Log.d("SKIMAP", "tryRedrawPaths()");
-		
 		// kontrola zoom
 		if(mMapView==null || mMapView.getZoomLevel()<ZOOM_MINIMUM_FOR_DRAW) return;
 			
