@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.MenuItem;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.Window;
 import android.view.View;
@@ -57,17 +58,8 @@ public class ListingActivity extends FragmentActivity implements ListingFragment
     	ActionBar bar = getSupportActionBar();
     	bar.setDisplayUseLogoEnabled(true);
     	bar.setDisplayShowTitleEnabled(false);
-    	
-    	// logo nebude klikatelne
-    	try
-    	{
-	    	View homeLayout = findViewById(com.actionbarsherlock.R.id.abs__home_wrapper);
-	    	homeLayout.setClickable(false);
-	        homeLayout.setFocusable(false);
-    	}
-    	catch(Exception e)
-    	{
-    	}
+    	bar.setDisplayShowHomeEnabled(true);
+    	bar.setDisplayHomeAsUpEnabled(true);
     	
     	// tabs
     	bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -85,6 +77,22 @@ public class ListingActivity extends FragmentActivity implements ListingFragment
         // inicializace progress baru
     	boolean synchro = ((SkimapApplication) getApplicationContext()).isSynchronizing();
     	setProgressBarIndeterminateVisibility(synchro ? Boolean.TRUE : Boolean.FALSE);
+    }
+    
+    
+    @Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+    {
+    	// nastaveni chovani tlacitek
+    	switch (item.getItemId()) 
+    	{
+    		case android.R.id.home:
+    			this.finish();
+				return true;
+				
+    		default:
+    			return super.onOptionsItemSelected(item);
+    	}
     }
     
     

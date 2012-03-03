@@ -134,7 +134,7 @@
     <string name="dialog_intro_ok">Ok</string>
     <string name="dialog_intro_rate">Rate</string>
     <string name="dialog_intro_text"><![CDATA[
-		Welcome to Ski Map. Please note that application is new and some functions are not implemented yet. Comming soon:<br><br>
+		Welcome to Ski Map. Please note that some functions are not implemented yet. Comming soon:<br><br>
 		● sorting<br>
 		● accommodation<br><br>
 		Enjoy!
@@ -142,6 +142,7 @@
     
     <string name="toast_help_opened">Ski resort opened</string>
     <string name="toast_help_closed">Ski resort closed</string>
+    <string name="toast_help_unknown">Unknown opening</string>
     <string name="toast_help_nightski">Night skiing</string>
     <string name="toast_help_valley">Desc to valley</string>
     <string name="toast_help_snowpark">Snowpark</string>

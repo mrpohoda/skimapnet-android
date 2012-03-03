@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentMapActivity;
 import android.support.v4.view.Window;
-import android.view.View;
 
 public class MapActivity extends FragmentMapActivity
 {
@@ -50,17 +49,6 @@ public class MapActivity extends FragmentMapActivity
     	ActionBar bar = getSupportActionBar();
     	bar.setDisplayUseLogoEnabled(true);
     	bar.setDisplayShowTitleEnabled(false);
-    	
-    	// logo nebude klikatelne
-    	try
-    	{
-	    	View homeLayout = findViewById(com.actionbarsherlock.R.id.abs__home_wrapper);
-	    	homeLayout.setClickable(false);
-	        homeLayout.setFocusable(false);
-    	}
-    	catch(Exception e)
-    	{
-    	}
     	
     	// inicializace progress baru
     	boolean synchro = ((SkimapApplication) getApplicationContext()).isSynchronizing();

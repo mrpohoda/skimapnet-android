@@ -2,13 +2,15 @@ package net.skimap.data;
 
 public class SkicentreShort 
 {
+	public static enum Open { CLOSED, OPENED, UNKNOWN };
+	
 	protected int mId;
 	protected String mName;
 	protected int mArea;
 	protected int mCountry;
 	protected double mLocationLatitude;
 	protected double mLocationLongitude;
-	protected boolean mFlagOpened;
+	protected Open mFlagOpened;
 	protected int mSnowMax;
 	
 	public SkicentreShort(int id, String name) 
@@ -17,7 +19,7 @@ public class SkicentreShort
 		mName = name;
 	}
 	
-	public SkicentreShort(int id, String name, int area, int country, double locationLatitude, double locationLongitude, boolean flagOpened, int snowMax)
+	public SkicentreShort(int id, String name, int area, int country, double locationLatitude, double locationLongitude, Open flagOpened, int snowMax)
 	{
 		mId = id;
 		mName = name;
@@ -35,7 +37,7 @@ public class SkicentreShort
 	public void setCountry(int country) { mCountry = country; }
 	public void setLocationLatitude(double locationLatitude) { mLocationLatitude = locationLatitude; }
 	public void setLocationLongitude(double locationLongitude) { mLocationLongitude = locationLongitude; }
-	public void setFlagOpened(boolean flagOpened) { mFlagOpened = flagOpened; }
+	public void setFlagOpened(Open flagOpened) { mFlagOpened = flagOpened; }
 	public void setSnowMax(int snowMax) { mSnowMax = snowMax; }
 	
 	public int getId() { return mId; }
@@ -44,6 +46,12 @@ public class SkicentreShort
 	public int getCountry() { return mCountry; }
 	public double getLocationLatitude() { return mLocationLatitude; }
 	public double getLocationLongitude() { return mLocationLongitude; }
-	public boolean isFlagOpened() { return mFlagOpened; }
+	public Open getFlagOpened() { return mFlagOpened; }
 	public int getSnowMax() { return mSnowMax; }
+	
+	public static Open intToOpen(int value)
+	{
+		SkicentreShort.Open values[] = SkicentreShort.Open.values();
+		return values[value];
+	}
 }

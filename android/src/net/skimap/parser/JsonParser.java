@@ -56,7 +56,7 @@ public class JsonParser
 				int country = DatabaseHelper.NULL_INT;
 				double locationLatitude = DatabaseHelper.NULL_DOUBLE;
 				double locationLongitude = DatabaseHelper.NULL_DOUBLE;
-				boolean flagOpened = DatabaseHelper.NULL_BOOLEAN;
+				SkicentreShort.Open flagOpened = SkicentreShort.Open.UNKNOWN;
 				int snowMax = DatabaseHelper.NULL_INT;
 				
 				// prochazej objekt az do konce
@@ -101,7 +101,7 @@ public class JsonParser
 					}
 					else if (field.equals(DatabaseHelper.TAB_SKICENTRE_API_FLAG_OPENED))
 					{
-						try { flagOpened = Integer.parseInt(parser.getText())==1; }
+						try { flagOpened = SkicentreShort.intToOpen( Integer.parseInt(parser.getText()) ); }
 						catch(NumberFormatException e) { /* hodnota je null */ }
 					}
 					else if (field.equals(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX))
@@ -166,7 +166,7 @@ public class JsonParser
 				int countDownhillsOpened = DatabaseHelper.NULL_INT;
 				int lengthCrosscountry = DatabaseHelper.NULL_INT;
 				int lengthDownhillsTotal = DatabaseHelper.NULL_INT;
-				boolean flagOpened = DatabaseHelper.NULL_BOOLEAN;
+				SkicentreShort.Open flagOpened = SkicentreShort.Open.UNKNOWN;
 				boolean flagNightski = DatabaseHelper.NULL_BOOLEAN;
 				boolean flagValley = DatabaseHelper.NULL_BOOLEAN;
 				boolean flagSnowpark = DatabaseHelper.NULL_BOOLEAN;
@@ -304,7 +304,7 @@ public class JsonParser
 					}
 					else if (field.equals(DatabaseHelper.TAB_SKICENTRE_API_FLAG_OPENED))
 					{
-						try { flagOpened = Integer.parseInt(parser.getText())==1; }
+						try { flagOpened = SkicentreShort.intToOpen( Integer.parseInt(parser.getText()) ); }
 						catch(NumberFormatException e) { /* hodnota je null */ }
 					}
 					else if (field.equals(DatabaseHelper.TAB_SKICENTRE_API_FLAG_NIGHTSKI))

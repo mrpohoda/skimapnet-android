@@ -108,13 +108,18 @@
     ]]></string>
     <string name="layout_help_info_title">O aplikaci</string>
     <string name="layout_help_info_text"><![CDATA[
-       	Plánujete vyrazit na lyže či snowboard a chcete mít jasnější představu kam se vydat? Využijte jedinečnou aplikaci s přehledem lyžařských středisek, sněhovým zpravodajstvím, počasím, cen skipasů, webovými kamerami a řadou dalších funkcí. Prohlédněte si reálnou mapu sjezdovek, běžkařských tratí, vleků a lanovek všech významných skicenter střední Evropy nejen v Alpách. Užitečnou funkcí je také offline režim, který oceníte na horách, pokud nemáte internetové připojení. Snažíme se aplikaci neustále vylepšovat a připravili jsme možnost hlášení připomínek či přání pro další vývoj aplikace. Už nyní se můžete těšit na:<br><br>
+       	Plánujete vyrazit na lyže či snowboard a chcete mít jasnější představu kam se vydat? Využijte jedinečnou aplikaci s přehledem lyžařských středisek, sněhovým zpravodajstvím, počasím, cen skipasů, webovými kamerami a řadou dalších funkcí. Prohlédněte si reálnou mapu sjezdovek, běžkařských tratí, vleků a lanovek všech významných skicenter střední Evropy nejen v Alpách. Užitečnou funkcí je také offline režim, který oceníte na horách, pokud zrovna nemáte internetové připojení. Snažíme se aplikaci neustále vylepšovat a připravili jsme možnost hlášení připomínek či přání pro další vývoj aplikace. Už nyní se můžete těšit na:<br><br>
 		● řazení středisek dle různých kritérií<br>
 		● ubytování v okolí včetně hodnocení<br><br>
 		Vyzkoušejte Ski Map a prohlédněte si svůj oblíbený svah. Na webu Ski-map.net dokonce ve 3D.
     ]]></string>
     <string name="layout_help_changes_title">Změny</string>
     <string name="layout_help_changes_text"><![CDATA[
+        <b>0.9.5</b> <i>(3.3.2012)</i><br>
+        ● nové: hardwarová akcelerace<br>
+       	● opravené: žádné info o otevření střediska<br>
+       	● opravené: navigační logika<br>
+       	<br>
         <b>0.9.4</b> <i>(30.1.2012)</i><br>
         ● zveřejnění Vodafone edice 0.9.4vf na Market<br>
        	● opravené: načítání obrázků<br>
@@ -158,7 +163,7 @@
     <string name="dialog_intro_ok">Ok</string>
     <string name="dialog_intro_rate">Ohodnotit</string>
     <string name="dialog_intro_text"><![CDATA[
-		Vítejte v aplikaci Ski Map. Berte prosím na vědomí, že aplikace je nová a některé funkce zatím nebyly implementovány. Brzy se můžete těšit na:<br><br>
+		Vítejte v aplikaci Ski Map. Berte prosím na vědomí, že některé funkce zatím nebyly implementovány. Brzy se můžete těšit na:<br><br>
 		● řazení středisek<br>
 		● ubytování<br><br>
 		Přejeme pěknou lyžovačku!
@@ -166,6 +171,7 @@
     
     <string name="toast_help_opened">Středisko otevřeno</string>
     <string name="toast_help_closed">Středisko zavřeno</string>
+    <string name="toast_help_unknown">Žádné info o otevření střediska</string>
     <string name="toast_help_nightski">Noční lyžování</string>
     <string name="toast_help_valley">Sjezd do údolí</string>
     <string name="toast_help_snowpark">Snowpark</string>

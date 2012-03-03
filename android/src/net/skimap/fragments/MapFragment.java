@@ -20,6 +20,7 @@ import net.skimap.data.Country;
 import net.skimap.data.Placemark;
 import net.skimap.data.SkicentreLong;
 import net.skimap.data.SkicentreShort;
+import net.skimap.data.SkicentreShort.Open;
 import net.skimap.database.Database;
 import net.skimap.database.DatabaseHelper;
 import net.skimap.map.CustomMapView;
@@ -704,15 +705,15 @@ public class MapFragment extends Fragment implements SkimapApplication.OnSynchro
 			// POI
 			GeoPoint point = new GeoPoint((int)(skicentre.getLocationLatitude()*1E6),(int)(skicentre.getLocationLongitude()*1E6));
 			OverlayItem overlayItem = new OverlayItem(point, skicentre.getName(), secondLine);
-			if(skicentre.isFlagOpened())
-			{
-				overlaysOn.add(overlayItem);
-				idsOn.add(skicentre.getId());
-			}
-			else 
+			if(skicentre.getFlagOpened()==Open.CLOSED)
 			{
 				overlaysOff.add(overlayItem);
 				idsOff.add(skicentre.getId());
+			}
+			else
+			{
+				overlaysOn.add(overlayItem);
+				idsOn.add(skicentre.getId());
 			}
 			//if(skicentre.isFlagOpened()) itemizedOverlayOn.addOverlay(overlayItem, skicentre.getId());
 			//else itemizedOverlayOff.addOverlay(overlayItem, skicentre.getId());

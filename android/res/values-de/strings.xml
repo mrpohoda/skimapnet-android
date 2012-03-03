@@ -129,6 +129,7 @@
     
     <string name="toast_help_opened">Öffnen</string>
     <string name="toast_help_closed">Geschlossen</string>
+    <string name="toast_help_unknown">Unbekannt Eröffnung</string>
     <string name="toast_help_nightski">Nachtskilauf</string>
     <string name="toast_help_valley">Abfahrtslauf zu Tal</string>
     <string name="toast_help_snowpark">Ski-Park</string>

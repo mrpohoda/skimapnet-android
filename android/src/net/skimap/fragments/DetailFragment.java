@@ -9,6 +9,7 @@ import net.skimap.activities.MapActivity;
 import net.skimap.activities.SettingsActivity;
 import net.skimap.activities.SkimapApplication;
 import net.skimap.data.SkicentreLong;
+import net.skimap.data.SkicentreShort;
 import net.skimap.data.Weather;
 import net.skimap.database.Database;
 import net.skimap.database.DatabaseHelper;
@@ -305,6 +306,13 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
             	try
             	{
             		setView();
+            		
+            		// naslouchani synchronizace
+                    ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(DetailFragment.this);
+                	
+                	// synchronizace
+                    Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext(), mDatabase);
+                    if(mItemId!=EMPTY_ID) synchro.trySynchronizeLongData(mItemId);
             	}
             	catch(IllegalStateException e)
             	{
@@ -313,13 +321,6 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
             	catch(NullPointerException e)
             	{
             	}
-            	
-            	// naslouchani synchronizace
-                ((SkimapApplication) getSupportActivity().getApplicationContext()).setSynchroListener(DetailFragment.this);
-            	
-            	// synchronizace
-                Synchronization synchro = new Synchronization((SkimapApplication) getSupportActivity().getApplicationContext(), mDatabase);
-                if(mItemId!=EMPTY_ID) synchro.trySynchronizeLongData(mItemId);
             }
 	    };
 			    
@@ -770,7 +771,9 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 		}
 		
 		// nastaveni obrazku
-		imageSkicentreOpened.setImageResource(mSkicentre.isFlagOpened() ? R.drawable.presence_online : R.drawable.presence_busy);
+		if(mSkicentre.getFlagOpened()==SkicentreShort.Open.CLOSED) imageSkicentreOpened.setImageResource(R.drawable.presence_busy);
+		else if(mSkicentre.getFlagOpened()==SkicentreShort.Open.OPENED) imageSkicentreOpened.setImageResource(R.drawable.presence_online);
+		else if(mSkicentre.getFlagOpened()==SkicentreShort.Open.UNKNOWN) imageSkicentreOpened.setImageResource(R.drawable.presence_unknown);
 		
 		imageSkicentreNightski.setVisibility(mSkicentre.isFlagNightski() ? View.VISIBLE : View.GONE);
 		imageSkicentreValley.setVisibility(mSkicentre.isFlagValley() ? View.VISIBLE : View.GONE);
@@ -819,7 +822,11 @@ public class DetailFragment extends Fragment implements SkimapApplication.OnSync
 			@Override
 			public void onClick(View v)
 			{
-				Toast.makeText(getActivity(), (mSkicentre.isFlagOpened() ? R.string.toast_help_opened : R.string.toast_help_closed), Toast.LENGTH_SHORT).show();
+				int textResource = R.string.toast_help_unknown;
+				if(mSkicentre.getFlagOpened()==SkicentreShort.Open.CLOSED) textResource = R.string.toast_help_closed;
+				else if(mSkicentre.getFlagOpened()==SkicentreShort.Open.OPENED) textResource = R.string.toast_help_opened;
+				else if(mSkicentre.getFlagOpened()==SkicentreShort.Open.UNKNOWN) textResource = R.string.toast_help_unknown;
+				Toast.makeText(getActivity(), textResource, Toast.LENGTH_SHORT).show();
 			}
 		});
 		imageSkicentreNightski.setOnClickListener(new OnClickListener() 

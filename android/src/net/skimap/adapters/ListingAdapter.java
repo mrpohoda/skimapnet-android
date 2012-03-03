@@ -52,7 +52,7 @@ public class ListingAdapter extends BaseAdapter
 		String name;
 		int area;
 		int country;
-		boolean flagOpened;
+		SkicentreShort.Open flagOpened;
 		int snowMax;
 		try
 		{
@@ -60,7 +60,7 @@ public class ListingAdapter extends BaseAdapter
 			name = skicentre.getName();
 			area = skicentre.getArea();
 			country = skicentre.getCountry();
-			flagOpened = skicentre.isFlagOpened();
+			flagOpened = skicentre.getFlagOpened();
 			snowMax = skicentre.getSnowMax();
 		}
 		catch(Exception e)
@@ -76,8 +76,10 @@ public class ListingAdapter extends BaseAdapter
 		TextView textSub = (TextView) view.findViewById(R.id.layout_listing_item_sub);
 		
 		// nastaveni obsahu widgetu
-		imageOpened.setImageResource(flagOpened ? R.drawable.presence_online : R.drawable.presence_busy);
-		imageFavourite.setImageResource(flagOpened ? R.drawable.btn_star_on : R.drawable.btn_star_off);
+		if(flagOpened==SkicentreShort.Open.CLOSED) imageOpened.setImageResource(R.drawable.presence_busy);
+		else if(flagOpened==SkicentreShort.Open.OPENED) imageOpened.setImageResource(R.drawable.presence_online);
+		else if(flagOpened==SkicentreShort.Open.UNKNOWN) imageOpened.setImageResource(R.drawable.presence_unknown);
+		//imageFavourite.setImageResource(flagOpened ? R.drawable.btn_star_on : R.drawable.btn_star_off);
 		imageFavourite.setVisibility(View.GONE); // TODO: osetrit favourite
 		textName.setText(name);
 		

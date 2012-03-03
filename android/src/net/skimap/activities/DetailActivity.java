@@ -41,7 +41,7 @@ public class DetailActivity extends FragmentActivity implements DetailFragment.O
     {
     	// vypnuti loga, vypnuti titulku a zapnuti home
     	ActionBar bar = getSupportActionBar();
-    	bar.setDisplayUseLogoEnabled(false);
+    	bar.setDisplayUseLogoEnabled(true);
     	bar.setDisplayShowTitleEnabled(false);
     	bar.setDisplayShowHomeEnabled(true);
     	bar.setDisplayHomeAsUpEnabled(true);

@@ -386,7 +386,7 @@ public class Database
 		int country = cursor.getInt(colCountry);
 		double locationLatitude = cursor.getDouble(colLocationLatitude);
 		double locationLongitude = cursor.getDouble(colLocationLongitude);
-		boolean flagOpened = cursor.getInt(colFlagOpened)==1;
+		SkicentreShort.Open flagOpened = SkicentreShort.intToOpen(cursor.getInt(colFlagOpened));
 		int snowMax = cursor.getInt(colSnowMax);
 		
 		SkicentreShort skicentre = new SkicentreShort(id, name, area, country, locationLatitude, locationLongitude, flagOpened, snowMax);
@@ -481,7 +481,7 @@ public class Database
 		skicentre.setCountDownhillsOpened( cursor.getInt(colCountDownhillsOpened) );
 		skicentre.setLengthCrosscountry( cursor.getInt(colLengthCrosscountry) );
 		skicentre.setLengthDownhillsTotal( cursor.getInt(colLengthDownhillsTotal) );
-		skicentre.setFlagOpened( cursor.getInt(colFlagOpened)==1 );
+		skicentre.setFlagOpened( SkicentreShort.intToOpen(cursor.getInt(colFlagOpened)) );
 		skicentre.setFlagNightski( cursor.getInt(colFlagNightski)==1 );
 		skicentre.setFlagValley( cursor.getInt(colFlagValley)==1 );
 		skicentre.setFlagSnowpark( cursor.getInt(colFlagSnowpark)==1 );
@@ -547,7 +547,7 @@ public class Database
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_COUNTRY_ID, skicentre.getCountry());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LATITUDE, skicentre.getLocationLatitude());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_LOCATION_LONGITUDE, skicentre.getLocationLongitude());
-		values.put(DatabaseHelper.TAB_SKICENTRE_API_FLAG_OPENED, skicentre.isFlagOpened());
+		values.put(DatabaseHelper.TAB_SKICENTRE_API_FLAG_OPENED, skicentre.getFlagOpened().ordinal());
 		values.put(DatabaseHelper.TAB_SKICENTRE_API_SNOW_MAX, skicentre.getSnowMax());
 		return values;
 	}
