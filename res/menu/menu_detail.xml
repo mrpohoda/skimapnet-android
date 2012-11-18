@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item 
+		android:id="@+id/ab_button_share"
+		android:title="@string/ab_button_share"
+		android:icon="@drawable/ic_menu_share"
+		android:showAsAction="ifRoom"
+		android:orderInCategory="2" />
+	
+	<item 
+		android:id="@+id/ab_button_navigation"
+		android:title="@string/ab_button_navigation"
+		android:icon="@drawable/ic_menu_compass"
+		android:showAsAction="ifRoom"
+		android:orderInCategory="3" />
+
+    <item 
+		android:id="@+id/ab_button_preferences"
+		android:title="@string/ab_button_preferences"
+		android:icon="@drawable/ic_menu_preferences"
+		android:showAsAction="ifRoom"
+		android:orderInCategory="21" />
+	
+	<item 
+		android:id="@+id/ab_button_map"
+		android:title="@string/ab_button_map"
+		android:icon="@drawable/ic_menu_mapmode"
+		android:showAsAction="always"
+		android:orderInCategory="23" />
+</menu>

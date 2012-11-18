@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbarThumbVertical="@drawable/scrollbar_background"
+    android:scrollbarSize="@dimen/scrollbar_size"
+    android:scrollbarTrackHorizontal="@drawable/scrollbar_track"
+    android:scrollbarTrackVertical="@drawable/scrollbar_track">
+    
+    <LinearLayout
+        android:id="@+id/layout_detail"
+        android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		
+        <TextView
+		    android:id="@+id/layout_detail_offline"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:paddingTop="@dimen/layout_detail_padding"
+		    android:paddingLeft="@dimen/layout_detail_padding"
+		    android:paddingRight="@dimen/layout_detail_padding"
+		    android:textSize="@dimen/layout_detail_warning_textsize"
+		    android:textColor="@color/layout_detail_warning"
+		    android:text="@string/layout_detail_offline"
+		    android:visibility="gone" />
+    
+		<include layout="@layout/layout_detail_skicentre" />
+		<include layout="@layout/widget_divider" />
+		<include layout="@layout/layout_detail_skiing" />
+		<include layout="@layout/widget_divider" />
+		<include layout="@layout/layout_detail_weather" />
+		<include layout="@layout/widget_divider" />
+		<include layout="@layout/layout_detail_webcam" android:id="@+id/layout_detail_webcam" android:visibility="gone" />
+		<include layout="@layout/widget_divider" android:id="@+id/widget_divider_detail_webcam" android:visibility="gone" />
+		<include layout="@layout/layout_detail_prices" android:id="@+id/layout_detail_prices" />
+		<include layout="@layout/widget_divider" android:id="@+id/widget_divider_detail_prices" />
+		<include layout="@layout/layout_detail_images" />
+		<include layout="@layout/widget_divider" />
+		<include layout="@layout/layout_detail_links" />
+
+	</LinearLayout>
+</ScrollView>

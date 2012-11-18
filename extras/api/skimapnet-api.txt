@@ -1,0 +1,588 @@
+Získání všech středisek (jednotlivé body na mapě)
+=================================================
+
+Dotaz
+-----
+http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list
+
+Odpověď
+-------
+[
+	{
+		"id":"89",
+		"name":"Adelboden",
+		"lat":"46.3718707854758",
+		"lng":"8.07622790336609",
+		"type":"skicentre"
+	}
+]
+
+Datatypy
+--------
+id		int
+name	string
+lat		float
+lng		float
+type	string
+
+Parametry - volitelné
+---------------------
+1) určení bounding boxu
+http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&nelat=50&nelng=15&swlat=60&swlng=16
+nelat, nelng, swlat, swlng - float
+
+2) určení státu
+http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&country=13
+country - int 
+13 austria
+79 france
+111 italy
+215 switzerland
+89 germany
+69 czech
+134 slovakia
+202 slovenia
+
+3) fulltext v názvu střediska
+http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&fulltext=adelbo
+fulltext - string
+
+4) min. počet km sjezdovek
+http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&slopes=150
+slopes - int
+
+5) min. nadmořská výška
+http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&undermost=2150
+undermost - int
+
+6) min. výška sněhu
+http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&snow_min=50
+snow_min - int
+
+7) snowpar, u-rampa
+http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&funpark=1
+funpark - 1
+
+8) trasy pro běžky
+http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&xc=1
+xc - 1
+
+9) rozšířené parametry
+http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&country=13&extended=1
+extended - 1
+
+
+Získání všech států
+===================
+
+Dotaz
+-----
+http://ski-map.net/skimapnet/php/common.php?fce=countries_list
+
+Odpověď
+-------
+[
+	{
+	    "cat": "13",
+	    "cntry_name": "Austria"
+	}
+]
+
+Datatypy
+--------
+cat			int
+cntry_name	string
+
+
+Získání všech středisek (jednotlivé regiony)
+============================================
+
+Dotaz
+-----
+http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list_areas
+
+Odpověď
+-------
+[
+	{
+		"id":"2290",
+		"name":"Aineck"
+	}
+]
+
+Datatypy
+--------
+id		int
+name	string
+
+Parametry - volitelné
+---------------------
+1) určení státu
+http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list_areas&country=13
+country - int 
+13 austria
+79 france
+111 italy
+215 switzerland
+89 germany
+69 czech
+134 slovakia
+202 slovenia
+
+Získání detailu konkrétního střediska
+=====================================
+
+Dotaz
+-----
+http://ski-map.net/skimapnet/php/common.php?fce=skicentre_detail&id=89
+
+Odpověď
+-------
+[
+	{
+		"id":"89",
+		"name":"Adelboden",
+		"url_webcams":"http:\/\/www.adelboden.ch\/de\/",
+		"point":"0101000020E610000000000058072720406AFA3E76992F4740",
+		"perex":"Tradi\u010dn\u00ed horsk\u00e1 vesni\u010dka Adelboden le\u017e\u00ed na \u00fapat\u00ed rozs\u00e1hl\u00e9ho are\u00e1lu prost\u00edraj\u00edc\u00edho se na bezm\u00e1la dvoutis\u00edcov\u00fdch obl\u00fdch h\u0159ebenech, jim\u017e kulisu tvo\u0159\u00ed t\u0159\u00edtis\u00edcov\u00e9 skalnat\u00e9 vrcholky Bernsk\u00fdch Alp. Na opa\u010dn\u00e9 stran\u011b centr\u00e1ln\u00edho ly\u017ea\u0159sk\u00e9ho h\u0159eben le\u017e\u00ed v \u00fadol\u00ed st\u0159edisko Lenk. Sjezdovky pot\u011b\u0161\u00ed \u201est\u0159edn\u00ed t\u0159\u00eddu\u201c i milovn\u00edka safari, n\u011bkter\u00e1 z\u00e1kout\u00ed pak i n\u00e1ro\u010dn\u011bj\u0161\u00edho jezdce \u010di m\u00e9n\u011b dobrodru\u017en\u00e9ho freeridera. Skipas pokr\u00fdv\u00e1 i n\u011bkolik men\u0161\u00edch are\u00e1l\u016f v okol\u00ed dostupn\u00fdch skibusem.",
+		"totallength":"210",
+		"undermost":"1075",
+		"topmost":"2357",
+		"mapimage":"http:\/\/farm6.static.flickr.com\/5283\/5282987860_658bb5d5db_o.jpg",
+		"zasnezovani_km":"80",
+		"adults_1":"59",
+		"adults_6":"264",
+		"children_1":"32",
+		"children_6":"143",
+		"young_1":"50",
+		"young_6":"221",
+		"seniors_1":"54",
+		"seniors_6":"238",
+		"skipas_currency":"CHF",
+		"season_start":"2011-12-17",
+		"season_end":"2012-04-15",
+		"last_snow":null,
+		"lifts_open":null,
+		"downhill_open":null,
+		"desc_to_valley":null,
+		"nightski":"1",
+		"snowpark":null,
+		"halfpipe":null,
+		"crosscountry_km":null,
+		"phone":"+41\/33\/7363030",
+		"meteogram":"http:\/\/www.yr.no\/place\/Switzerland\/Bern\/Adelboden~2661863\/avansert_meteogram.png",
+		"sjezdovky_modre":"37",
+		"sjezdovky_cervene":"56",
+		"sjezdovky_cerne":"7",
+		"snow_max":null,
+		"snow_min":null,
+		"snow_last_update":"2011-10-19",
+		"weather_date_1":"2011-10-19",
+		"temperature_min_1":null,
+		"temperature_max_1":"6",
+		"day_precipitation_1":"2.4",
+		"symbol_name_1":"Partly cloudy",
+		"symbol_url_1":"http:\/\/symbol.yr.no\/grafikk\/sym\/b38\/03d.png",
+		"weather_date_2":"2011-10-20",
+		"temperature_min_2":"-5",
+		"temperature_max_2":"2",
+		"day_precipitation_2":null,
+		"symbol_name_2":"Fair",
+		"symbol_url_2":"http:\/\/symbol.yr.no\/grafikk\/sym\/b38\/01d.png",
+		"weather_date_3":"2011-10-21",
+		"temperature_min_3":"-8",
+		"temperature_max_3":"4",
+		"day_precipitation_3":null,
+		"symbol_name_3":"Fair",
+		"symbol_url_3":"http:\/\/symbol.yr.no\/grafikk\/sym\/b38\/02d.png",
+		"weather_date_4":"2011-10-22",
+		"temperature_min_4":"-4",
+		"temperature_max_4":"6",
+		"day_precipitation_4":null,
+		"symbol_name_4":"Fair",
+		"symbol_url_4":"http:\/\/symbol.yr.no\/grafikk\/sym\/b38\/01d.png",
+		"weather_date_5":"2011-10-23",
+		"temperature_min_5":"-5",
+		"temperature_max_5":"6",
+		"day_precipitation_5":null,
+		"symbol_name_5":"Fair",
+		"symbol_url_5":"http:\/\/symbol.yr.no\/grafikk\/sym\/b38\/01d.png",
+		"weather_date_6":"2011-10-24",
+		"temperature_min_6":"-4",
+		"temperature_max_6":"1",
+		"day_precipitation_6":null,
+		"symbol_name_6":"Partly cloudy",
+		"symbol_url_6":"http:\/\/symbol.yr.no\/grafikk\/sym\/b38\/03d.png",
+		"img_webcam":"http:\/\/www.thecambrianadelboden.com\/webcam\/thecambrian.jpg",
+		"url_atlas":"http:\/\/snow.cz\/stredisko\/89-adelboden",
+		"url_snowreport":"http:\/\/snow.cz\/snih-stav-snehu\/detail\/1326-adelboden",
+		"url_weatherreport":"http:\/\/pocasi-hory.cz\/adelboden",
+		"lng":"8.07622790336609",
+		"lat":"46.3718707854758"
+	}
+]
+
+Parametry - povinnné
+--------------------
+1) id - int
+
+Získání seznamu ubytování
+=========================
+
+Dotaz
+-----
+http://ski-map.net/skimapnet/php/common.php?fce=accommodation_list
+
+Odpověď
+-------
+[
+	{
+		"id":"21138",
+		"name":" Hawai",
+		"class":"2",
+		"lat":"42.852948545239",
+		"lng":"3.0336159467697",
+		"type_a":null,
+		"url":"http://www.interhome.cz/Forward.aspx?navigationid=10&partnerid=CZ1000245&aCode=AD1500.100.2"
+		"rooms":4,
+		"persons_min":2,
+		"persons_max":6,
+		"price_min":"9243",
+		"price_max":"22266",
+		"currency":"CZK",
+		"type":"accommodation"
+	}
+)
+
+Parametry - nepovinné
+---------------------
+bounds - jako u skicentres_list
+price_min - int minimální cena (většinou na týden)
+price_max - int maximální cena (většinou na týden)
+fulltext - string
+country - jako u skicentres_list
+skicentre - int v jakém středisku se ubytování nachází !!! jedná se o id ze skicentres_list_areas
+distance - int maximální vzdálenost od sjezdovky/lanovky
+
+
+Získání konkrétního ubytování
+=============================
+
+Dotaz
+-----
+http://ski-map.net/skimapnet/php/common.php?fce=accommodation_detail&id=27912
+
+Odpověď
+-------
+[
+	{
+		"id":"27912",
+		"name":"Aravis",
+		"class_a":"1",
+		"lat":"45.32436231204",
+		"lng":"6.5396976470947",
+		"perex":"",
+		"url":"http:\/\/www.interhome.cz\/Forward.aspx?navigationid=10&partnerid=CZ1000245&aCode=FR7358.510.4",
+		"rooms":"1",
+		"persons_max":"4",
+		"price_min":"7565",
+		"price_max":"24645",
+		"currency":"CZK",
+		"photo_url":"http:\/\/web.interhome.com\/ImagesIps\/Normal\/FR\/FR7358.510a_s.jpg",
+		"partner":"Interhome",
+		"type":"accommodation"
+	}
+]
+
+Parametry - povinnné
+--------------------
+1) id - int
+
+
+Získání kml souboru s čarami (sjezdovky, lanovky, ...)
+======================================================
+
+Dotaz
+-----
+http://ski-map.net/skimapnet/php/common.php?fce=lines_list&nelat=50.76669766709482&nelng=15.796450982910073&swlat=50.68193459347409&swlng=15.422229181152261
+
+Odpověď
+-------
+kml soubor
+
+Parametry - povinnné
+--------------------
+1) bounds - viz skicentres_list
+
+Parametry - nepovinnné
+----------------------
+1) downhill[] - string
+red, blue, black, lift... všechny možnosti dodám
+
+
+
+
+
+
+
+
+
+
+
+Seznam ikon počasí
+==================
+1;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.58.png;1;night
+2;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.62.png;1;night
+3;Fair;http://symbol.yr.no/grafikk/sym/b38/01d.png;1;day
+4;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.62.png;2;night
+5;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.65.png;2;night
+6;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/03d.png;3;day
+7;Rain;http://symbol.yr.no/grafikk/sym/b38/09.png;9;night
+8;Heavy rain;http://symbol.yr.no/grafikk/sym/b38/10.png;10;day
+9;Sleet;http://symbol.yr.no/grafikk/sym/b38/12.png;12;night
+10;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.72.png;5;night
+11;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.75.png;1;night
+12;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.78.png;3;night
+13;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.78.png;2;night
+14;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.82.png;1;night
+15;Fair;http://symbol.yr.no/grafikk/sym/b38/02d.png;2;day
+16;Rain showers;http://symbol.yr.no/grafikk/sym/b38/05d.png;5;day
+17;Cloudy;http://symbol.yr.no/grafikk/sym/b38/04.png;4;night
+18;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.85.png;3;night
+19;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.85.png;1;night
+20;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.89.png;1;night
+21;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.68.png;3;night
+22;Snow;http://symbol.yr.no/grafikk/sym/b38/13.png;13;night
+23;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.75.png;2;night
+24;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.89.png;3;night
+25;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.65.png;3;night
+26;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.72.png;3;night
+27;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.72.png;2;night
+28;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.82.png;3;night
+29;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.89.png;2;night
+30;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.62.png;3;night
+31;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.78.png;1;night
+32;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.82.png;2;night
+33;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.85.png;2;night
+34;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.58.png;3;night
+35;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.65.png;1;night
+36;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.82.png;8;night
+37;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.62.png;5;night
+38;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.75.png;3;night
+39;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.72.png;1;night
+40;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.89.png;5;night
+41;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.89.png;8;night
+42;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.65.png;5;night
+43;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.58.png;2;night
+44;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/07d.png;7;day
+45;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.68.png;2;night
+46;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.82.png;5;night
+47;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.85.png;5;night
+48;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.68.png;1;night
+49;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.68.png;8;night
+50;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.75.png;8;night
+51;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.92.png;2;night
+52;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.75.png;5;night
+53;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.75.png;7;night
+54;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.68.png;5;night
+55;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.68.png;7;night
+56;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.92.png;3;night
+57;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.72.png;8;night
+58;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.92.png;1;night
+59;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.72.png;7;night
+60;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.92.png;5;night
+61;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.65.png;8;night
+62;Snow showers;http://symbol.yr.no/grafikk/sym/b38/08d.png;8;day
+63;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.78.png;5;night
+64;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.95.png;1;night
+65;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.95.png;2;night
+66;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.95.png;3;night
+67;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.95.png;5;night
+68;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.99.png;1;night
+69;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.99.png;2;night
+70;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.99.png;3;night
+71;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.99.png;5;night
+72;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.02.png;1;night
+73;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.02.png;3;night
+74;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.02.png;2;night
+75;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.02.png;5;night
+76;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.06.png;1;night
+77;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.06.png;2;night
+78;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.06.png;3;night
+79;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.09.png;2;night
+80;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.09.png;3;night
+81;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.09.png;1;night
+82;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.95.png;8;night
+83;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.92.png;8;night
+84;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.99.png;8;night
+85;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.06.png;8;night
+86;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.06.png;5;night
+87;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.12.png;3;night
+88;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.12.png;1;night
+89;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.12.png;2;night
+90;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.12.png;5;night
+91;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.09.png;8;night
+92;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.09.png;5;night
+93;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.16.png;1;night
+94;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.16.png;3;night
+95;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.16.png;2;night
+96;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.85.png;8;night
+97;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.16.png;5;night
+98;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.02.png;7;night
+99;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.02.png;8;night
+100;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.12.png;8;night
+101;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.19.png;1;night
+102;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.19.png;2;night
+103;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.19.png;3;night
+104;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.09.png;7;night
+105;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.19.png;5;night
+106;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.22.png;1;night
+107;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.22.png;2;night
+108;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.22.png;3;night
+109;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.22.png;5;night
+110;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.99.png;7;night
+111;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.26.png;1;night
+112;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.26.png;3;night
+113;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.26.png;2;night
+114;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.26.png;5;night
+115;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.29.png;3;night
+116;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.29.png;1;night
+117;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.29.png;2;night
+118;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.29.png;5;night
+119;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.33.png;3;night
+120;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.33.png;1;night
+121;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.33.png;2;night
+122;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.29.png;8;night
+123;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.26.png;8;night
+124;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.33.png;5;night
+125;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.33.png;8;night
+126;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.33.png;7;night
+127;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.29.png;7;night
+128;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.36.png;3;night
+129;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.36.png;2;night
+130;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.36.png;5;night
+131;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.36.png;1;night
+132;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.39.png;1;night
+133;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.39.png;3;night
+134;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.39.png;2;night
+135;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.39.png;8;night
+136;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.39.png;5;night
+137;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.36.png;8;night
+138;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.43.png;2;night
+139;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.43.png;3;night
+140;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.43.png;1;night
+141;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.43.png;8;night
+142;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.43.png;7;night
+143;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.43.png;5;night
+144;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.39.png;7;night
+145;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.36.png;7;night
+146;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.46.png;3;night
+147;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.46.png;2;night
+148;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.46.png;8;night
+149;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.46.png;5;night
+150;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.46.png;1;night
+151;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.50.png;3;night
+152;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.50.png;2;night
+153;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.50.png;1;night
+154;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.53.png;3;night
+155;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.50.png;8;night
+156;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.46.png;7;night
+157;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.50.png;7;night
+158;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.50.png;5;night
+159;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.53.png;2;night
+160;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.53.png;1;night
+161;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.53.png;5;night
+162;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.56.png;1;night
+163;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.53.png;7;night
+164;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.56.png;2;night
+165;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.56.png;3;night
+166;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.53.png;8;night
+167;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.56.png;5;night
+168;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.56.png;8;night
+169;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.60.png;1;night
+170;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.60.png;2;night
+171;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.60.png;3;night
+172;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.56.png;7;night
+173;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.60.png;8;night
+174;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.60.png;5;night
+175;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.60.png;7;night
+176;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.63.png;2;night
+177;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.63.png;1;night
+178;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.63.png;3;night
+179;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.63.png;8;night
+180;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.66.png;2;night
+181;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.63.png;5;night
+182;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.66.png;1;night
+183;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.66.png;3;night
+184;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.70.png;3;night
+185;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.70.png;1;night
+186;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.70.png;2;night
+187;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.70.png;5;night
+188;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.66.png;8;night
+189;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.66.png;5;night
+190;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.70.png;8;night
+191;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.73.png;1;night
+192;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.73.png;2;night
+193;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.73.png;3;night
+194;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.73.png;8;night
+195;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.77.png;1;night
+196;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.77.png;2;night
+197;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.77.png;3;night
+198;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.77.png;5;night
+199;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.73.png;5;night
+200;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.70.png;7;night
+201;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.73.png;7;night
+202;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.80.png;2;night
+203;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.80.png;3;night
+204;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.80.png;1;night
+205;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.77.png;8;night
+206;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.77.png;7;night
+207;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.66.png;7;night
+208;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.80.png;7;night
+209;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.80.png;5;night
+210;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.83.png;1;night
+211;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.83.png;3;night
+212;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.83.png;2;night
+213;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.80.png;8;night
+214;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.83.png;5;night
+215;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.83.png;8;night
+216;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.87.png;1;night
+217;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.87.png;3;night
+218;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.87.png;5;night
+219;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.87.png;2;night
+220;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.90.png;1;night
+221;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.90.png;2;night
+222;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.90.png;3;night
+223;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.90.png;5;night
+224;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.94.png;3;night
+225;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.90.png;8;night
+226;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.87.png;8;night
+227;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.87.png;7;night
+228;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.94.png;2;night
+229;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.94.png;5;night
+230;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.90.png;7;night
+231;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.94.png;8;night
+232;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.94.png;1;night
+233;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.83.png;7;night
+234;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.97.png;3;night
+235;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.97.png;2;night
+236;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.97.png;8;night
+237;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.97.png;7;night
+238;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.97.png;1;night
+239;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.97.png;5;night
+240;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.00.png;5;night
+241;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.00.png;3;night
+242;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.00.png;2;night
+243;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.00.png;1;night
+244;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.00.png;8;night
+245;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.04.png;3;night
+246;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.94.png;7;night
+247;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.04.png;2;night
+248;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.04.png;1;night
+249;Sleet showers;http://symbol.yr.no/grafikk/sym/b38/mf/07n.04.png;7;night
+250;Partly cloudy;http://symbol.yr.no/grafikk/sym/b38/mf/03n.07.png;3;night
+251;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.04.png;8;night
+252;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/02n.07.png;2;night
+253;Snow showers;http://symbol.yr.no/grafikk/sym/b38/mf/08n.07.png;8;night
+254;Fair;http://symbol.yr.no/grafikk/sym/b38/mf/01n.07.png;1;night
+255;Rain showers;http://symbol.yr.no/grafikk/sym/b38/mf/05n.07.png;5;night

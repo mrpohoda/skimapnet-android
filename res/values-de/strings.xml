@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- LANGUAGE DEPENDENT -->
+    <string name="ab_button_list">Liste</string>
+    <string name="ab_button_map">Karte</string>
+    <string name="ab_button_search">Suchen</string>
+    <string name="ab_button_refresh">Wiederherstellen</string>
+    <string name="ab_button_preferences">Einstellung</string>
+    <string name="ab_button_layers">Kartenebenen</string>
+    <string name="ab_button_layers_normal">Normal</string>
+    <string name="ab_button_layers_satellite">Satellit</string>
+    <string name="ab_button_location">Lage</string>
+    <string name="ab_button_location_current">Position des Gerätes</string>
+    <string name="ab_button_location_last">Das aktuelle Skizentrum</string>
+    <string name="ab_button_location_nearest">Das nächste Skizentrum</string>
+    <string name="ab_button_sort">Sortieren</string>
+    <string name="ab_button_sort_alphabet">Alphabet</string>
+    <string name="ab_button_sort_country">Staat</string>
+    <string name="ab_button_sort_distance">Distanz</string>
+    <string name="ab_button_sort_snow">Schneemenge</string>
+    <string name="ab_button_share">Veröffentlichen</string>
+    <string name="ab_button_favourite">Lieblingszentrum</string>
+    <string name="ab_button_navigation">Navigation</string>
+    
+    <string name="ab_tab_all">Alles</string>
+    <string name="ab_tab_favourites">Lieblings</string>
+    <string name="ab_tab_recommended">Empfehlung</string>
+    
+    <string name="search_location">Suchort</string>
+    <string name="search_skicentre">Suchen Skizentrum</string>
+    <string name="search_result">Suchergebnis</string>
+    <string name="search_result_skicentre_1">Skizentrum</string>
+    <string name="search_result_skicentre_234">Zentren</string>
+    <string name="search_result_skicentre_5">Zentren</string>
+    <string name="search_result_cancel">Tippen Sie hier, um abzubrechen Suchergebnis.</string>
+    <string name="search_error_not_found">nicht gefunden.</string>
+    <string name="search_error_connection">Verbindungsfehler. Kontrollieren Sie, bitte, Ihre Internetverbindung.</string>
+    
+    <string name="settings_category_other">Übrig</string>
+    <string name="settings_category_map">Karte</string>
+    <string name="settings_clear_cache">Cache leeren</string>
+    <string name="settings_clear_cache_summary">Löschen von temporären Dateien und beliebte skizentren aus der Datenbank</string>
+    <string name="settings_clear_cache_toast">Die temporären Daten werden gelöscht</string>
+    <string name="settings_help">Info und Hilfe</string>
+    <string name="settings_rate">Die Applikation bewerten</string>
+    <string name="settings_rate_summary">Bewerten Sie Applikation im Market</string>
+    <string name="settings_feedback">Rückkopplung</string>
+    <string name="settings_feedback_summary">Eine Nachricht senden</string>
+    <string name="settings_feedback_subject">Ski-map Rückkopplung</string>
+    <string name="settings_feedback_email">android@ski-map.net</string>
+    <string name="settings_feedback_app_version">Software-Version:</string>
+    <string name="settings_feedback_os_version">Version des Operationssystems: Android</string>
+    <string name="settings_feedback_api">API</string>
+    <string name="settings_feedback_device">Gerätes:</string>
+    <string name="settings_feedback_message">Nachricht an die Entwickler:</string>
+    <string name="settings_trail">Arten von Routen</string>
+    <string name="settings_trail_summary">Wählen Sie die Arten von Routen</string>
+    <string name="settings_trail_downhills">Pisten</string>
+    <string name="settings_trail_lifts">Lifte</string>
+    <string name="settings_trail_xc">Langlaufs</string>
+    
+    <string name="layout_map_infobox">Zu der Abbildung der Pisten näher zu sein...</string>
+    
+    <string name="layout_listing_item_snow">cm Schnee</string>
+    <string name="layout_listing_empty">Keine Favoriten. Fügen Sie den beliebten Skizentren im Detail.</string>
+    
+    <string name="layout_detail_offline">Sie sind offline. Daten müssen nicht aktuell sein.</string>
+    <string name="layout_detail_share">Veröffentlichen</string>
+    <string name="layout_detail_share_skicentre">Skizentrum</string>
+    <string name="layout_detail_share_url">Ski-map.net</string>
+    <string name="layout_detail_share_url_full">http://ski-map.net</string>
+    <string name="layout_detail_skiing_title">Skilaufen</string>
+    <string name="layout_detail_weather_title">Wetter</string>
+    <string name="layout_detail_webcam_title">Kamera</string>
+    <string name="layout_detail_prices_title">Preise</string>
+    <string name="layout_detail_images_title">Bild Links</string>
+    <string name="layout_detail_links_title">Web Links</string>
+    
+    <!-- STRINGS IN HTML FORMAT -->
+    <string name="layout_detail_skicentre_country"><![CDATA[<b>Staat:</b>]]></string>
+    <string name="layout_detail_skicentre_season"><![CDATA[<b>Saison:</b>]]></string>
+    <string name="layout_detail_skicentre_altitude"><![CDATA[<b>Höhe:</b>]]></string>
+    <string name="layout_detail_skicentre_perex_more"><![CDATA[<u>mehr</u>]]></string>
+    <string name="layout_detail_skicentre_perex_less"><![CDATA[<u>weniger</u>]]></string>
+    <string name="layout_detail_skiing_snow_quantity"><![CDATA[<b>Schneemenge:</b>]]></string>
+    <string name="layout_detail_skiing_lifts_count"><![CDATA[<b>Offene Lifte:</b>]]></string>
+    <string name="layout_detail_skiing_downhills_count"><![CDATA[<b>Offene Pisten:</b>]]></string>
+    <string name="layout_detail_skiing_downhills_length"><![CDATA[<b>Länge der Pisten:</b>]]></string>
+    <string name="layout_detail_skiing_crosscountry_length"><![CDATA[<b>Länge des Langlaufs:</b>]]></string>
+    <string name="layout_detail_price_adults_1"><![CDATA[<b>Erwachsene 1 Tag:</b>]]></string>
+    <string name="layout_detail_price_adults_6"><![CDATA[<b>Erwachsene 6 Tage:</b>]]></string>
+    <string name="layout_detail_price_children_1"><![CDATA[<b>Kinder 1 Tag:</b>]]></string>
+    <string name="layout_detail_price_children_6"><![CDATA[<b>Kinder 6 Tage:</b>]]></string>
+    <string name="layout_detail_price_young_1"><![CDATA[<b>Jugend 1 Tag:</b>]]></string>
+    <string name="layout_detail_price_young_6"><![CDATA[<b>Jugend 6 Tage:</b>]]></string>
+    <string name="layout_detail_price_seniors_1"><![CDATA[<b>Senior 1 Tag:</b>]]></string>
+    <string name="layout_detail_price_seniors_6"><![CDATA[<b>Senior 6 Tage:</b>]]></string>
+    
+    <string name="layout_help_about_title">Ski Map</string>
+    <string name="layout_help_about_text_pre"><![CDATA[Ski Map Version]]></string>
+    <string name="layout_help_about_text"><![CDATA[
+       	<br>
+       	&copy; 2011 <a href="http://liska-webdesign.cz/">Liška webdesign</a><br>
+       	Entwickelt von Petr Nohejl, <a href="http://jestrab.net/">www.jestrab.net</a><br>
+       	Alle Rechte vorbehalten.<br><br>
+       	Gefallen Sie Applikation Ski Map? <a href="market://details?id=net.skimap">Bewerten Sie Applikation im Market</a>. Besuchen Sie auch web <a href="http://ski-map.net/">www.ski-map.net</a>.<br><br>
+       	Im Falle von Problemen Kontakt mit dem Autor: <a href="mailto:android@ski-map.net">android@ski-map.net</a>.
+    ]]></string>
+    <string name="layout_help_info_title">Info</string>
+    <string name="layout_help_info_text"><![CDATA[
+       	Ski Map ist ein einzigartiges Guide für Skifahrer und Snowboarder. Ski Map bietet Überblick über die Skigebiete, Pisten, Langlaufs, Schneeberichte, Wetter, Skipasspreise, Webkameras und viele andere Funktionen. Besichtigen Sie sich reale Karte der Piste aller bekannte Skizentren im Mitteleuropa einschließlich Alpen. Es gibt auch einen Offline-Modus. In Kürze:<br><br>
+		● Sortierzentren<br>
+		● Unterkunft
+    ]]></string>
+    <string name="layout_help_changes_title">Änderungen</string>
+    <string name="layout_help_changes_text"><![CDATA[
+       	Nicht verfügbar
+    ]]></string>
+    
+    <string name="dialog_intro_title">Willkommen</string>
+    <string name="dialog_intro_ok">Ok</string>
+    <string name="dialog_intro_rate">Bewerten</string>
+    <string name="dialog_intro_text"><![CDATA[
+		Willkommen in der Ski Map. Die Applikation ist neu und deshalb waren einige Funktionen nicht implementieren. In Kürze:<br><br>
+		● Sortierzentren<br>
+		● Unterkunft<br><br>
+		Wir wünschen euch schönes Skilaufen!
+    ]]></string>
+    
+    <string name="toast_help_opened">Öffnen</string>
+    <string name="toast_help_closed">Geschlossen</string>
+    <string name="toast_help_unknown">Unbekannt Eröffnung</string>
+    <string name="toast_help_nightski">Nachtskilauf</string>
+    <string name="toast_help_valley">Abfahrtslauf zu Tal</string>
+    <string name="toast_help_snowpark">Ski-Park</string>
+    <string name="toast_help_halfpipe">U-Rampe</string>
+    
+    <string name="toast_help_url_img_map">Skigebiet Karte</string>
+    <string name="toast_help_url_img_meteogram">Meteogram</string>
+    <string name="toast_help_url_img_webcam">Kamera</string>
+    <string name="toast_help_url_skimap">Ski-map Website</string>
+    <string name="toast_help_url_homepage">Offizielle Website</string>
+    <string name="toast_help_url_snow_report">Schneebericht</string>
+    <string name="toast_help_url_weather_report">Wetter</string>
+    <string name="toast_help_url_webcams">Kameras</string>
+    
+    <string name="toast_synchro_offline">Sie sind offline. Kontrollieren Sie, bitte, Ihre Internetverbindung.</string>
+    <string name="toast_synchro_canceled">Die Aktualisierung der Daten unterbrochen wurde.</string>
+    <string name="toast_synchro_error">Error! Daten können nicht synchronisiert werden. Bitte aktualisieren Sie Ihre Anwendung oder Kontakt zu den Entwicklern.</string>
+    
+    <string name="toast_location_nearest">Nächster Skizentrum ist</string>
+    
+    <string name="day_sun">So</string>
+    <string name="day_mon">Mo</string>
+    <string name="day_tue">Di</string>
+    <string name="day_wed">Mi</string>
+    <string name="day_thu">Do</string>
+    <string name="day_fri">Fr</string>
+    <string name="day_sat">Sa</string>
+    
+    <string name="unit_m">m</string>
+    <string name="unit_cm">cm</string>
+    <string name="unit_km">km</string>
+    <string name="unit_celsius">°C</string>
+</resources>

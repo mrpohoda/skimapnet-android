@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:padding="@dimen/layout_detail_padding"
+	android:background="@color/layout_background">
+    
+	<TextView
+	    android:id="@+id/layout_detail_skiing_title"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/layout_detail_title_textsize"
+	    android:textColor="@color/layout_detail_title"
+	    android:textStyle="bold"
+	    android:text="@string/layout_detail_skiing_title" />
+	
+	<TextView
+	    android:id="@+id/layout_detail_skiing_snow_quantity"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/layout_detail_text_textsize" 
+	    android:textColor="@color/layout_detail_text"
+		android:text="" />
+	
+	<TextView
+	    android:id="@+id/layout_detail_skiing_lifts_count"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/layout_detail_text_textsize" 
+	    android:textColor="@color/layout_detail_text"
+		android:text="" />
+	
+	<TextView
+	    android:id="@+id/layout_detail_skiing_downhills_count"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/layout_detail_text_textsize" 
+	    android:textColor="@color/layout_detail_text"
+		android:text="" />
+	
+	<TextView
+	    android:id="@+id/layout_detail_skiing_downhills_length"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/layout_detail_text_textsize" 
+	    android:textColor="@color/layout_detail_text"
+		android:text="" />
+	
+	<TextView
+	    android:id="@+id/layout_detail_skiing_crosscountry_length"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/layout_detail_text_textsize" 
+	    android:textColor="@color/layout_detail_text"
+		android:text="" />
+	
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		
+		<ImageView 
+			android:id="@+id/layout_detail_skiing_flag_nightski"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginRight="@dimen/layout_detail_flag_padding"
+			android:layout_marginTop="@dimen/layout_detail_flag_padding"
+			android:layout_marginBottom="@dimen/layout_detail_flag_padding"
+			android:src="@drawable/flag_nightski" />
+		
+		<ImageView 
+			android:id="@+id/layout_detail_skiing_flag_valley"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginRight="@dimen/layout_detail_flag_padding"
+			android:layout_marginTop="@dimen/layout_detail_flag_padding"
+			android:layout_marginBottom="@dimen/layout_detail_flag_padding"
+			android:src="@drawable/flag_valley" />
+		
+		<ImageView 
+			android:id="@+id/layout_detail_skiing_flag_snowpark"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginRight="@dimen/layout_detail_flag_padding"
+			android:layout_marginTop="@dimen/layout_detail_flag_padding"
+			android:layout_marginBottom="@dimen/layout_detail_flag_padding"
+			android:src="@drawable/flag_snowpark" />
+		
+		<ImageView 
+			android:id="@+id/layout_detail_skiing_flag_halfpipe"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginRight="@dimen/layout_detail_flag_padding"
+			android:layout_marginTop="@dimen/layout_detail_flag_padding"
+			android:layout_marginBottom="@dimen/layout_detail_flag_padding"
+			android:src="@drawable/flag_halfpipe" />
+		
+	</LinearLayout>
+</LinearLayout>

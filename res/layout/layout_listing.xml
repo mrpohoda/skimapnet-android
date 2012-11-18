@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content">
+	
+    <TextView
+	    android:id="@+id/layout_listing_infobox"
+	    android:visibility="gone"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="center"
+	    android:padding="@dimen/layout_infobox_padding"
+	    android:textSize="@dimen/layout_infobox_textsize"
+	    android:textColor="@color/layout_infobox_text"
+	    android:background="@color/layout_infobox_background" />
+	
+    <RelativeLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:background="@color/layout_background">
+    
+	    <FrameLayout
+	        android:id="@+id/layout_listing_border"
+			android:layout_width="@dimen/layout_listing_listview_divider" 
+			android:layout_height="fill_parent" 	
+			android:layout_alignParentRight="true"
+			android:background="@color/layout_listing_listview_divider" />
+	
+	    <ListView
+			android:id="@+id/layout_listing_listview"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_toLeftOf="@id/layout_listing_border"
+		    android:dividerHeight="@dimen/layout_listing_listview_divider"
+		    android:divider="@color/layout_listing_listview_divider"
+	        android:cacheColorHint="@color/layout_listing_listview_cache"
+	        android:background="@color/layout_background" 
+	        android:scrollbarThumbVertical="@drawable/scrollbar_background"
+	        android:scrollbarSize="@dimen/scrollbar_size"
+	        android:scrollbarTrackHorizontal="@drawable/scrollbar_track"
+	   		android:scrollbarTrackVertical="@drawable/scrollbar_track" />
+
+	</RelativeLayout>
+</LinearLayout>

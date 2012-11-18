@@ -1,8 +1,0 @@
-http://ski-map.net/skimapnet/index.php - WEB
-http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&nelat=46.53597470889601&nelng=8.364758491516113&swlat=46.52810667997699&swlng=8.344802856445312&_=1317848228713 - API
-http://ski-map.net/skimapnet/php/common.php?fce=skicentre_detail - pres POST
-http://ski-map.net/skimapnet/php/common.php?fce=skicentres_list&country= - všechny skicentra
-http://ski-map.net/skimapnet/php/common.php?fce=lines_list&nelat=50.123&nelng=15.4327&swlat=60.0013&swlng=16.765 - sjezdovky, Načítání čar omez až od nějakého rozumného zoomu, aby se nechtěla najednou načíst celá republika, to by asi nedělalo serveru dobře.
-http://www.bestandroidappsreview.com/wp-content/uploads/2011/05/Top-Android-App-Google-IO-2011-Developer-Conference-Home.png - pod action bar muzes hodit oranzovy pruh
-http://code.google.com/p/iosched/source/browse/#hg%2Fandroid%2Fassets
-http://developer.android.com/sdk/compatibility-library.html

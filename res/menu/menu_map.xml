@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">	
+    <item 
+		android:id="@+id/ab_button_layers"
+		android:title="@string/ab_button_layers"
+		android:icon="@drawable/ic_menu_layers"
+		android:showAsAction="ifRoom"
+		android:orderInCategory="1">		
+		<menu>
+		    <item 
+				android:id="@+id/ab_button_layers_normal"
+				android:title="@string/ab_button_layers_normal"
+				android:orderInCategory="1" />
+		    <item 
+				android:id="@+id/ab_button_layers_satellite"
+				android:title="@string/ab_button_layers_satellite"
+				android:orderInCategory="2" />
+		</menu>
+	</item>
+	
+    
+    <item 
+		android:id="@+id/ab_button_location"
+		android:title="@string/ab_button_location"
+		android:icon="@drawable/ic_menu_mylocation"
+		android:showAsAction="ifRoom"
+		android:orderInCategory="2">
+		<menu>
+		    <item 
+				android:id="@+id/ab_button_location_current"
+				android:title="@string/ab_button_location_current"
+				android:orderInCategory="1" />
+			<item 
+				android:id="@+id/ab_button_location_nearest"
+				android:title="@string/ab_button_location_nearest"
+				android:orderInCategory="3" />
+		</menu>
+	</item>
+	
+ 
+    <item 
+		android:id="@+id/ab_button_refresh"
+		android:title="@string/ab_button_refresh"
+		android:icon="@drawable/ic_menu_refresh"
+		android:showAsAction="ifRoom"
+		android:orderInCategory="20" />
+    
+    <item 
+		android:id="@+id/ab_button_preferences"
+		android:title="@string/ab_button_preferences"
+		android:icon="@drawable/ic_menu_preferences"
+		android:showAsAction="ifRoom"
+		android:orderInCategory="21" />
+    
+	<item 
+		android:id="@+id/ab_button_search"
+		android:title="@string/ab_button_search"
+		android:icon="@drawable/ic_menu_search"
+		android:showAsAction="always"
+		android:orderInCategory="22" />
+	
+	<item 
+		android:id="@+id/ab_button_list"
+		android:title="@string/ab_button_list"
+		android:icon="@drawable/ic_menu_list"
+		android:showAsAction="always"
+		android:orderInCategory="23" />
+</menu>

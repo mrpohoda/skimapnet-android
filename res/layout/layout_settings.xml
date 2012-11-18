@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/settings_category_map">
+		<Preference 
+			android:key="@string/settings_key_trail"
+			android:title="@string/settings_trail" 
+			android:summary="@string/settings_trail_summary" 
+			android:persistent="false" />
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/settings_category_other">
+	    <Preference 
+			android:key="@string/settings_key_help"
+			android:title="@string/settings_help" 
+			android:persistent="false" />
+	    
+	    <Preference 
+			android:key="@string/settings_key_rate"
+			android:title="@string/settings_rate" 
+			android:summary="@string/settings_rate_summary" 
+			android:persistent="false" />
+	    
+		<Preference 
+			android:key="@string/settings_key_clear_cache"
+			android:title="@string/settings_clear_cache" 
+			android:summary="@string/settings_clear_cache_summary" 
+			android:persistent="false" />
+
+		<Preference 
+			android:key="@string/settings_key_feedback"
+			android:title="@string/settings_feedback" 
+			android:summary="@string/settings_feedback_summary" 
+			android:persistent="false" />
+	</PreferenceCategory>
+</PreferenceScreen>

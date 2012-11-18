@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:padding="@dimen/layout_detail_padding"
+	android:background="@color/layout_background">
+	
+	<TextView
+	    android:id="@+id/layout_detail_weather_title"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/layout_detail_title_textsize"
+	    android:textColor="@color/layout_detail_title"
+	    android:textStyle="bold"
+	    android:text="@string/layout_detail_weather_title" />
+
+	<TableLayout
+		android:layout_height="fill_parent"
+		android:layout_width="fill_parent">
+		
+		<TableRow 
+		    android:id="@+id/layout_detail_weather_1">
+			<TextView
+			    android:id="@+id/layout_detail_weather_1_date"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_text"
+			    android:text="" />
+			<ImageView 
+				android:id="@+id/layout_detail_weather_1_symbol"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:paddingRight="@dimen/layout_detail_weather_padding" />
+			<TextView
+			    android:id="@+id/layout_detail_weather_1_min"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_weather_min"
+			    android:text="" />
+			<TextView
+			    android:id="@+id/layout_detail_weather_1_max"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_weather_max"
+			    android:text="" />
+		</TableRow>
+		
+		<TableRow
+		    android:id="@+id/layout_detail_weather_2">
+			<TextView
+			    android:id="@+id/layout_detail_weather_2_date"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_text"
+			    android:text="" />
+			<ImageView 
+				android:id="@+id/layout_detail_weather_2_symbol"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:paddingRight="@dimen/layout_detail_weather_padding" />
+			<TextView
+			    android:id="@+id/layout_detail_weather_2_min"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_weather_min"
+			    android:text="" />
+			<TextView
+			    android:id="@+id/layout_detail_weather_2_max"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_weather_max"
+			    android:text="" />
+		</TableRow>
+		
+		<TableRow
+		    android:id="@+id/layout_detail_weather_3">
+			<TextView
+			    android:id="@+id/layout_detail_weather_3_date"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_text"
+			    android:text="" />
+			<ImageView 
+				android:id="@+id/layout_detail_weather_3_symbol"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:paddingRight="@dimen/layout_detail_weather_padding" />
+			<TextView
+			    android:id="@+id/layout_detail_weather_3_min"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_weather_min"
+			    android:text="" />
+			<TextView
+			    android:id="@+id/layout_detail_weather_3_max"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_weather_max"
+			    android:text="" />
+		</TableRow>
+		
+		<TableRow
+		    android:id="@+id/layout_detail_weather_4">
+			<TextView
+			    android:id="@+id/layout_detail_weather_4_date"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_text"
+			    android:text="" />
+			<ImageView 
+				android:id="@+id/layout_detail_weather_4_symbol"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:paddingRight="@dimen/layout_detail_weather_padding" />
+			<TextView
+			    android:id="@+id/layout_detail_weather_4_min"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_weather_min"
+			    android:text="" />
+			<TextView
+			    android:id="@+id/layout_detail_weather_4_max"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_weather_max"
+			    android:text="" />
+		</TableRow>
+		
+		<TableRow
+		    android:id="@+id/layout_detail_weather_5">
+			<TextView
+			    android:id="@+id/layout_detail_weather_5_date"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_text"
+			    android:text="" />
+			<ImageView 
+				android:id="@+id/layout_detail_weather_5_symbol"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:paddingRight="@dimen/layout_detail_weather_padding" />
+			<TextView
+			    android:id="@+id/layout_detail_weather_5_min"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_weather_min"
+			    android:text="" />
+			<TextView
+			    android:id="@+id/layout_detail_weather_5_max"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_weather_max"
+			    android:text="" />
+		</TableRow>
+		
+		<TableRow
+		    android:id="@+id/layout_detail_weather_6">
+			<TextView
+			    android:id="@+id/layout_detail_weather_6_date"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_text"
+			    android:text="" />
+			<ImageView 
+				android:id="@+id/layout_detail_weather_6_symbol"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:paddingRight="@dimen/layout_detail_weather_padding" />
+			<TextView
+			    android:id="@+id/layout_detail_weather_6_min"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_weather_min"
+			    android:text="" />
+			<TextView
+			    android:id="@+id/layout_detail_weather_6_max"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="right"
+			    android:paddingRight="@dimen/layout_detail_weather_padding"
+			    android:textSize="@dimen/layout_detail_text_textsize" 
+			    android:textColor="@color/layout_detail_weather_max"
+			    android:text="" />
+		</TableRow>
+	</TableLayout>
+</LinearLayout>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <style name="Theme.SkiMap" parent="Theme.Sherlock">
+            <item name="abLogo">@drawable/ab_logo</item>
+            <item name="abIcon">@drawable/ic_menu_home</item>
+            <item name="abBackground">@drawable/ab_background</item>
+            <item name="abDivider">@color/ab_divider_button</item>
+            <item name="abIndeterminateProgressStyle">@android:style/Widget.ProgressBar.Small</item>
+            <item name="selectableItemBackground">@drawable/ab_selectable_background</item>
+            <item name="actionBarTabStyle">@style/MyActionBarTabStyle</item>
+            <item name="popupMenuStyle">@style/MyPopupMenu</item>
+            <item name="dropDownListViewStyle">@style/MyDropDownListView</item>
+        </style>
+        
+        <!-- actionbar tabs -->
+	    <style name="MyActionBarTabStyle" parent="Widget.Sherlock.ActionBar.TabView">
+	        <item name="android:background">@drawable/ab_tab_background</item>
+	        <item name="android:paddingLeft">@dimen/ab_tab_padding</item>
+	        <item name="android:paddingRight">@dimen/ab_tab_padding</item>
+	    </style>
+	    
+	    <!-- actionbar popup menu -->
+        <style name="MyPopupMenu" parent="Widget.Sherlock.ListPopupWindow">
+                <item name="android:popupBackground">@color/ab_background_end</item>
+        </style>
+        
+        <!-- actionbar popup menu items -->
+        <style name="MyDropDownListView" parent="Widget.Sherlock.ListView.DropDown">
+                <item name="android:listSelector">@drawable/ab_selectable_background</item>
+        </style>
+</resources>
